@@ -17,6 +17,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 
 #vlfeat
+FIND_LIBRARY(VLFEAT_LIBRARY NAMES vl HINTS /home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/vlfeat-0.9.20/bin/glnxa64)
 FIND_LIBRARY(VLFEAT_LIBRARY libvl)
 
 aux_source_directory(./Debugger DEBUGGER_SRC)
