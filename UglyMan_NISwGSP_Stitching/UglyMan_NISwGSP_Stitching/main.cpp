@@ -14,13 +14,16 @@ using namespace std;
 
 int main(int argc, const char * argv[]) {
     Eigen::initParallel(); /* remember to turn off "Hardware Multi-Threading */
+    Eigen::setNbThreads(16);
     cout << "nThreads = " << Eigen::nbThreads() << endl;
-    cout << "[#Images : " << argc - 1 << "]" << endl;
+    cout << "[#Images : " << argc - 2<< "]" << endl;
 
     TimeCalculator timer;
-    for(int i = 1; i < argc; ++i) {
+    std::string rootPath = argv[1];
+    for(int i = 2; i < argc; ++i) {
         cout << "i = " << i << ", [Images : " << argv[i] << "]" << endl;
-        MultiImages multi_images(argv[i], LINES_FILTER_WIDTH, LINES_FILTER_LENGTH);
+        //MultiImages multi_images(argv[i], LINES_FILTER_WIDTH, LINES_FILTER_LENGTH);
+        MultiImages multi_images(rootPath, argv[i], LINES_FILTER_WIDTH, LINES_FILTER_LENGTH);
         
         timer.start();
         /* 2D */
@@ -28,8 +31,14 @@ int main(int argc, const char * argv[]) {
         niswgsp.setWeightToAlignmentTerm(1);
         niswgsp.setWeightToLocalSimilarityTerm(0.75);
         niswgsp.setWeightToGlobalSimilarityTerm(6, 20, GLOBAL_ROTATION_2D_METHOD);
+        timer.end("2d common: ");
+        timer.start();
         niswgsp.writeImage(niswgsp.solve(BLEND_AVERAGE), BLENDING_METHODS_NAME[BLEND_AVERAGE]);
+        timer.end("2d BLEND_AVERAGE: ");
+        timer.start();
         niswgsp.writeImage(niswgsp.solve(BLEND_LINEAR),  BLENDING_METHODS_NAME[BLEND_LINEAR]);
+        timer.end("2d BLEND_LINEAR: ");
+        timer.start();
         /* 3D */
         niswgsp.setWeightToAlignmentTerm(1);
         niswgsp.setWeightToLocalSimilarityTerm(0.75);

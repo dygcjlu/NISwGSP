@@ -2,6 +2,16 @@ cmake_minimum_required(VERSION 2.8)
 
 PROJECT(NISwGSP)
 
+MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" )
+  #SET(CMAKE_BUILD_TYPE Debug)
+  set(CMAKE_CXX_FLAGS "-O0 -g")
+  MESSAGE("set debug option type" )
+endif()
+
+#add_definitions(-DEIGEN_HAS_OPENMP)
+
+
 FIND_PACKAGE(OpenMP REQUIRED)
 
 #eigen

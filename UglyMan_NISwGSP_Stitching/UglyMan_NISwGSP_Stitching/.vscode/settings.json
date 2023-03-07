@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "random": "cpp",
+        "*.tcc": "cpp",
+        "core": "cpp",
+        "superlusupport": "cpp",
+        "threadpool": "cpp",
+        "numericaldiff": "cpp",
+        "specialfunctions": "cpp"
+    }
+}

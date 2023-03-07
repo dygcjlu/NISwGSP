@@ -8,9 +8,9 @@
 
 #include "MultiImages.h"
 
-MultiImages::MultiImages(const string & _file_name,
+MultiImages::MultiImages(const string & rootPath, const string & _file_name,
                          LINES_FILTER_FUNC * _width_filter,
-                         LINES_FILTER_FUNC * _length_filter) : parameter(_file_name) {
+                         LINES_FILTER_FUNC * _length_filter) : parameter(rootPath, _file_name) {
     
     for(int i = 0; i < parameter.image_file_full_names.size(); ++i) {
 #ifndef NDEBUG

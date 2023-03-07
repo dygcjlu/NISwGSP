@@ -45,17 +45,29 @@ bool isFileExist (const string & name) {
     return (stat (name.c_str(), &buffer) == 0);
 }
 
-Parameter::Parameter(const string & _file_name) {
+Parameter::Parameter(const string & rootPath, const string & _file_name) {
     
+    //std::string rootPath = "/media/xxd/Data2/datasets/image_stitching/input-42-data/";
     file_name = _file_name;
+
+    file_dir = rootPath + _file_name + "/";
+    result_dir = rootPath + "0_results/" + _file_name + "-result/";
+
+    std::string resultPath = rootPath + "0_results/";
+    
+    mkdir(resultPath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    mkdir(result_dir.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    /*
     file_dir = "./input-42-data/" + _file_name + "/";
     result_dir = "./input-42-data/0_results/" + _file_name + "-result/";
     
     mkdir("./input-42-data/0_results/", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
     mkdir(result_dir.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    */
 #ifndef NDEBUG
-    debug_dir = "./input-42-data/1_debugs/" + _file_name + "-result/";
-    mkdir("./input-42-data/1_debugs/", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    //debug_dir = "./input-42-data/1_debugs/" + _file_name + "-result/";
+    debug_dir = resultPath + "1_debugs/";
+    //mkdir("./input-42-data/1_debugs/", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
     mkdir(debug_dir.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 #endif
     

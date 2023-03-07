@@ -17,7 +17,8 @@
 
 class Parameter {
 public:
-    Parameter(const string & _file_name);
+    //Parameter(const string & _file_name);
+    Parameter(const string & rootPath, const string & _file_name);
     
     string file_name, file_dir;
     string stitching_parse_file_name;

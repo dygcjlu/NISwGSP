@@ -63,7 +63,12 @@ private:
 
 class MultiImages {
 public:
+    /*
     MultiImages(const string & _file_name,
+                LINES_FILTER_FUNC * _width_filter  = &LINES_FILTER_NONE,
+                LINES_FILTER_FUNC * _length_filter = &LINES_FILTER_NONE);
+                */
+    MultiImages(const string & rootPath, const string & _file_name,
                 LINES_FILTER_FUNC * _width_filter  = &LINES_FILTER_NONE,
                 LINES_FILTER_FUNC * _length_filter = &LINES_FILTER_NONE);
     
