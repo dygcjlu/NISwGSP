@@ -7,10 +7,14 @@
 //
 
 #include "MultiImages.h"
+#include "../Debugger/TimeCalculator.h"
+#include "siftgpu_manage.h"
 
 MultiImages::MultiImages(const string & rootPath, const string & _file_name,
                          LINES_FILTER_FUNC * _width_filter,
-                         LINES_FILTER_FUNC * _length_filter) : parameter(rootPath, _file_name) {
+                         LINES_FILTER_FUNC * _length_filter) : parameter(rootPath, _file_name)
+{
+    m_bUseSiftGPU = true;
     
     for(int i = 0; i < parameter.image_file_full_names.size(); ++i) {
 #ifndef NDEBUG
@@ -18,12 +22,14 @@ MultiImages::MultiImages(const string & rootPath, const string & _file_name,
                                  parameter.image_file_full_names[i],
                                  _width_filter,
                                  _length_filter,
+                                 m_bUseSiftGPU,
                                  &parameter.debug_dir);
 #else
         images_data.emplace_back(parameter.file_dir,
                                  parameter.image_file_full_names[i],
                                  _width_filter,
-                                 _length_filter);
+                                 _length_filter,
+                                  m_bUseSiftGPU);
 #endif
     }
 }
@@ -50,7 +56,7 @@ void MultiImages::doFeatureMatching() const {
         apap_overlap_mask[i].resize(images_data.size());
         apap_matching_points[i].resize(images_data.size());
     }
-    const vector<vector<vector<Point2> > > & feature_matches = getFeatureMatches();
+    const vector<vector<vector<Point2> > > & feature_matches = getFeatureMatches(); //获取图像之间特征点配对关系
     for(int i = 0; i < images_match_graph_pair_list.size(); ++i) {
         const pair<int, int> & match_pair = images_match_graph_pair_list[i];
         const int & m1 = match_pair.first, & m2 = match_pair.second;
@@ -753,7 +759,14 @@ const vector<vector<vector<pair<int, int> > > > & MultiImages::getFeaturePairs()
         const vector<pair<int, int> > & images_match_graph_pair_list = parameter.getImagesMatchGraphPairList();
         for(int i = 0; i < images_match_graph_pair_list.size(); ++i) {
             const pair<int, int> & match_pair = images_match_graph_pair_list[i];
-            const vector<pair<int, int> > & initial_indices = getInitialFeaturePairs(match_pair);
+            TimeCalculator timer;
+      
+            timer.start();
+            const vector<pair<int, int> > & initial_indices = getInitialFeaturePairs(match_pair);//通过特征匹配获取配对图像特征点匹配信息
+            timer.end("init pair cpu");
+            timer.start();
+
+             
             const vector<Point2> & m1_fpts = images_data[match_pair.first ].getFeaturePoints();
             const vector<Point2> & m2_fpts = images_data[match_pair.second].getFeaturePoints();
             vector<Point2> X, Y;
@@ -765,8 +778,9 @@ const vector<vector<vector<pair<int, int> > > > & MultiImages::getFeaturePairs()
                 Y.emplace_back(m2_fpts[it.second]);
             }
             vector<pair<int, int> > & result = feature_pairs[match_pair.first][match_pair.second];
-            result = getFeaturePairsBySequentialRANSAC(match_pair, X, Y, initial_indices);
+            result = getFeaturePairsBySequentialRANSAC(match_pair, X, Y, initial_indices);//通过RANSAC算法过滤匹配外点
             assert(result.empty() == false);
+            timer.end("sRANSAC");
 #ifndef NDEBUG
             writeImageOfFeaturePairs("sRANSAC", match_pair, result);
 #endif
@@ -776,25 +790,52 @@ const vector<vector<vector<pair<int, int> > > > & MultiImages::getFeaturePairs()
 }
 
 const vector<vector<vector<Point2> > > & MultiImages::getFeatureMatches() const {
-    if(feature_matches.empty()) {
-        const vector<vector<vector<pair<int, int> > > > & feature_pairs = getFeaturePairs();
-        const vector<pair<int, int> > & images_match_graph_pair_list = parameter.getImagesMatchGraphPairList();
-        feature_matches.resize(images_data.size());
-        for(int i = 0; i < images_data.size(); ++i) {
-            feature_matches[i].resize(images_data.size());
-        }
-        for(int i = 0; i < images_match_graph_pair_list.size(); ++i) {
-            const pair<int, int> & match_pair = images_match_graph_pair_list[i];
-            const int & m1 = match_pair.first, & m2 = match_pair.second;
-            feature_matches[m1][m2].reserve(feature_pairs[m1][m2].size());
-            feature_matches[m2][m1].reserve(feature_pairs[m1][m2].size());
-            const vector<Point2> & m1_fpts = images_data[m1].getFeaturePoints();
-            const vector<Point2> & m2_fpts = images_data[m2].getFeaturePoints();
-            for(int j = 0; j < feature_pairs[m1][m2].size(); ++j) {
-                feature_matches[m1][m2].emplace_back(m1_fpts[feature_pairs[m1][m2][j].first ]);
-                feature_matches[m2][m1].emplace_back(m2_fpts[feature_pairs[m1][m2][j].second]);
+    if(feature_matches.empty()) 
+    { 
+        if(m_bUseSiftGPU)
+        {
+            const vector<vector<vector<pair<int, int> > > > & feature_pairs = getFeaturePairsGPU();//
+            const vector<pair<int, int> > & images_match_graph_pair_list = parameter.getImagesMatchGraphPairList();//获取配置文件定义的图像配对关系
+            feature_matches.resize(images_data.size());
+            for(int i = 0; i < images_data.size(); ++i) {
+              feature_matches[i].resize(images_data.size());
             }
+            for(int i = 0; i < images_match_graph_pair_list.size(); ++i) {
+                const pair<int, int> & match_pair = images_match_graph_pair_list[i];
+                const int & m1 = match_pair.first, & m2 = match_pair.second;
+                feature_matches[m1][m2].reserve(feature_pairs[m1][m2].size());
+                feature_matches[m2][m1].reserve(feature_pairs[m1][m2].size());
+                const vector<Point2> & m1_fpts = images_data[m1].getFeaturePoints();
+                const vector<Point2> & m2_fpts = images_data[m2].getFeaturePoints();
+                for(int j = 0; j < feature_pairs[m1][m2].size(); ++j) {
+                    feature_matches[m1][m2].emplace_back(m1_fpts[feature_pairs[m1][m2][j].first ]);
+                    feature_matches[m2][m1].emplace_back(m2_fpts[feature_pairs[m1][m2][j].second]);
+                }
+            }
+
+        }else{
+            const vector<vector<vector<pair<int, int> > > > & feature_pairs = getFeaturePairs();//
+            const vector<pair<int, int> > & images_match_graph_pair_list = parameter.getImagesMatchGraphPairList();//获取配置文件定义的图像配对关系
+            feature_matches.resize(images_data.size());
+            for(int i = 0; i < images_data.size(); ++i) {
+              feature_matches[i].resize(images_data.size());
+            }
+            for(int i = 0; i < images_match_graph_pair_list.size(); ++i) {
+                const pair<int, int> & match_pair = images_match_graph_pair_list[i];
+                const int & m1 = match_pair.first, & m2 = match_pair.second;
+                feature_matches[m1][m2].reserve(feature_pairs[m1][m2].size());
+                feature_matches[m2][m1].reserve(feature_pairs[m1][m2].size());
+                const vector<Point2> & m1_fpts = images_data[m1].getFeaturePoints();
+                const vector<Point2> & m2_fpts = images_data[m2].getFeaturePoints();
+                for(int j = 0; j < feature_pairs[m1][m2].size(); ++j) {
+                    feature_matches[m1][m2].emplace_back(m1_fpts[feature_pairs[m1][m2][j].first ]);
+                    feature_matches[m2][m1].emplace_back(m2_fpts[feature_pairs[m1][m2][j].second]);
+                }
+            }
+
         }
+    
+        
     }
     return feature_matches;
 }
@@ -806,8 +847,10 @@ vector<pair<int, int> > MultiImages::getFeaturePairsBySequentialRANSAC(const pai
     const int HOMOGRAPHY_MODEL_MIN_POINTS = 4;
     const int GLOBAL_MAX_ITERATION = log(1 - OPENCV_DEFAULT_CONFIDENCE) / log(1 - pow(GLOBAL_TRUE_PROBABILITY, HOMOGRAPHY_MODEL_MIN_POINTS));
     
+   
     vector<char> final_mask(_initial_indices.size(), 0);
     findHomography(_X, _Y, CV_RANSAC, parameter.global_homography_max_inliers_dist, final_mask, GLOBAL_MAX_ITERATION);
+     
     
     vector<Point2> tmp_X = _X, tmp_Y = _Y;
     
@@ -876,6 +919,10 @@ vector<pair<int, int> > MultiImages::getInitialFeaturePairs(const pair<int, int>
     const int feature_size[PAIR_COUNT] = { feature_size_1, feature_size_2 };
     const int pair_match[PAIR_COUNT] = { _match_pair.first , _match_pair.second };
     vector<FeatureDistance> feature_pairs[PAIR_COUNT];
+
+   //std::cout<<"size 1:"<<feature_size_1<<std::endl;
+    //std::cout<<"size 2:"<<feature_size_2<<std::endl;
+    
     
     for(int p = 0; p < pair_count; ++p) {
         const int another_feature_size = feature_size[1 - p];
@@ -883,6 +930,9 @@ vector<pair<int, int> > MultiImages::getInitialFeaturePairs(const pair<int, int>
         const vector<FeatureDescriptor> & feature_descriptors_1 = images_data[pair_match[ p]].getFeatureDescriptors();
         const vector<FeatureDescriptor> & feature_descriptors_2 = images_data[pair_match[!p]].getFeatureDescriptors();
         for(int f1 = 0; f1 < feature_size[p]; ++f1) {
+             //TimeCalculator timer;
+      
+            //timer.start();
             set<FeatureDistance> feature_distance_set;
             feature_distance_set.insert(FeatureDistance(MAXFLOAT, p, -1, -1));
             for(int f2 = 0; f2 < feature_size[!p]; ++f2) {
@@ -894,6 +944,7 @@ vector<pair<int, int> > MultiImages::getInitialFeaturePairs(const pair<int, int>
                     feature_distance_set.insert(FeatureDistance(dist, p, f1, f2));
                 }
             }
+            //timer.end("featue pairs");
             set<FeatureDistance>::const_iterator it = feature_distance_set.begin();
             if(ratio_test) {
                 const set<FeatureDistance>::const_iterator it2 = std::next(it, 1);
@@ -906,6 +957,8 @@ vector<pair<int, int> > MultiImages::getInitialFeaturePairs(const pair<int, int>
             feature_pairs[p].insert(feature_pairs[p].end(), it, feature_distance_set.end());
         }
     }
+    
+    
     vector<FeatureDistance> feature_pairs_result;
     if(pair_count == PAIR_COUNT) {
         sort(feature_pairs[0].begin(), feature_pairs[0].end(), compareFeaturePair);
@@ -1083,7 +1136,7 @@ void MultiImages::writeImageOfFeaturePairs(const string & _name,
                                            const vector<pair<int, int> > & _pairs) const {
     cout << images_data[_match_pair.first ].file_name << "-" <<
             images_data[_match_pair.second].file_name << " " << _name << " feature pairs = " << _pairs.size() << endl;
-    
+
     const vector<Point2> & m1_fpts = images_data[_match_pair.first ].getFeaturePoints();
     const vector<Point2> & m2_fpts = images_data[_match_pair.second].getFeaturePoints();
     vector<Point2> f1, f2;
@@ -1102,4 +1155,71 @@ void MultiImages::writeImageOfFeaturePairs(const string & _name,
             images_data[_match_pair.second].file_name  + "-" +
             to_string(_pairs.size()) +
             images_data[_match_pair.first ].file_extension, image_of_feauture_pairs);
+}
+
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
+
+
+vector<pair<int, int> > MultiImages::getInitialFeaturePairsGPU(const pair<int, int> & _match_pair) const 
+{
+    const int PAIR_COUNT = 2;
+    const int pair_match[PAIR_COUNT] = { _match_pair.first , _match_pair.second };
+
+    colmap::FeatureDescriptors & descriptors1 = images_data[ _match_pair.first].getFeatureDescriptorsSiftgpu();
+    colmap::FeatureDescriptors & descriptors2 = images_data[ _match_pair.second].getFeatureDescriptorsSiftgpu();
+
+    colmap::FeatureMatches matches;
+    vector<pair<int, int> > initial_indices;
+
+    CSiftgpuManage::getInstance().FeatureMatch(matches, descriptors1, descriptors2);
+    for(int i = 0; i < matches.size(); i++)
+    {
+        initial_indices.emplace_back(matches[i].point2D_idx1, matches[i].point2D_idx2);
+    }
+
+#ifndef NDEBUG
+    writeImageOfFeaturePairs("init", _match_pair, initial_indices);
+#endif
+    return initial_indices;
+}
+
+
+
+
+vector<vector<vector<pair<int, int> > > > & MultiImages::getFeaturePairsGPU() const{
+    if(feature_pairs.empty()) {
+        initialFeaturePairsSpace();
+        const vector<pair<int, int> > & images_match_graph_pair_list = parameter.getImagesMatchGraphPairList();
+        for(int i = 0; i < images_match_graph_pair_list.size(); ++i) {
+            const pair<int, int> & match_pair = images_match_graph_pair_list[i];
+            TimeCalculator timer;
+            timer.start();
+            
+            const vector<pair<int, int> > & initial_indices = getInitialFeaturePairsGPU(match_pair);//通过特征匹配获取配对图像特征点匹配信息
+            timer.end("init pair");
+      
+            timer.start();
+            const vector<Point2> & m1_fpts = images_data[match_pair.first ].getFeaturePoints();
+            const vector<Point2> & m2_fpts = images_data[match_pair.second].getFeaturePoints();
+            vector<Point2> X, Y;
+            X.reserve(initial_indices.size());
+            Y.reserve(initial_indices.size());
+            for(int j = 0; j < initial_indices.size(); ++j) {
+                const pair<int, int> it = initial_indices[j];
+                X.emplace_back(m1_fpts[it.first ]);
+                Y.emplace_back(m2_fpts[it.second]);
+            }
+            vector<pair<int, int> > & result = feature_pairs[match_pair.first][match_pair.second];
+            result = getFeaturePairsBySequentialRANSAC(match_pair, X, Y, initial_indices);//通过RANSAC算法过滤匹配外点
+            assert(result.empty() == false);
+            timer.end("sRANSAC");
+#ifndef NDEBUG
+            writeImageOfFeaturePairs("sRANSAC", match_pair, result);
+#endif
+        }
+    }
+    return feature_pairs;
 }

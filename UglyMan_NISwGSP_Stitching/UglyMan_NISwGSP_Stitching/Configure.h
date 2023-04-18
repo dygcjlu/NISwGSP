@@ -48,6 +48,7 @@ using namespace Eigen;
 /*** data setting ***/
 const int GRID_SIZE = 40;
 const int DOWN_SAMPLE_IMAGE_SIZE = 800 * 600;
+//const int DOWN_SAMPLE_IMAGE_SIZE = 1920 * 1080;
 
 /*** APAP ***/
 const double APAP_GAMMA = 0.0015;
@@ -65,6 +66,8 @@ const    int  LOCAL_HOMOGRAPHY_MIN_FEATURES_COUNT = 40;
 /*** vlfeat sift ***/
 const    int SIFT_LEVEL_COUNT          = 3;
 const    int SIFT_MINIMUM_OCTAVE_INDEX = 0;
+//const    int SIFT_LEVEL_COUNT          = 5;
+//const    int SIFT_MINIMUM_OCTAVE_INDEX = 0;
 const double SIFT_PEAK_THRESH = 0.;
 const double SIFT_EDGE_THRESH = 10.;
 
@@ -85,7 +88,7 @@ const double CRITERIA_EPSILON = DBL_EPSILON;
 
 /*** 2D Method ***/
 const double TOLERANT_ANGLE = 1.5;
-
+//const double TOLERANT_ANGLE = 3.0;  //deng log
 /*** 3D Method ***/
 const double LAMBDA_GAMMA = 10;
 

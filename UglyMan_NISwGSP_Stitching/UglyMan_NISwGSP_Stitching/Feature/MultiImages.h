@@ -115,6 +115,12 @@ public:
     
     vector<ImageData> images_data;
     Parameter parameter;
+
+private:
+
+    vector<pair<int, int> > getInitialFeaturePairsGPU(const pair<int, int> & _match_pair) const;
+    vector<vector<vector<pair<int, int> > > > & getFeaturePairsGPU() const;
+
 private:    
     /*** Debugger ***/
     void writeImageOfFeaturePairs(const string & _name,
@@ -160,6 +166,9 @@ private:
     mutable vector<vector<vector<Point2> > > images_lines_projects; /* [m1][m2] img1 lines project on img2 */
     
     mutable vector<Mat> images;
+
+private:
+    bool m_bUseSiftGPU;
 };
 
 #endif /* defined(__UglyMan_Stitiching__MultiImages__) */

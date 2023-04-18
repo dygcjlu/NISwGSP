@@ -1,0 +1,1 @@
+sshfs nvidia@192.168.0.37:/home/nvidia/dyg/image_stitch/NISwGSP/UglyMan_NISwGSP_Stitching /home/xxd/dyg/remote_mount/image_stitch

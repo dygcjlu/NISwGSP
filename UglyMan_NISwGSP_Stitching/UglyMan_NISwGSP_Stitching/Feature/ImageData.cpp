@@ -7,6 +7,9 @@
 //
 
 #include "ImageData.h"
+#include "siftgpu_manage.h"
+
+const static bool g_USE_SIFTGPU = true;
 
 LineData::LineData(const Point2 & _a,
                    const Point2 & _b,
@@ -40,7 +43,10 @@ ImageData::ImageData(const string & _file_dir,
                      const string & _file_full_name,
                      LINES_FILTER_FUNC * _width_filter,
                      LINES_FILTER_FUNC * _length_filter,
+                     bool bUseSiftgpu,
                      const string * _debug_dir) {
+
+    m_bUseSiftGPU = bUseSiftgpu;
     
     file_dir = &_file_dir;
     std::size_t found = _file_full_name.find_last_of(".");
@@ -73,6 +79,8 @@ ImageData::ImageData(const string & _file_dir,
     split(rgba_img, channels);
     alpha_mask = channels[3];
     mesh_2d = make_unique<MeshGrid>(img.cols, img.rows);
+
+    m_bIsFeatureDetected = false;
 }
 
 const Mat & ImageData::getGreyImage() const {
@@ -131,10 +139,30 @@ const vector<LineData> & ImageData::getLines() const {
     return img_lines;
 }
 
-const vector<Point2> & ImageData::getFeaturePoints() const {
-    if(feature_points.empty()) {
-        FeatureController::detect(getGreyImage(), feature_points, feature_descriptors);
+const vector<Point2> & ImageData::getFeaturePoints() const 
+{
+    if(m_bUseSiftGPU)
+    {
+        if(feature_points.empty()) 
+        {
+
+            CSiftgpuManage::getInstance().FeatureDetect(getGreyImage(), m_vecFeaturePoints, m_vecFeatureDescriptors);
+
+            //
+            for(int i = 0; i < m_vecFeaturePoints.size(); i++)
+            {
+               Point2 tmp(m_vecFeaturePoints[i].x, m_vecFeaturePoints[i].y);
+               feature_points.push_back(tmp);
+          }
+        }
+
+    }else{
+        if(feature_points.empty()) 
+        {
+            FeatureController::detect(getGreyImage(), feature_points, feature_descriptors);
+        }
     }
+    
     return feature_points;
 }
 const vector<FeatureDescriptor> & ImageData::getFeatureDescriptors() const {
@@ -142,6 +170,46 @@ const vector<FeatureDescriptor> & ImageData::getFeatureDescriptors() const {
         FeatureController::detect(getGreyImage(), feature_points, feature_descriptors);
     }
     return feature_descriptors;
+}
+
+
+/*
+
+vector<Point2> &  ImageData::getFeaturePointsSiftgpu()
+{
+    if(!m_bIsFeatureDetected) {
+        //FeatureController::detect(getGreyImage(), m_vecFeaturePoints, m_vecFeatureDescriptors);
+        CSiftgpuManage::getInstance().FeatureDetect(getGreyImage(), m_vecFeaturePoints, m_vecFeatureDescriptors);
+
+        //
+        for(int i = 0; i < m_vecFeaturePoints.size(); i++)
+        {
+            Point2 tmp(m_vecFeaturePoints[i].x, m_vecFeaturePoints[i].y);
+            feature_points.push_back(tmp);
+        }
+        m_bIsFeatureDetected = true;
+        
+        
+    }
+    return feature_points;
+}
+*/
+
+colmap::FeatureDescriptors & ImageData::getFeatureDescriptorsSiftgpu() const
+{
+    if(!m_bIsFeatureDetected) {
+        //FeatureController::detect(getGreyImage(), m_vecFeaturePoints, m_vecFeatureDescriptors);
+         CSiftgpuManage::getInstance().FeatureDetect(getGreyImage(), m_vecFeaturePoints, m_vecFeatureDescriptors);
+
+         //
+        for(int i = 0; i < m_vecFeaturePoints.size(); i++)
+        {
+            Point2 tmp(m_vecFeaturePoints[i].x, m_vecFeaturePoints[i].y);
+            feature_points.push_back(tmp);
+        }
+        m_bIsFeatureDetected = true;
+    }
+    return m_vecFeatureDescriptors;
 }
 
 void ImageData::clear() {

@@ -1,3 +1,33 @@
+/*
+
+{
+    //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
+    //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
+    ///media/xxd/Data2/datasets/image_stitching/APAP/scene1/*
+    ///home/xxd/dyg/opencv/opencv4_5/opencv_extra/testdata/stitching/s*
+    ///media/xxd/Data2/datasets/image_stitching/0308_calib/rotation/images/1/
+    ///media/xxd/Data2/datasets/image_stitching/0308_calib/plane/images/
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build/NISwGSP",
+            "args": [ "/media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/images/image_stitching/", "simple3"],
+            "cwd": "${workspaceFolder}",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+        
+    ]
+}
+*/
 /*{
     //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
     //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
@@ -30,7 +60,7 @@
     //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
     ///media/xxd/Data2/datasets/image_stitching/APAP/scene1/*
     ///home/xxd/dyg/opencv/opencv4_5/opencv_extra/testdata/stitching/s*
-    ///media/xxd/Data2/datasets/3d/mine/0111/mono/stitching/2/
+    ///media/xxd/Data2/datasets/3d/mine/0111/mono/stitching/2/ NISwGSP-parrington APAP-garden AANAP-building
     "version": "0.2.0",
     "configurations": [
         {
@@ -38,7 +68,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build/NISwGSP",
-            "args": [ "/media/xxd/Data2/datasets/image_stitching/input-42-data/", "NISwGSP-parrington"],
+            "args": [ "/media/xxd/Data2/datasets/image_stitching/input-42-data/", "AANAP-building"],
             "cwd": "${workspaceFolder}",
             "setupCommands": [
                 {
@@ -58,3 +88,34 @@
 
 //mine/0111/mono/stitching/3/ 11 images, about 120s, AutoStitch > 7min and failed
 //stitching/2/  27 images , about 195s......   AutoStitch > 7min and failed
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+/*
+
+{
+    //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
+    //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
+    ///media/xxd/Data2/datasets/image_stitching/APAP/scene1/*
+    ///home/xxd/dyg/opencv/opencv4_5/opencv_extra/testdata/stitching/s*
+    ///media/xxd/Data2/datasets/3d/mine/0111/mono/stitching/2/ NISwGSP-parrington APAP-garden AANAP-building
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/siftgpu/build/sift_gpu_demo",
+            "args": [ "/media/xxd/Data2/datasets/image_stitching/input-42-data/", "AANAP-building"],
+            "cwd": "${workspaceFolder}",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+        
+    ]
+}*/

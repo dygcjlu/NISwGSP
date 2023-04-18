@@ -13,6 +13,7 @@
 #include "../Util/Statistics.h"
 #include "../Feature/FeatureController.h"
 #include "../Mesh/MeshGrid.h"
+#include "../siftgpu/siftgpu.h"
 
 class LineData {
 public:
@@ -41,12 +42,17 @@ public:
               const string & _file_full_name,
               LINES_FILTER_FUNC * _width_filter,
               LINES_FILTER_FUNC * _length_filter,
+              bool bUseSiftgpu,
               const string * _debug_dir = NULL);
     
     const Mat & getGreyImage() const;
     const vector<LineData> & getLines() const;
     const vector<Point2> & getFeaturePoints() const;
     const vector<FeatureDescriptor> & getFeatureDescriptors() const;
+
+    //siftgpu version
+    //vector<Point2> & getFeaturePointsSiftgpu();
+    colmap::FeatureDescriptors& getFeatureDescriptorsSiftgpu() const;
     
     void clear();
     
@@ -60,6 +66,12 @@ private:
     mutable vector<LineData> img_lines;
     mutable vector<Point2> feature_points;
     mutable vector<FeatureDescriptor> feature_descriptors;
+
+private:
+    bool m_bUseSiftGPU;
+    mutable bool m_bIsFeatureDetected;
+    mutable colmap::FeatureKeypoints m_vecFeaturePoints;
+    mutable colmap::FeatureDescriptors m_vecFeatureDescriptors;
 };
 
 #endif /* defined(__UglyMan_Stitiching__ImageData__) */

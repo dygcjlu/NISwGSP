@@ -7,6 +7,7 @@
 //
 
 #include "FeatureController.h"
+#include "../Debugger/TimeCalculator.h"
 
 void FeatureDescriptor::addDescriptor(const Mat & _descriptor) {
     data.emplace_back(_descriptor);
@@ -39,7 +40,12 @@ double FeatureDescriptor::getDistance(const FeatureDescriptor & _descriptor1,
 
 void FeatureController::detect(const Mat & _grey_img,
                                vector<Point2> & _feature_points,
-                               vector<FeatureDescriptor> & _feature_descriptors) {
+                               vector<FeatureDescriptor> & _feature_descriptors)
+{
+    TimeCalculator timer;
+      
+    timer.start();
+                                  
 #ifndef NDEBUG
     if(_feature_points.empty() == false) {
         _feature_points.clear();
@@ -81,4 +87,6 @@ void FeatureController::detect(const Mat & _grey_img,
         } while (vl_sift_process_next_octave(vlSift) != VL_ERR_EOF);
     }
     vl_sift_delete(vlSift);
+
+    timer.end("feature detect:");
 }

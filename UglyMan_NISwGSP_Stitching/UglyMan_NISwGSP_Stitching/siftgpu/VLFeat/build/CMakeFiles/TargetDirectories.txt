@@ -1,0 +1,3 @@
+/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/siftgpu/VLFeat/build/CMakeFiles/rebuild_cache.dir
+/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/siftgpu/VLFeat/build/CMakeFiles/edit_cache.dir
+/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/siftgpu/VLFeat/build/CMakeFiles/vlfeat.dir

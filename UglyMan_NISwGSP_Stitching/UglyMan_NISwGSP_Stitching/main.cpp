@@ -14,7 +14,7 @@ using namespace std;
 
 int main(int argc, const char * argv[]) {
     Eigen::initParallel(); /* remember to turn off "Hardware Multi-Threading */
-    Eigen::setNbThreads(16);
+    Eigen::setNbThreads(4);
     cout << "nThreads = " << Eigen::nbThreads() << endl;
     cout << "[#Images : " << argc - 2<< "]" << endl;
 

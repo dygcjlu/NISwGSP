@@ -8,6 +8,8 @@
 
 #include "NISwGSP_Stitching.h"
 
+#include "../Debugger/TimeCalculator.h"
+
 NISwGSP_Stitching::NISwGSP_Stitching(const MultiImages & _multi_images) : MeshOptimization(_multi_images) {
     
 }
@@ -27,12 +29,17 @@ void NISwGSP_Stitching::setWeightToGlobalSimilarityTerm(const double _weight_bet
 }
 
 Mat NISwGSP_Stitching::solve(const BLENDING_METHODS & _blend_method) {
+    TimeCalculator timer;
+      
+    timer.start();
     const MultiImages & multi_images = getMultiImages();
     
     vector<Triplet<double> > triplets;
     vector<pair<int, double> > b_vector;
     
     reserveData(triplets, b_vector, DIMENSION_2D);
+    timer.end("reserveData");
+    timer.start();
     
     triplets.emplace_back(0, 0, STRONG_CONSTRAINT);
     triplets.emplace_back(1, 1, STRONG_CONSTRAINT);
@@ -40,15 +47,26 @@ Mat NISwGSP_Stitching::solve(const BLENDING_METHODS & _blend_method) {
     b_vector.emplace_back(1,    STRONG_CONSTRAINT);
     
     prepareAlignmentTerm(triplets);
+    timer.end("prepareAlignmentTerm");
+    timer.start();
     prepareSimilarityTerm(triplets, b_vector);
+    timer.end(" prepareSimilarityTerm");
+    timer.start();
     
     vector<vector<Point2> > original_vertices;
 
     original_vertices = getImageVerticesBySolving(triplets, b_vector);
+    timer.end(" getImageVerticesBySolving");
+    timer.start();
     
     Size2 target_size = normalizeVertices(original_vertices);
+    timer.end("normalizeVertices");
+    timer.start();
     
     Mat result = multi_images.textureMapping(original_vertices, target_size, _blend_method);
+    timer.end("textureMapping");
+    timer.start();
+    
 #ifndef NDEBUG
     multi_images.writeResultWithMesh(result, original_vertices, "-[NISwGSP]" +
                                      GLOBAL_ROTATION_METHODS_NAME[getGlobalRotationMethod()] +
@@ -59,6 +77,7 @@ Mat NISwGSP_Stitching::solve(const BLENDING_METHODS & _blend_method) {
                                      BLENDING_METHODS_NAME[_blend_method] +
                                      "[Border]", true);
 #endif
+    timer.end("writeResultWithMesh");
     return result;
 }
 
