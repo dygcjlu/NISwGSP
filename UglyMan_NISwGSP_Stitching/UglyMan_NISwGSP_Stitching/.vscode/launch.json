@@ -67,7 +67,7 @@
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build/NISwGSP",
+            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build_d/NISwGSP",
             "args": [ "/media/xxd/Data2/datasets/image_stitching/input-42-data/", "APAP-garden"],
             "cwd": "${workspaceFolder}",
             "setupCommands": [
@@ -80,8 +80,8 @@
         }
         
     ]
-}*/
-
+}
+*/
 //CAVE-church, 32 images, about 180s
 //CAVE-columbus_circle, 15 images, about 60s
 //NISwGSP-parrington, 18 images, about 60s

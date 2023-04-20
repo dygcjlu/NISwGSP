@@ -19,6 +19,7 @@ Mat getMatOfLinearBlendWeight(const Mat & image) {
     return result;
 }
 
+//越靠近图像边缘数值越小，图像中心数值为(w/2 * h/2)
 vector<Mat> getMatsLinearBlendWeight(const vector<Mat> & images) {
     vector<Mat> result;
     result.reserve(images.size());
@@ -41,6 +42,9 @@ Mat Blending(const vector<Mat> & images,
     for(int i = 0; i < origins.size(); ++i) {
         rects.emplace_back(origins[i], images[i].size());
     }
+    
+    omp_set_num_threads(8);
+#pragma omp parallel for
     for(int y = 0; y < result.rows; ++y) {
         for(int x = 0; x < result.cols; ++x) {
             Point2i p(x, y);

@@ -130,6 +130,7 @@ void MeshOptimization::prepareAlignmentTerm(vector<Triplet<double> > & _triplets
     }
 }
 
+//网格的边经过相似变换到话布后应该与画布对应边对齐
 void MeshOptimization::prepareSimilarityTerm(vector<Triplet<double> > & _triplets,
                                              vector<pair<int, double> > & _b_vector) const {
     const bool local_similarity_term = local_similarity_equation.second;
@@ -143,7 +144,7 @@ void MeshOptimization::prepareSimilarityTerm(vector<Triplet<double> > & _triplet
         const vector<vector<double> > & images_grid_space_matching_pts_weight = multi_images->getImagesGridSpaceMatchingPointsWeight(global_similarity_weight_gamma);
         timer.end("images_grid_space_matching_pts_weight");
         timer.start();
-        const vector<SimilarityElements> & images_similarity_elements = multi_images->getImagesSimilarityElements(global_rotation_method);
+        const vector<SimilarityElements> & images_similarity_elements = multi_images->getImagesSimilarityElements(global_rotation_method);//得到图像之间缩放关系和旋转角度
         timer.end("getImagesSimilarityElements");
         int eq_count = 0, eq_count_rotation = 0;
         for(int i = 0; i < multi_images->images_data.size(); ++i) {

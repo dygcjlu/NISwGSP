@@ -150,7 +150,7 @@ private:
     mutable vector<vector<bool> > images_features_mask;  //images_features_mask[m1][k] = true; m1的第K个网格点，其他图像中有与它匹配的网格点,相当于各图像的网格顶点是否与其他图像有重叠
     
     mutable vector<vector<vector<pair<int, int> > > > feature_pairs; //图像之间特征点配对情况，存储的是特征点的索引
-    mutable vector<vector<vector<Point2> > > feature_matches; /* [m1][m2][j], img1 j_th matches */ //m1与m2的第j个匹配点的多标，m1上的坐标
+    mutable vector<vector<vector<Point2> > > feature_matches; /* [m1][m2][j], img1 j_th matches */ //m1与m2的第j个特征匹配点的坐标，m1上的坐标
     
     mutable vector<vector<vector<bool> > >   apap_overlap_mask; //apap_overlap_mask[m1][m2][k] = true; //m1的第K个网格顶点投影到m2图像，如果在M2图像内，则值为true
     mutable vector<vector<vector<Mat> > >    apap_homographies; //apap_homographies[m1][m2] m1投影到m2的单应矩阵列表
@@ -169,8 +169,8 @@ private:
     mutable vector<vector<double> > images_polygon_space_matching_pts_weight;
     
     /* Line */
-    mutable vector<vector<FLOAT_TYPE> > images_minimum_line_distortion_rotation;
-    mutable vector<vector<vector<Point2> > > images_lines_projects; /* [m1][m2] img1 lines project on img2 */
+    mutable vector<vector<FLOAT_TYPE> > images_minimum_line_distortion_rotation;//最小线段失真对应的图像旋转角度
+    mutable vector<vector<vector<Point2> > > images_lines_projects; /* [m1][m2] img1 lines project on img2 *///m1的某个线段两个端点投影到m2后在m2上的坐标
     
     mutable vector<Mat> images;
 

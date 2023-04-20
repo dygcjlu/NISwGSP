@@ -109,6 +109,12 @@ void MultiImages::doFeatureMatching() const {
         pairwise_matches[pm_index].inliers_mask.resize(D_matches.size(), 1);
         pairwise_matches[pm_index].num_inliers = (int)D_matches.size();
         pairwise_matches[pm_index].H = apap_homographies[m1][m2].front(); /*** for OpenCV findMaxSpanningTree funtion ***/
+
+
+        //提前提取图像中的线段以及计算线段投影
+        getImagesMinimumLineDistortionRotation(m1, m2);
+        
+        
     }
 
     timer.end("apap");
@@ -368,12 +374,12 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
     vector<SimilarityElements> & result = *images_similarity_elements[_global_rotation_method];
     if(result.empty()) {
         result.reserve(images_data.size());
-         TimeCalculator timer;
+         //TimeCalculator timer;
       
-        timer.start();
+        //timer.start();
         const vector<detail::CameraParams> & camera_params = getCameraParams();//计算焦距和旋转矩阵
         
-        timer.end("getCameraParams");
+        //timer.end("getCameraParams");
         for(int i = 0; i < images_data.size(); ++i) {
             result.emplace_back(fabs(camera_params[parameter.center_image_index].focal / camera_params[i].focal),
                                 -getEulerZXYRadians<float>(camera_params[i].R)[2]);
@@ -382,6 +388,7 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
         for(int i = 0; i < images_data.size(); ++i) {
             double a = (result[i].theta - rotate_theta) * 180 / M_PI;
             result[i].theta = normalizeAngle(a) * M_PI / 180;
+            //std::cout<<"i theta:"<<i<<" "<<result[i].theta<<std::endl;
         }
         
         const vector<pair<int, int> > & images_match_graph_pair_list = parameter.getImagesMatchGraphPairList();
@@ -407,7 +414,7 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
                 decided[parameter.center_image_index] = true;
                 priority_que.emplace_back(parameter.center_image_index, -1);
                 const vector<vector<bool> > & images_match_graph = parameter.getImagesMatchGraph();
-                timer.start();
+                //timer.start();
                 while(priority_que.empty() == false) {
                     RotationNode node = priority_que.front();
                     priority_que.erase(priority_que.begin());
@@ -436,8 +443,8 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
                         }
                     }
                 }
-                timer.end("get line rotation");
-                timer.start();
+                //timer.end("get line rotation");
+                //timer.start();
                 const int equations_count = (int)(images_match_graph_pair_list.size() + theta_constraints.size()) * DIMENSION_2D;
                 SparseMatrix<double> A(equations_count, images_data.size() * DIMENSION_2D);
                 VectorXd b = VectorXd::Zero(equations_count);
@@ -464,8 +471,8 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
                     triplets.emplace_back(equation + 1, DIMENSION_2D * m2 + 1,               -1);
                     equation += DIMENSION_2D;
                 }
-                 timer.end("get another line rotation");
-                  timer.start();
+                 //timer.end("get another line rotation");
+                 // timer.start();
                 assert(equation == equations_count);
                 A.setFromTriplets(triplets.begin(), triplets.end());
                 LeastSquaresConjugateGradient<SparseMatrix<double> > lscg(A);
@@ -473,8 +480,9 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
 
                for(int i = 0; i < images_data.size(); ++i) {
                     result[i].theta = atan2(x[DIMENSION_2D * i + 1], x[DIMENSION_2D * i]);
+                    //std::cout<<"after i theta:"<<i<<" "<<result[i].theta<<std::endl;
                 }
-                timer.end("theta optimizier");
+                //timer.end("theta optimizier");
             }
                 break;
             case GLOBAL_ROTATION_3D_METHOD:
@@ -679,7 +687,7 @@ FLOAT_TYPE MultiImages::getImagesMinimumLineDistortionRotation(const int _from, 
                 }
                 const Point2d a = (*lines[i])[j].data[1] - (*lines[i])[j].data[0];
                 const Point2d b = p2 - p1;
-                const double theta = acos(a.dot(b) / (norm(a) * norm(b)));
+                const double theta = acos(a.dot(b) / (norm(a) * norm(b)));//线段之间的夹角
                 const double direction = a.x * b.y - a.y * b.x;
                 const int map = ((direction > 0) << 1) + i;
                 const double b_length_2 = sqrt(b.x * b.x + b.y * b.y);
@@ -1069,11 +1077,15 @@ Mat MultiImages::textureMapping(const vector<vector<Point2> > & _vertices,
 Mat MultiImages::textureMapping(const vector<vector<Point2> > & _vertices,
                                 const Size2 & _target_size,
                                 const BLENDING_METHODS & _blend_method,
-                                vector<Mat> & _warp_images) const {
+                                vector<Mat> & _warp_images) const 
+{
+    TimeCalculator timer;
+      
+    timer.start();
     
     vector<Mat> weight_mask, new_weight_mask;
     vector<Point2> origins;
-    vector<Rect_<FLOAT_TYPE> > rects = getVerticesRects<FLOAT_TYPE>(_vertices);
+    vector<Rect_<FLOAT_TYPE> > rects = getVerticesRects<FLOAT_TYPE>(_vertices);//获取每个图像网格的左上角坐标以及长宽
     
     switch (_blend_method) {
         case BLEND_AVERAGE:
@@ -1097,6 +1109,7 @@ Mat MultiImages::textureMapping(const vector<vector<Point2> > & _vertices,
     const int SCALE = pow(2, PRECISION);
     
     for(int i = 0; i < images_data.size(); ++i) {
+        //timer.start();
         const vector<Point2> & src_vertices = images_data[i].mesh_2d->getVertices();
         const vector<Indices> & polygons_indices = images_data[i].mesh_2d->getPolygonsIndices();
         const Point2 origin(rects[i].x, rects[i].y);
@@ -1124,37 +1137,79 @@ Mat MultiImages::textureMapping(const vector<vector<Point2> > & _vertices,
                     src_vertices[polygons_indices[j].indices[index.indices[1]]],
                     src_vertices[polygons_indices[j].indices[index.indices[2]]]
                 };
+                //从原始的网格坐标变换到优化后的网格坐标的仿射变换矩阵,每个小网格对应两个三角形，即有两个变换矩阵
                 affine_transforms.emplace_back(getAffineTransform(src, dst));
                 ++label;
             }
         }
+        //timer.end("mask");
+
+        //timer.start();
+        
         Mat image = Mat::zeros(rects[i].height + shift.y, rects[i].width + shift.x, CV_8UC4);
         Mat w_mask = (_blend_method != BLEND_AVERAGE) ? Mat::zeros(image.size(), CV_32FC1) : Mat();
         for(int y = 0; y < image.rows; ++y) {
+           
             for(int x = 0; x < image.cols; ++x) {
                 int polygon_index = polygon_index_mask.at<int>(y, x);
                 if(polygon_index != NO_GRID) {
+
                     Point2 p_f = applyTransform2x3<FLOAT_TYPE>(x, y,
                                                                affine_transforms[polygon_index]);
-                    if(p_f.x >= 0 && p_f.y >= 0 &&
+                    
+                    int xx = int(round(p_f.x));
+                    int yy = int(round(p_f.y));
+                    bool beFast = true;
+                    if(beFast)
+                    {
+                        //getSubpix操作很耗时，直接使用最近点的值来代替，牺牲精度换速度
+                        //TODO: 改用双线性差值
+                       if(xx>= 0 && yy >= 0 &&
+                       xx < images_data[i].img.cols &&
+                       yy < images_data[i].img.rows)
+                       {
+                            uchar alpha = images_data[i].alpha_mask.at<uchar>(yy,xx);
+                            Vec3b c = images_data[i].img.at<Vec3b>(yy,xx);
+
+                            image.at<Vec4b>(y, x) = Vec4b(c[0], c[1], c[2], alpha);
+                            if(_blend_method != BLEND_AVERAGE) 
+                            {
+                                w_mask.at<float>(y, x) = weight_mask[i].at<float>(yy,xx);
+                            }
+
+                       }
+
+                    }else
+                    {
+                        //p_f.x = -1;
+                        if(p_f.x >= 0 && p_f.y >= 0 &&
                        p_f.x <= images_data[i].img.cols &&
                        p_f.y <= images_data[i].img.rows) {
-                        Vec<uchar, 1> alpha = getSubpix<uchar, 1>(images_data[i].alpha_mask, p_f);
+                        Vec<uchar, 1> alpha = getSubpix<uchar, 1>(images_data[i].alpha_mask, p_f);//
                         Vec3b c = getSubpix<uchar, 3>(images_data[i].img, p_f);
                         image.at<Vec4b>(y, x) = Vec4b(c[0], c[1], c[2], alpha[0]);
                         if(_blend_method != BLEND_AVERAGE) {
                             w_mask.at<float>(y, x) = getSubpix<float>(weight_mask[i], p_f);
                         }
+                        }
+
                     }
+                    
                 }
             }
         }
+        //timer.end("affine1");
+        //cv::imshow("mask", polygon_index_mask);
+        //cv::imshow("img", image);
+        
+        //cv::waitKey(0);
         _warp_images.emplace_back(image);
         origins.emplace_back(rects[i].x, rects[i].y);
         if(_blend_method != BLEND_AVERAGE) {
             new_weight_mask.emplace_back(w_mask);
         }
     }
+    timer.end("blend prepare");
     
     return Blending(_warp_images, origins, _target_size, new_weight_mask, _blend_method == BLEND_AVERAGE);
 }

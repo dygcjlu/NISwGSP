@@ -100,11 +100,11 @@ public:
 protected:
     mutable vector<Point2> vertices; //保存网格每个顶点的坐标，像素坐标
     mutable vector<Point2> polygons_center;//保存每个网格中心点的坐标，像素坐标
-    mutable vector<Edge> edges;
-    mutable vector<Indices> polygons_indices;  //保存的是每个网格四个顶点对应的网格坐标
-    mutable vector<Indices> polygons_neighbors; //保存与每个网格顶点相领的四个顶点的网格坐标
+    mutable vector<Edge> edges;  //保存网格每一条边的两个端点坐标，网格坐标
+    mutable vector<Indices> polygons_indices;  //保存的是每个网格四个顶点对应的网格坐标索引
+    mutable vector<Indices> polygons_neighbors; //保存与每个网格顶点相领的四个顶点的网格坐标索引
     mutable vector<Indices> polygons_edges;
-    mutable vector<Indices> vertex_structures;
+    mutable vector<Indices> vertex_structures;  //网格顶点相邻的四个顶点坐标索引
     mutable vector<Indices> edge_structures;
     mutable vector<Indices> triangulation_indices;
     mutable vector<int> boundary_vertex_indices;

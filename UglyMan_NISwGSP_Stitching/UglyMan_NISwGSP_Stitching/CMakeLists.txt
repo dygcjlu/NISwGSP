@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 PROJECT(NISwGSP)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-add_definitions("-DNDEBUG")
+#add_definitions("-DNDEBUG")
 
 MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" )
