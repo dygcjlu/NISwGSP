@@ -78,7 +78,8 @@ ImageData::ImageData(const string & _file_dir,
     vector<Mat> channels;
     split(rgba_img, channels);
     alpha_mask = channels[3];
-    mesh_2d = make_unique<MeshGrid>(img.cols, img.rows);
+    //mesh_2d = make_unique<MeshGrid>(img.cols, img.rows);
+    mesh_2d = make_unique_custom<MeshGrid>(img.cols, img.rows);
 
     m_bIsFeatureDetected = false;
 }

@@ -57,7 +57,12 @@ void MultiImages::doFeatureMatching() const {
         apap_matching_points[i].resize(images_data.size());
     }
     const vector<vector<vector<Point2> > > & feature_matches = getFeatureMatches(); //获取图像之间特征点配对关系
-    for(int i = 0; i < images_match_graph_pair_list.size(); ++i) {
+
+    TimeCalculator timer;
+      
+    timer.start();
+    for(int i = 0; i < images_match_graph_pair_list.size(); ++i) 
+    {
         const pair<int, int> & match_pair = images_match_graph_pair_list[i];
         const int & m1 = match_pair.first, & m2 = match_pair.second;
         APAP_Stitching::apap_project(feature_matches[m1][m2],
@@ -80,17 +85,21 @@ void MultiImages::doFeatureMatching() const {
             for(int k = 0; k < out_dst[j]->size(); ++k) {
                 if((*out_dst[j])[k].x >= 0 && (*out_dst[j])[k].y >= 0 &&
                    (*out_dst[j])[k].x <= images_data[m_index[j]].img.cols &&
-                   (*out_dst[j])[k].y <= images_data[m_index[j]].img.rows) {
+                   (*out_dst[j])[k].y <= images_data[m_index[j]].img.rows) 
+                   {
+                    //D_matches的第一个值为M1的点，第二个值为m2的点，保存了两种匹配情况，
+                    // 第一种为m1投影到m2，若在m2图像内，则保存m1源点与投影后在m2上的点，两个点为匹配点
+                    // 第二种为M2投影到m1，若在m1图像内，则保存投影后的M1点，以及M2上的源点，两个点为匹配点对
                     if(j) {
                         apap_overlap_mask[m2][m1][k] = true;
-                        D_matches.emplace_back(images_features[m_index[j]].keypoints.size(), k, 0);
+                        D_matches.emplace_back(images_features[m_index[j]].keypoints.size(), k, 0);//m2的第K个点投影到m1的坐标，存储在m1的keypoint中，即，m2的第k个顶点与投影到m1的顶点坐标
                         images_features_mask[m2][k] = true;
                     } else {
-                        apap_overlap_mask[m1][m2][k] = true;
-                        D_matches.emplace_back(k, images_features[m_index[j]].keypoints.size(), 0);
-                        images_features_mask[m1][k] = true;
+                        apap_overlap_mask[m1][m2][k] = true; //m1的第K个网格顶点投影到m2图像，如果在M2图像内，则值为true
+                        D_matches.emplace_back(k, images_features[m_index[j]].keypoints.size(), 0);//保存顶点配对关系，m1的第k个顶点与m2图像keypoint列表的第n个点配对，即，m1的第k个顶点投影到m2后的顶点坐标
+                        images_features_mask[m1][k] = true;//m1的第K个网格点，有与它匹配的网格点
                     }
-                    images_features[m_index[j]].keypoints.emplace_back((*out_dst[j])[k], 0);
+                    images_features[m_index[j]].keypoints.emplace_back((*out_dst[j])[k], 0);//存储当前图像网格顶点坐标以及其他图像顶点投影到当前图像后的顶点坐标
                 }
             }
         }
@@ -101,6 +110,9 @@ void MultiImages::doFeatureMatching() const {
         pairwise_matches[pm_index].num_inliers = (int)D_matches.size();
         pairwise_matches[pm_index].H = apap_homographies[m1][m2].front(); /*** for OpenCV findMaxSpanningTree funtion ***/
     }
+
+    timer.end("apap");
+   
 }
 
 const vector<detail::ImageFeatures> & MultiImages::getImagesFeaturesByMatchingPoints() const {
@@ -119,6 +131,9 @@ const vector<detail::MatchesInfo> & MultiImages::getPairwiseMatchesByMatchingPoi
 
 const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
     if(camera_params.empty()) {
+        TimeCalculator timer;
+      
+        timer.start();
         camera_params.resize(images_data.size());
         /*** Focal Length ***/
         const vector<vector<vector<bool> > > & apap_overlap_mask = getAPAPOverlapMask();
@@ -134,6 +149,7 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
             T.at<double>(0, 1) = T.at<double>(1, 0) = T.at<double>(2, 0) = T.at<double>(2, 1) = 0;
             translation_matrix.emplace_back(T);
         }
+        //通过单应矩阵估计图像对应的焦距，每个图像会得到多个焦距
         vector<vector<double> > image_focal_candidates;
         image_focal_candidates.resize(images_data.size());
         for(int i = 0; i < images_data.size(); ++i) {
@@ -153,6 +169,7 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
                 }
             }
         }
+        //将焦距平均值做为图像的焦距
         for(int i = 0; i < camera_params.size(); ++i) {
             if(image_focal_candidates[i].empty()) {
                 camera_params[i].focal = images_data[i].img.cols + images_data[i].img.rows;
@@ -160,6 +177,8 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
                 Statistics::getMedianWithoutCopyData(image_focal_candidates[i], camera_params[i].focal);
             }
         }
+        timer.end("get focal length");
+        timer.start();
         /********************/
         /*** 3D Rotations ***/
         vector<vector<Mat> > relative_3D_rotations;
@@ -182,6 +201,7 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
                                         HOMOGRAPHY_VARIABLES_COUNT);
             
             for(int j = 0; j < matches_info.num_inliers; ++j) {
+                //将匹配点坐标减去图像中心坐标
                 Point2d p1 = Point2d(images_features[m1].keypoints[matches_info.matches[j].queryIdx].pt) -
                              Point2d(translation_matrix[m1].at<double>(0, 2), translation_matrix[m1].at<double>(1, 2));
                 Point2d p2 = Point2d(images_features[m2].keypoints[matches_info.matches[j].trainIdx].pt) -
@@ -235,6 +255,8 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
             }
         }
         /********************/
+        timer.end("get rotation");
+        timer.start();
         for(int i = 0; i < camera_params.size(); ++i) {
             camera_params[i].aspect = 1;
             camera_params[i].ppx = translation_matrix[i].at<double>(0, 2);
@@ -260,6 +282,8 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
         for(int i = 0; i < camera_params.size(); ++i) {
             camera_params[i].R = center_rotation_inv * camera_params[i].R;
         }
+        timer.end("BundleAdjusterBase");
+        timer.start();
         /* wave correction */
         if(WAVE_CORRECT != WAVE_X) {
             vector<Mat> rotations;
@@ -272,8 +296,15 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
                 camera_params[i].R = rotations[i];
             }
         }
+        timer.end("WAVE_CORRECT");
         /*******************/
     }
+    /*
+    [TIME] 0.0073s : get focal length
+    [TIME] 0.0186s : get rotation
+    [TIME] 3.3229s : BundleAdjusterBase
+    [TIME] 0.0001s : WAVE_CORRECT
+    */
     return camera_params;
 }
 
@@ -337,7 +368,12 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
     vector<SimilarityElements> & result = *images_similarity_elements[_global_rotation_method];
     if(result.empty()) {
         result.reserve(images_data.size());
-        const vector<detail::CameraParams> & camera_params = getCameraParams();
+         TimeCalculator timer;
+      
+        timer.start();
+        const vector<detail::CameraParams> & camera_params = getCameraParams();//计算焦距和旋转矩阵
+        
+        timer.end("getCameraParams");
         for(int i = 0; i < images_data.size(); ++i) {
             result.emplace_back(fabs(camera_params[parameter.center_image_index].focal / camera_params[i].focal),
                                 -getEulerZXYRadians<float>(camera_params[i].R)[2]);
@@ -371,6 +407,7 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
                 decided[parameter.center_image_index] = true;
                 priority_que.emplace_back(parameter.center_image_index, -1);
                 const vector<vector<bool> > & images_match_graph = parameter.getImagesMatchGraph();
+                timer.start();
                 while(priority_que.empty() == false) {
                     RotationNode node = priority_que.front();
                     priority_que.erase(priority_que.begin());
@@ -399,6 +436,8 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
                         }
                     }
                 }
+                timer.end("get line rotation");
+                timer.start();
                 const int equations_count = (int)(images_match_graph_pair_list.size() + theta_constraints.size()) * DIMENSION_2D;
                 SparseMatrix<double> A(equations_count, images_data.size() * DIMENSION_2D);
                 VectorXd b = VectorXd::Zero(equations_count);
@@ -425,6 +464,8 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
                     triplets.emplace_back(equation + 1, DIMENSION_2D * m2 + 1,               -1);
                     equation += DIMENSION_2D;
                 }
+                 timer.end("get another line rotation");
+                  timer.start();
                 assert(equation == equations_count);
                 A.setFromTriplets(triplets.begin(), triplets.end());
                 LeastSquaresConjugateGradient<SparseMatrix<double> > lscg(A);
@@ -433,6 +474,7 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
                for(int i = 0; i < images_data.size(); ++i) {
                     result[i].theta = atan2(x[DIMENSION_2D * i + 1], x[DIMENSION_2D * i]);
                 }
+                timer.end("theta optimizier");
             }
                 break;
             case GLOBAL_ROTATION_3D_METHOD:
@@ -562,6 +604,9 @@ const vector<vector<pair<double, double> > > & MultiImages::getImagesRelativeRot
 }
 
 FLOAT_TYPE MultiImages::getImagesMinimumLineDistortionRotation(const int _from, const int _to) const {
+    //TimeCalculator timer;
+      
+    //timer.start();
     if(images_minimum_line_distortion_rotation.empty()) {
         images_minimum_line_distortion_rotation.resize(images_data.size());
         for(int i = 0; i < images_minimum_line_distortion_rotation.size(); ++i) {
@@ -569,10 +614,16 @@ FLOAT_TYPE MultiImages::getImagesMinimumLineDistortionRotation(const int _from, 
         }
     }
     if(images_minimum_line_distortion_rotation[_from][_to] == std::numeric_limits<float>::max()) {
+        // TimeCalculator timer2;
+      
+         //timer2.start();
         const vector<LineData> & from_lines   = images_data[_from].getLines();
+        //timer2.end("detect line");
         const vector<LineData> &   to_lines   = images_data[_to  ].getLines();
+        //timer2.start();
         const vector<Point2>   & from_project = getImagesLinesProject(_from, _to);
         const vector<Point2>   &   to_project = getImagesLinesProject(_to, _from);
+        //timer2.end("getImagesLinesProjecte");
         
         const vector<const vector<LineData> *> & lines    = { &from_lines,   &to_lines   };
         const vector<const vector<Point2  > *> & projects = { &from_project, &to_project };
@@ -644,6 +695,9 @@ FLOAT_TYPE MultiImages::getImagesMinimumLineDistortionRotation(const int _from, 
         images_minimum_line_distortion_rotation[_from][_to] = acos(dir.x / (norm(dir))) * (dir.y > 0 ? 1 : -1);
         images_minimum_line_distortion_rotation[_to][_from] = -images_minimum_line_distortion_rotation[_from][_to];
     }
+   
+      
+    //timer.end("getImagesMinimumLineDistortionRotation");
     return images_minimum_line_distortion_rotation[_from][_to];
 }
 
@@ -665,7 +719,12 @@ const vector<Point2> & MultiImages::getImagesLinesProject(const int _from, const
             }
         }
         vector<Mat> not_be_used;
+        //TimeCalculator timer2;
+      
+         //timer2.start();
         APAP_Stitching::apap_project(feature_matches[_from][_to], feature_matches[_to][_from], points, images_lines_projects[_from][_to], not_be_used);
+      
+         //timer2.end("apap_project");
     }
     return images_lines_projects[_from][_to];
 }
@@ -695,11 +754,11 @@ public:
 const vector<vector<double> > & MultiImages::getImagesGridSpaceMatchingPointsWeight(const double _global_weight_gamma) const {
     if(_global_weight_gamma && images_polygon_space_matching_pts_weight.empty()) {
         images_polygon_space_matching_pts_weight.resize(images_data.size());
-        const vector<vector<bool > > & images_features_mask = getImagesFeaturesMaskByMatchingPoints();
-        const vector<vector<InterpolateVertex> > & mesh_interpolate_vertex_of_matching_pts = getInterpolateVerticesOfMatchingPoints();
+        const vector<vector<bool > > & images_features_mask = getImagesFeaturesMaskByMatchingPoints();//各图像的网格顶点是否与其他图像有重叠
+        const vector<vector<InterpolateVertex> > & mesh_interpolate_vertex_of_matching_pts = getInterpolateVerticesOfMatchingPoints();//图像每个匹配点所属网格的索引，以及匹配点到网格四个顶点的权重(距离)
         for(int i = 0; i < images_polygon_space_matching_pts_weight.size(); ++i) {
-            const int polygons_count = (int)images_data[i].mesh_2d->getPolygonsIndices().size();
-            vector<bool> polygons_has_matching_pts(polygons_count, false);
+            const int polygons_count = (int)images_data[i].mesh_2d->getPolygonsIndices().size();//获取网格数量
+            vector<bool> polygons_has_matching_pts(polygons_count, false);//网格内是否存在与其他图像匹配的点，即此网格是否与其他图像存在重叠情况
             for(int j = 0; j < images_features_mask[i].size(); ++j) {
                 if(images_features_mask[i][j]) {
                     polygons_has_matching_pts[mesh_interpolate_vertex_of_matching_pts[i][j].polygon] = true;
@@ -717,8 +776,8 @@ const vector<vector<double> > & MultiImages::getImagesGridSpaceMatchingPointsWei
                     images_polygon_space_matching_pts_weight[i].emplace_back(MAXFLOAT);
                 }
             }
-            const vector<Indices> & polygons_neighbors = images_data[i].mesh_2d->getPolygonsNeighbors();
-            const vector<Point2> & polygons_center = images_data[i].mesh_2d->getPolygonsCenter();
+            const vector<Indices> & polygons_neighbors = images_data[i].mesh_2d->getPolygonsNeighbors();//网格顶点相领的四个顶点的网格坐标
+            const vector<Point2> & polygons_center = images_data[i].mesh_2d->getPolygonsCenter();//每个网格中心点的坐标，像素坐标
             while(que.empty() == false) {
                 const dijkstraNode now = que.top();
                 const int index = now.pos;

@@ -138,21 +138,28 @@ private:
                                                               const vector<Point2> & _Y,
                                                               const vector<pair<int, int> > & _initial_indices) const;
     
-    mutable vector<detail::ImageFeatures> images_features;
-    mutable vector<detail::MatchesInfo>   pairwise_matches;
+    mutable vector<detail::ImageFeatures> images_features; //存储当前图像网格顶点坐标以及其他图像顶点投影到当前图像后的顶点坐标, (当前图像中与其他图像有匹配关系的匹配点坐标，即其他图像的网格顶点通过apap投影到当前图像的点的坐标)
+
+    //保存匹配图相对的匹配信息,其中，D_matches的第一个值为M1的点，第二个值为m2的点，保存了两种匹配情况，
+    //第一种为m1投影到m2，若在m2图像内，则保存m1源点与投影后在m2上的点，两个点为匹配点
+    //第二种为M2投影到m1，若在m1图像内，则保存投影后的M1点，以及M2上的源点，两个点为匹配点对
+    //此处保存的是匹配点在images_features中的索引
+    mutable vector<detail::MatchesInfo>   pairwise_matches; 
     mutable vector<detail::CameraParams>  camera_params;
     
-    mutable vector<vector<bool> > images_features_mask;
+    mutable vector<vector<bool> > images_features_mask;  //images_features_mask[m1][k] = true; m1的第K个网格点，其他图像中有与它匹配的网格点,相当于各图像的网格顶点是否与其他图像有重叠
     
-    mutable vector<vector<vector<pair<int, int> > > > feature_pairs;
-    mutable vector<vector<vector<Point2> > > feature_matches; /* [m1][m2][j], img1 j_th matches */
+    mutable vector<vector<vector<pair<int, int> > > > feature_pairs; //图像之间特征点配对情况，存储的是特征点的索引
+    mutable vector<vector<vector<Point2> > > feature_matches; /* [m1][m2][j], img1 j_th matches */ //m1与m2的第j个匹配点的多标，m1上的坐标
     
-    mutable vector<vector<vector<bool> > >   apap_overlap_mask;
-    mutable vector<vector<vector<Mat> > >    apap_homographies;
-    mutable vector<vector<vector<Point2> > > apap_matching_points;
+    mutable vector<vector<vector<bool> > >   apap_overlap_mask; //apap_overlap_mask[m1][m2][k] = true; //m1的第K个网格顶点投影到m2图像，如果在M2图像内，则值为true
+    mutable vector<vector<vector<Mat> > >    apap_homographies; //apap_homographies[m1][m2] m1投影到m2的单应矩阵列表
+    mutable vector<vector<vector<Point2> > > apap_matching_points;//apap_matching_points[m1][m2] m1上所有网格顶点投影到m2后的坐标
     
     mutable vector<vector<InterpolateVertex> > mesh_interpolate_vertex_of_feature_pts;
-    mutable vector<vector<InterpolateVertex> > mesh_interpolate_vertex_of_matching_pts;
+    //保存图像每个匹配点所属网格的索引，以及匹配点到网格四个顶点的权重(距离).
+    //mesh_interpolate_vertex_of_matching_pts[i][j] 第i张图像的第j个网格顶点对应的索引以及权重
+    mutable vector<vector<InterpolateVertex> > mesh_interpolate_vertex_of_matching_pts; 
     
     mutable vector<int> images_vertices_start_index;
     mutable vector<SimilarityElements> images_similarity_elements_2D;

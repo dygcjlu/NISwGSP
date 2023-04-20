@@ -24,7 +24,7 @@ using namespace std;
 #define MAXFLOAT std::numeric_limits<double>::max()
 
 template<typename T, typename... Args>
-unique_ptr<T> make_unique(Args&&... args) {
+unique_ptr<T> make_unique_custom(Args&&... args) {
     return unique_ptr<T>(new T(forward<Args>(args)...));
 }
 
@@ -46,7 +46,8 @@ using namespace Eigen;
 /******************************/
 
 /*** data setting ***/
-const int GRID_SIZE = 40;
+//const int GRID_SIZE = 40;
+const int GRID_SIZE = 80;
 const int DOWN_SAMPLE_IMAGE_SIZE = 800 * 600;
 //const int DOWN_SAMPLE_IMAGE_SIZE = 1920 * 1080;
 

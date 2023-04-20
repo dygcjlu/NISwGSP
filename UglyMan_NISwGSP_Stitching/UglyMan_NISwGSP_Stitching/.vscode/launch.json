@@ -1,4 +1,4 @@
-/*
+
 
 {
     //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
@@ -27,7 +27,7 @@
         
     ]
 }
-*/
+
 /*{
     //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
     //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
@@ -54,7 +54,7 @@
         
     ]
 }*/
-
+/*
 {
     //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
     //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
@@ -68,7 +68,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build/NISwGSP",
-            "args": [ "/media/xxd/Data2/datasets/image_stitching/input-42-data/", "AANAP-building"],
+            "args": [ "/media/xxd/Data2/datasets/image_stitching/input-42-data/", "APAP-garden"],
             "cwd": "${workspaceFolder}",
             "setupCommands": [
                 {
@@ -80,7 +80,7 @@
         }
         
     ]
-}
+}*/
 
 //CAVE-church, 32 images, about 180s
 //CAVE-columbus_circle, 15 images, about 60s

@@ -93,15 +93,16 @@ public:
     
     virtual const vector<Point2> & getPolygonsCenter() const;
     
+    //获取像素坐标点p所属网格的索引
     template <typename T>
     int getGridIndexOfPoint(const Point_<T> & _p) const;
     
 protected:
-    mutable vector<Point2> vertices;
-    mutable vector<Point2> polygons_center;
+    mutable vector<Point2> vertices; //保存网格每个顶点的坐标，像素坐标
+    mutable vector<Point2> polygons_center;//保存每个网格中心点的坐标，像素坐标
     mutable vector<Edge> edges;
-    mutable vector<Indices> polygons_indices;
-    mutable vector<Indices> polygons_neighbors;
+    mutable vector<Indices> polygons_indices;  //保存的是每个网格四个顶点对应的网格坐标
+    mutable vector<Indices> polygons_neighbors; //保存与每个网格顶点相领的四个顶点的网格坐标
     mutable vector<Indices> polygons_edges;
     mutable vector<Indices> vertex_structures;
     mutable vector<Indices> edge_structures;

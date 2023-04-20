@@ -1,1 +1,157 @@
 sshfs nvidia@192.168.0.37:/home/nvidia/dyg/image_stitch/NISwGSP/UglyMan_NISwGSP_Stitching /home/xxd/dyg/remote_mount/image_stitch
+
+
+
+
+
+#############APAP-garden  setNbThreads(4)  default setTolerance,  
+[TIME] 9.3040s : apap
+[TIME] 10.4626s : reserveData
+[TIME] 0.0035s : prepareAlignmentTerm
+[TIME] 17.5763s :  prepareSimilarityTerm
+A = [17548, 3680]
+[TIME] 0.0635s : Initial A matrix
+[TIME] 1.8387s : Solve Ax = b
+#Iterations:     562
+Estimated error: 2.08387e-16
+[TIME] 1.9025s :  getImageVerticesBySolving
+[TIME] 0.0001s : normalizeVertices
+
+
+###### APAP-garden  nThreads = 4  lscg.setTolerance(0.000001);   stitch failed
+[TIME] 9.3554s : apap
+[TIME] 10.4563s : reserveData
+[TIME] 0.0037s : prepareAlignmentTerm
+[TIME] 17.5985s :  prepareSimilarityTerm
+A = [17548, 3680]
+[TIME] 0.0661s : Initial A matrix
+[TIME] 0.0202s : Solve Ax = b
+#Iterations:     1
+Estimated error: 6.87794e-07
+[TIME] 0.0867s :  getImageVerticesBySolving
+[TIME] 0.0001s : normalizeVertices
+
+###### APAP-garden  nThreads = 4  lscg.setTolerance(0.000000001); similar
+[TIME] 9.1631s : apap
+[TIME] 10.2444s : reserveData
+[TIME] 0.0048s : prepareAlignmentTerm
+[TIME] 17.9847s :  prepareSimilarityTerm
+A = [17548, 3680]
+[TIME] 0.0657s : Initial A matrix
+[TIME] 1.4058s : Solve Ax = b
+#Iterations:     401
+Estimated error: 9.89159e-10
+[TIME] 1.4718s :  getImageVerticesBySolving
+[TIME] 0.0001s : normalizeVertices
+
+
+
+#########APAP-garden  nThreads = 1  default setTolerance, apap thead = 4
+
+[TIME] 2.9097s : apap
+[TIME] 4.0345s : reserveData
+[TIME] 0.0037s : prepareAlignmentTerm
+[TIME] 5.5414s :  prepareSimilarityTerm
+A = [17548, 3680]
+[TIME] 0.0777s : Initial A matrix
+[TIME] 2.5358s : Solve Ax = b
+#Iterations:     562
+Estimated error: 2.08387e-16
+[TIME] 2.6139s :  getImageVerticesBySolving
+[TIME] 0.0001s : normalizeVertices
+
+
+
+###############APAP-garden  nThreads = 1  default setTolerance, apap thead = 8
+[TIME] 1.9346s : apap
+[TIME] 3.0074s : reserveData
+[TIME] 0.0038s : prepareAlignmentTerm
+[TIME] 3.9939s :  prepareSimilarityTerm
+A = [17548, 3680]
+[TIME] 0.0720s : Initial A matrix
+[TIME] 2.5131s : Solve Ax = b
+#Iterations:     562
+Estimated error: 2.08387e-16
+[TIME] 2.5854s :  getImageVerticesBySolving
+[TIME] 0.0001s : normalizeVertices
+
+
+#########APAP-garden  nThreads = 1  default setTolerance, apap thead = 8
+[TIME] 1.7270s : apap
+[TIME] 2.8060s : reserveData
+[TIME] 0.0051s : prepareAlignmentTerm
+[TIME] 3.3713s :  prepareSimilarityTerm
+A = [17548, 3680]
+[TIME] 0.0774s : Initial A matrix
+[TIME] 2.3885s : Solve Ax = b
+#Iterations:     562
+Estimated error: 2.08387e-16
+[TIME] 2.4662s :  getImageVerticesBySolving
+[TIME] 0.0001s : normalizeVertices
+
+
+
+######### human lung simple3, apap thead = 8,  GRID_SIZE=40
+[TIME] 9.7411s : apap
+[TIME] 15.2192s : reserveData
+[TIME] 0.0306s : prepareAlignmentTerm
+[TIME] 18.1283s : getImagesSimilarityElements
+[TIME] 18.2940s :  prepareSimilarityTerm
+A = [108460, 20300]
+[TIME] 0.4474s : Initial A matrix
+[TIME] 13.2987s : Solve Ax = b
+#Iterations:     500
+Estimated error: 3.10099e-08
+[TIME] 13.7476s :  getImageVerticesBySolving
+[TIME] 0.0003s : normalizeVertices
+[TIME] 10.5652s : textureMapping
+[TIME] 0.3030s : writeResultWithMesh
+[TIME] 58.3130s : 2d BLEND_AVERAGE: 
+
+
+######### human lung simple3 , apap thead = 8, GRID_SIZE=80, lscg.setTolerance(1e-10),  lscg.setMaxIterations(500);
+[TIME] 3.1264s : apap
+[TIME] 8.7300s : reserveData
+[TIME] 0.0092s : prepareAlignmentTerm
+[TIME] 13.9940s : getImagesSimilarityElements
+[TIME] 14.0442s :  prepareSimilarityTerm
+A = [30680, 6032]
+[TIME] 0.1373s : Initial A matrix
+[TIME] 3.1048s : Solve Ax = b
+#Iterations:     392
+Estimated error: 9.75284e-11
+[TIME] 3.2427s :  getImageVerticesBySolving
+[TIME] 0.0001s : normalizeVertices
+[TIME] 9.6985s : textureMapping
+[TIME] 0.2993s : writeResultWithMesh
+[TIME] 36.1745s : 2d BLEND_AVERAGE:
+
+######### human lung simple3 , apap thead = 8, GRID_SIZE=160, lscg.setTolerance(1e-10),  lscg.setMaxIterations(500);
+[TIME] 1.3414s : apap
+[TIME] 8.3723s : reserveData
+[TIME] 0.0040s : prepareAlignmentTerm
+[TIME] 12.9126s : getImagesSimilarityElements
+[TIME] 12.9293s :  prepareSimilarityTerm
+A = [9562, 2030]
+[TIME] 0.0315s : Initial A matrix
+[TIME] 0.4723s : Solve Ax = b
+#Iterations:     190
+Estimated error: 8.27545e-11
+[TIME] 0.5040s :  getImageVerticesBySolving
+[TIME] 0.0000s : normalizeVertices
+[TIME] 7.2151s : textureMapping
+[TIME] 0.2384s : writeResultWithMesh
+[TIME] 29.3925s : 2d BLEND_AVERAGE: 
+
+
+#######################human lung simple3 , apap thead = 8, GRID_SIZE=160, lscg.setTolerance(1e-10),  lscg.setMaxIterations(500), NDEBUG
+[TIME] 1.0082s : apap
+[TIME] 4.9540s : reserveData
+[TIME] 0.0029s : prepareAlignmentTerm
+[TIME] 11.7352s : getImagesSimilarityElements
+[TIME] 11.7477s :  prepareSimilarityTerm
+[TIME] 0.5262s :  getImageVerticesBySolving
+[TIME] 0.0000s : normalizeVertices
+[TIME] 7.4865s : textureMapping
+[TIME] 0.0000s : writeResultWithMesh
+[TIME] 24.8357s : 2d BLEND_AVERAGE:

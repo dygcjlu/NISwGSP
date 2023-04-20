@@ -16,7 +16,7 @@ public:
     MeshGrid(const int _cols, const int _rows);
     const vector<Point2> & getVertices() const;
     const vector<Edge>   & getEdges() const;
-    const vector<Indices> & getPolygonsIndices() const;
+    const vector<Indices> & getPolygonsIndices() const; //每个网格四个顶点对应的网格坐标
     const vector<Indices> & getPolygonsNeighbors() const;
     const vector<Indices> & getPolygonsEdges() const;
     const vector<Indices> & getVertexStructures() const;

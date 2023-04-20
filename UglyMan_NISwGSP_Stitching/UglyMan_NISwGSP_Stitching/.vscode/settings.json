@@ -72,6 +72,13 @@
         "valarray": "cpp",
         "variant": "cpp",
         "csignal": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "*.ipp": "cpp",
+        "matrixfunctions": "cpp",
+        "nonlinearoptimization": "cpp",
+        "*.tc": "cpp",
+        "*.def": "cpp",
+        "iterativelinearsolvers": "cpp",
+        "mprealsupport": "cpp"
     }
 }

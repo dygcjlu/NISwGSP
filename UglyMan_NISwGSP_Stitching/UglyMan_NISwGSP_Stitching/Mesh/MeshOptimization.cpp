@@ -7,6 +7,7 @@
 //
 
 #include "MeshOptimization.h"
+#include "../Debugger/TimeCalculator.h"
 
 MeshOptimization::MeshOptimization(const MultiImages & _multi_images) {
     multi_images = &_multi_images;
@@ -92,10 +93,10 @@ void MeshOptimization::prepareAlignmentTerm(vector<Triplet<double> > & _triplets
     if(alignment_equation.second) {
         const int equation = alignment_equation.first;
         
-        const vector<vector<InterpolateVertex> > & mesh_interpolate_vertex_of_matching_pts = multi_images->getInterpolateVerticesOfMatchingPoints();
+        const vector<vector<InterpolateVertex> > & mesh_interpolate_vertex_of_matching_pts = multi_images->getInterpolateVerticesOfMatchingPoints();//图像每个匹配点所属网格的索引，以及匹配点到网格四个顶点的权重(距离)
         const vector<detail::MatchesInfo> & pairwise_matches = multi_images->getPairwiseMatchesByMatchingPoints();
         const vector<pair<int, int> > & images_match_graph_pair_list = multi_images->parameter.getImagesMatchGraphPairList();
-        const vector<int> & images_vertices_start_index = multi_images->getImagesVerticesStartIndex();
+        const vector<int> & images_vertices_start_index = multi_images->getImagesVerticesStartIndex();//各个图像的网格起始索引(若所有图像的网格都放在同一个列表)
 
         int eq_count = 0;
         for(int i = 0; i < images_match_graph_pair_list.size(); ++i) {
@@ -134,9 +135,16 @@ void MeshOptimization::prepareSimilarityTerm(vector<Triplet<double> > & _triplet
     const bool local_similarity_term = local_similarity_equation.second;
     const bool global_similarity_term = global_similarity_equation.second;
     if(local_similarity_term || global_similarity_term) {
-        const vector<int> & images_vertices_start_index = multi_images->getImagesVerticesStartIndex();
+        TimeCalculator timer;
+      
+        timer.start();
+        const vector<int> & images_vertices_start_index = multi_images->getImagesVerticesStartIndex();//各个图像的网格起始索引
+        //返回第i个图像的第j个网格的距离权重，到此重叠区域的距离？
         const vector<vector<double> > & images_grid_space_matching_pts_weight = multi_images->getImagesGridSpaceMatchingPointsWeight(global_similarity_weight_gamma);
+        timer.end("images_grid_space_matching_pts_weight");
+        timer.start();
         const vector<SimilarityElements> & images_similarity_elements = multi_images->getImagesSimilarityElements(global_rotation_method);
+        timer.end("getImagesSimilarityElements");
         int eq_count = 0, eq_count_rotation = 0;
         for(int i = 0; i < multi_images->images_data.size(); ++i) {
             const vector<Edge> & edges = multi_images->images_data[i].mesh_2d->getEdges();
@@ -301,6 +309,8 @@ vector<vector<Point2> > MeshOptimization::getImageVerticesBySolving(vector<Tripl
     timer.end("Initial A matrix");
     timer.start();
 #endif
+    lscg.setTolerance(1e-10);
+    lscg.setMaxIterations(500);
     lscg.compute(A);
     x = lscg.solve(b);
 #ifndef NDEBUG

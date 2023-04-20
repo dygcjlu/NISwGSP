@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.0)
 PROJECT(NISwGSP)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+add_definitions("-DNDEBUG")
+
 MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" )
   #SET(CMAKE_BUILD_TYPE Debug)
@@ -32,15 +34,18 @@ add_definitions("-DOPENGL_ENABLED")
 find_package(Glew REQUIRED)
 
 #openmp
-add_definitions(-DEIGEN_HAS_OPENMP)
+#add_definitions(-DEIGEN_HAS_OPENMP)
 FIND_PACKAGE(OpenMP REQUIRED)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+message("openmp" ${OpenMP_CXX_FLAGS})
+
 
 #eigen
 set(Eigen3_DIR /usr/local/share/eigen3/cmake)
 FIND_PACKAGE(Eigen3 REQUIRED)
 
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -DEIGEN_DONT_PARALLELIZE")
 
 #glog
 find_package(Glog REQUIRED)
