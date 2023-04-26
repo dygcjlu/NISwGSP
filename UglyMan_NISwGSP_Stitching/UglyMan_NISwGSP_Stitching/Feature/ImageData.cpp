@@ -117,6 +117,37 @@ ImageData::ImageData(cv::Mat& img, int nId, bool bUseSiftgpu,
 
 
 }
+/*
+ImageData& ImageData::operator=(const ImageData &data)
+{
+    if (this != &data) 
+    {
+        this->img = data.img.clone();
+        this->rgba_img = 
+
+        Mat img, rgba_img, alpha_mask;
+    unique_ptr<Mesh2D> mesh_2d;
+    int m_nID;
+
+    LINES_FILTER_FUNC * width_filter, * length_filter;
+    
+    mutable Mat grey_img;
+    mutable vector<LineData> img_lines; //图像中所有线段的两个端点坐标
+    mutable vector<Point2> feature_points; //图像中提取的特征点
+    mutable vector<FeatureDescriptor> feature_descriptors;//特征描述子
+
+private:
+    
+    bool m_bUseSiftGPU;
+    mutable bool m_bIsFeatureDetected;
+    mutable colmap::FeatureKeypoints m_vecFeaturePoints;
+    mutable colmap::FeatureDescriptors m_vecFeatureDescriptors;
+    set<int> m_setContectedKfId;
+
+    }
+
+    return *this;
+}*/
 
 /*
 ImageData::~ImageData()
@@ -293,4 +324,13 @@ int ImageData::getFeaturePointSize()
     return feature_points.size();
 }
 
+int ImageData::SetConnection(int nId)
+{
+    m_setContectedKfId.insert(nId);
+    return 0;
+}
 
+int ImageData::GetConnectionSize()
+{
+    return m_setContectedKfId.size();
+}

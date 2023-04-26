@@ -148,6 +148,11 @@ int CFeatureMatchThread::LoopFeatureMatch(ImageData* pImage,  bool bIsKeyFrame)
             continue;
         }
 
+        //add connection to list
+        pImage->SetConnection(rit->first);
+        rit->second->SetConnection(pImage->m_nID);
+
+
         if(1 == nIteratorNo)
         {     
             dOverlapRatioWithLastKF = dOverlapRatio;

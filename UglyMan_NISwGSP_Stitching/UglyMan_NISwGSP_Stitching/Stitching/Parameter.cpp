@@ -51,6 +51,31 @@ bool isFileExist (const string & name) {
     return (stat (name.c_str(), &buffer) == 0);
 }
 
+
+Parameter::Parameter(const string & rootPath) 
+{
+    
+#ifndef NDEBUG
+    //debug_dir = "./input-42-data/1_debugs/" + _file_name + "-result/";
+    debug_dir = rootPath + "1_debugs/";
+    //mkdir("./input-42-data/1_debugs/", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    mkdir(debug_dir.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+#endif
+   
+    /*** configure ***/
+    grid_size = GRID_SIZE;
+    down_sample_image_size = DOWN_SAMPLE_IMAGE_SIZE;
+  
+    global_homography_max_inliers_dist   = GLOBAL_HOMOGRAPHY_MAX_INLIERS_DIST;
+    local_homogrpahy_max_inliers_dist    = LOCAL_HOMOGRAPHY_MAX_INLIERS_DIST;
+    local_homography_min_features_count  = LOCAL_HOMOGRAPHY_MIN_FEATURES_COUNT;
+        
+    images_count                 = 0;
+    center_image_index           = 0;
+    center_image_rotation_angle  = 0;
+
+}
+
 Parameter::Parameter(const string & rootPath, const string & _file_name) {
     
     //std::string rootPath = "/media/xxd/Data2/datasets/image_stitching/input-42-data/";
@@ -167,3 +192,60 @@ const vector<pair<int, int> > & Parameter::getImagesMatchGraphPairList() const {
     }
     return images_match_graph_pair_list;
 }
+
+/////////////////////////////////
+/*
+int Parameter::SetImagePair()
+{
+
+    images_count                 = input_parser.get<   int>("images_count");
+    center_image_index           = input_parser.get<   int>("center_image_index");
+    center_image_rotation_angle  = input_parser.get<double>("center_image_rotation_angle");
+        
+    
+        
+        assert(image_file_full_names.size() == images_count);
+        assert(center_image_index >= 0 && center_image_index < images_count);
+       
+        
+        images_match_graph_manually.resize(images_count);
+        for(int i = 0; i < images_count; ++i) {
+            images_match_graph_manually[i].resize(images_count, false);
+            vector<int> labels = input_parser.getVec<int>("matching_graph_image_edges-"+to_string(i), false);
+            for(int j = 0; j < labels.size(); ++j) {
+                images_match_graph_manually[i][labels[j]] = true;
+            }
+        }
+        
+        // check 
+        queue<int> que;
+        vector<bool> label(images_count, false);
+        que.push(center_image_index);
+        while(que.empty() == false) {
+            int n = que.front();
+            que.pop();
+            label[n] = true;
+            for(int i = 0; i < images_count; ++i) {
+                if(!label[i] && (images_match_graph_manually[n][i] || images_match_graph_manually[i][n])) {
+                    que.push(i);
+                }
+            }
+        }
+        assert(std::all_of(label.begin(), label.end(), [](bool i){return i;}));
+        
+        
+#ifndef NDEBUG
+        cout << "center_image_index = " << center_image_index << endl;
+        cout << "center_image_rotation_angle = " << center_image_rotation_angle << endl;
+        cout << "images_count = " << images_count << endl;
+        cout << "images_match_graph_manually = " << endl;
+        for(int i = 0; i < images_match_graph_manually.size(); ++i) {
+            for(int j = 0; j < images_match_graph_manually[i].size(); ++j) {
+                cout << images_match_graph_manually[i][j] << " ";
+            }
+            cout << endl;
+        }
+#endif
+
+    return 0;
+}*/

@@ -26,6 +26,8 @@
 #include <opencv2/stitching/detail/camera.hpp> /* CameraParams */
 #include <opencv2/stitching/detail/motion_estimators.hpp> /* BundleAdjusterBase */
 
+//#include "../ImagePair/APAPProjectThread.h"
+
 const int PAIR_COUNT = 2;
 
 class FeatureDistance {
@@ -69,6 +71,7 @@ public:
                 LINES_FILTER_FUNC * _width_filter  = &LINES_FILTER_NONE,
                 LINES_FILTER_FUNC * _length_filter = &LINES_FILTER_NONE);
                 */
+    MultiImages(const string & rootPath);
     MultiImages(const string & rootPath, const string & _file_name,
                 LINES_FILTER_FUNC * _width_filter  = &LINES_FILTER_NONE,
                 LINES_FILTER_FUNC * _length_filter = &LINES_FILTER_NONE);
@@ -114,13 +117,17 @@ public:
                              const string & _postfix,
                              const bool _only_border) const;
     
-    vector<ImageData> images_data;
+    //vector<ImageData> images_data;
+    vector<ImageData*> images_data;
     Parameter parameter;
 
 private:
 
     vector<pair<int, int> > getInitialFeaturePairsGPU(const pair<int, int> & _match_pair) const;
     vector<vector<vector<pair<int, int> > > > & getFeaturePairsGPU() const;
+    //int SetAPAPProjectObject(CAPAPProjectThread* pAPAPProjectObject);
+    //int InitMemberVariables();
+    
 
 private:    
     /*** Debugger ***/
@@ -177,6 +184,8 @@ private:
 
 private:
     bool m_bUseSiftGPU;
+    //CAPAPProjectThread* m_pAPAPProjectObject;
+
 };
 
 #endif /* defined(__UglyMan_Stitiching__MultiImages__) */

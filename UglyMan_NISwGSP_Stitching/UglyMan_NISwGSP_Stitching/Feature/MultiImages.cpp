@@ -10,6 +10,11 @@
 #include "../Debugger/TimeCalculator.h"
 #include "siftgpu_manage.h"
 
+MultiImages::MultiImages(const string & rootPath):parameter(rootPath)
+{
+
+}
+
 MultiImages::MultiImages(const string & rootPath, const string & _file_name,
                          LINES_FILTER_FUNC * _width_filter,
                          LINES_FILTER_FUNC * _length_filter) : parameter(rootPath, _file_name)
@@ -18,30 +23,37 @@ MultiImages::MultiImages(const string & rootPath, const string & _file_name,
     
     for(int i = 0; i < parameter.image_file_full_names.size(); ++i) {
 #ifndef NDEBUG
+        ImageData* pTmp = new ImageData(parameter.file_dir,
+                                 parameter.image_file_full_names[i],
+                                 _width_filter,
+                                 _length_filter,
+                                 m_bUseSiftGPU,
+                                 &parameter.debug_dir);
 
+        images_data.emplace_back(pTmp);
+        /*
         images_data.emplace_back(parameter.file_dir,
                                  parameter.image_file_full_names[i],
                                  _width_filter,
                                  _length_filter,
                                  m_bUseSiftGPU,
-                                 &parameter.debug_dir);
-                                 /*
-        ImageData a = ImageData(parameter.file_dir,
-                                 parameter.image_file_full_names[i],
-                                 _width_filter,
-                                 _length_filter,
-                                 m_bUseSiftGPU,
-                                 &parameter.debug_dir);
-
-
-        images_data.emplace_back(a);*/
+                                 &parameter.debug_dir);*/
+                              
         
 #else
+        /*
         images_data.emplace_back(parameter.file_dir,
+                                 parameter.image_file_full_names[i],
+                                 _width_filter,
+                                 _length_filter,
+                                  m_bUseSiftGPU);*/
+        ImageData* pTmp = new ImageData(parameter.file_dir,
                                  parameter.image_file_full_names[i],
                                  _width_filter,
                                  _length_filter,
                                   m_bUseSiftGPU);
+
+        images_data.emplace_back(pTmp);
 #endif
     }
 }
@@ -52,7 +64,7 @@ void MultiImages::doFeatureMatching() const {
     images_features.resize(images_data.size());
     images_features_mask.resize(images_data.size());
     for(int i = 0; i < images_data.size(); ++i) {
-        const vector<Point2> & vertices = images_data[i].mesh_2d->getVertices();
+        const vector<Point2> & vertices = images_data[i]->mesh_2d->getVertices();
         images_features_mask[i].resize(vertices.size(), false);
         for(int j = 0; j < vertices.size(); ++j) {
             images_features[i].keypoints.emplace_back(vertices[j], 0);
@@ -79,10 +91,10 @@ void MultiImages::doFeatureMatching() const {
         const int & m1 = match_pair.first, & m2 = match_pair.second;
         APAP_Stitching::apap_project(feature_matches[m1][m2],
                                      feature_matches[m2][m1],
-                                     images_data[m1].mesh_2d->getVertices(), apap_matching_points[m1][m2], apap_homographies[m1][m2]);
+                                     images_data[m1]->mesh_2d->getVertices(), apap_matching_points[m1][m2], apap_homographies[m1][m2]);
         APAP_Stitching::apap_project(feature_matches[m2][m1],
                                      feature_matches[m1][m2],
-                                     images_data[m2].mesh_2d->getVertices(), apap_matching_points[m2][m1], apap_homographies[m2][m1]);
+                                     images_data[m2]->mesh_2d->getVertices(), apap_matching_points[m2][m1], apap_homographies[m2][m1]);
         
         const int PAIR_SIZE = 2;
         const vector<Point2> * out_dst[PAIR_SIZE] = { &apap_matching_points[m1][m2], &apap_matching_points[m2][m1] };
@@ -96,8 +108,8 @@ void MultiImages::doFeatureMatching() const {
         for(int j = 0; j < PAIR_SIZE; ++j) {
             for(int k = 0; k < out_dst[j]->size(); ++k) {
                 if((*out_dst[j])[k].x >= 0 && (*out_dst[j])[k].y >= 0 &&
-                   (*out_dst[j])[k].x <= images_data[m_index[j]].img.cols &&
-                   (*out_dst[j])[k].y <= images_data[m_index[j]].img.rows) 
+                   (*out_dst[j])[k].x <= images_data[m_index[j]]->img.cols &&
+                   (*out_dst[j])[k].y <= images_data[m_index[j]]->img.rows) 
                    {
                     //D_matches的第一个值为M1的点，第二个值为m2的点，保存了两种匹配情况，
                     // 第一种为m1投影到m2，若在m2图像内，则保存m1源点与投影后在m2上的点，两个点为匹配点
@@ -162,8 +174,8 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
         for(int i = 0; i < images_data.size(); ++i) {
             Mat T(3, 3, CV_64FC1);
             T.at<double>(0, 0) = T.at<double>(1, 1) = T.at<double>(2, 2) = 1;
-            T.at<double>(0, 2) = images_data[i].img.cols * 0.5;
-            T.at<double>(1, 2) = images_data[i].img.rows * 0.5;
+            T.at<double>(0, 2) = images_data[i]->img.cols * 0.5;
+            T.at<double>(1, 2) = images_data[i]->img.rows * 0.5;
             T.at<double>(0, 1) = T.at<double>(1, 0) = T.at<double>(2, 0) = T.at<double>(2, 1) = 0;
             translation_matrix.emplace_back(T);
         }
@@ -190,7 +202,7 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
         //将焦距平均值做为图像的焦距
         for(int i = 0; i < camera_params.size(); ++i) {
             if(image_focal_candidates[i].empty()) {
-                camera_params[i].focal = images_data[i].img.cols + images_data[i].img.rows;
+                camera_params[i].focal = images_data[i]->img.cols + images_data[i]->img.rows;
             } else {
                 Statistics::getMedianWithoutCopyData(image_focal_candidates[i], camera_params[i].focal);
             }
@@ -360,7 +372,7 @@ const vector<vector<InterpolateVertex> > & MultiImages::getInterpolateVerticesOf
         for(int i = 0; i < mesh_interpolate_vertex_of_matching_pts.size(); ++i) {
             mesh_interpolate_vertex_of_matching_pts[i].reserve(images_features[i].keypoints.size());
             for(int j = 0; j < images_features[i].keypoints.size(); ++j) {
-                mesh_interpolate_vertex_of_matching_pts[i].emplace_back(images_data[i].mesh_2d->getInterpolateVertex(images_features[i].keypoints[j].pt));
+                mesh_interpolate_vertex_of_matching_pts[i].emplace_back(images_data[i]->mesh_2d->getInterpolateVertex(images_features[i].keypoints[j].pt));
             }
         }
     }
@@ -373,7 +385,7 @@ const vector<int> & MultiImages::getImagesVerticesStartIndex() const {
         int index = 0;
         for(int i = 0; i < images_data.size(); ++i) {
             images_vertices_start_index.emplace_back(index);
-            index += images_data[i].mesh_2d->getVertices().size() * DIMENSION_2D;
+            index += images_data[i]->mesh_2d->getVertices().size() * DIMENSION_2D;
         }
     }
     return images_vertices_start_index;
@@ -563,13 +575,13 @@ const vector<vector<pair<double, double> > > & MultiImages::getImagesRelativeRot
         for(int i = 0; i < images_match_graph_pair_list.size(); ++i) {
             const pair<int, int> & match_pair = images_match_graph_pair_list[i];
             const int & m1 = match_pair.first, & m2 = match_pair.second;
-            const vector<Edge> & m1_edges = images_data[m1].mesh_2d->getEdges();
-            const vector<Edge> & m2_edges = images_data[m2].mesh_2d->getEdges();
+            const vector<Edge> & m1_edges = images_data[m1]->mesh_2d->getEdges();
+            const vector<Edge> & m2_edges = images_data[m2]->mesh_2d->getEdges();
             const vector<const vector<Edge> *> & edges = { &m1_edges, &m2_edges };
             const vector<pair<int, int> > pair_index = { make_pair(m1, m2), make_pair(m2, m1) };
             const vector<pair<const vector<Point2> *, const vector<Point2> *> > & vertices_pair = {
-                make_pair(&images_data[m1].mesh_2d->getVertices(), &apap_matching_points[m1][m2]),
-                make_pair(&images_data[m2].mesh_2d->getVertices(), &apap_matching_points[m2][m1])
+                make_pair(&images_data[m1]->mesh_2d->getVertices(), &apap_matching_points[m1][m2]),
+                make_pair(&images_data[m2]->mesh_2d->getVertices(), &apap_matching_points[m2][m1])
             };
             vector<double> positive, negative;
             const vector<bool> sign_mapping = { false, true, true, false };
@@ -637,9 +649,9 @@ FLOAT_TYPE MultiImages::getImagesMinimumLineDistortionRotation(const int _from, 
         // TimeCalculator timer2;
       
          //timer2.start();
-        const vector<LineData> & from_lines   = images_data[_from].getLines();
+        const vector<LineData> & from_lines   = images_data[_from]->getLines();
         //timer2.end("detect line");
-        const vector<LineData> &   to_lines   = images_data[_to  ].getLines();
+        const vector<LineData> &   to_lines   = images_data[_to  ]->getLines();
         //timer2.start();
         const vector<Point2>   & from_project = getImagesLinesProject(_from, _to);
         const vector<Point2>   &   to_project = getImagesLinesProject(_to, _from);
@@ -652,8 +664,8 @@ FLOAT_TYPE MultiImages::getImagesMinimumLineDistortionRotation(const int _from, 
         
         vector<pair<double, double> > theta_weight_pairs;
         for(int i = 0; i < lines.size(); ++i) {
-            const int & rows = images_data[img_indices[i]].img.rows;
-            const int & cols = images_data[img_indices[i]].img.cols;
+            const int & rows = images_data[img_indices[i]]->img.rows;
+            const int & cols = images_data[img_indices[i]]->img.cols;
             const vector<pair<Point2, Point2> > & boundary_edgs = {
                 make_pair(Point2(0,       0), Point2(cols,    0)),
                 make_pair(Point2(cols,    0), Point2(cols, rows)),
@@ -730,7 +742,7 @@ const vector<Point2> & MultiImages::getImagesLinesProject(const int _from, const
     }
     if(images_lines_projects[_from][_to].empty()) {
         const vector<vector<vector<Point2> > > & feature_matches = getFeatureMatches();
-        const vector<LineData> & lines = images_data[_from].getLines();
+        const vector<LineData> & lines = images_data[_from]->getLines();
         vector<Point2> points, project_points;
         points.reserve(lines.size() * EDGE_VERTEX_SIZE);
         for(int i = 0; i < lines.size(); ++i) {
@@ -753,7 +765,7 @@ const vector<Mat> & MultiImages::getImages() const {
     if(images.empty()) {
         images.reserve(images_data.size());
         for(int i = 0; i < images_data.size(); ++i) {
-            images.emplace_back(images_data[i].img);
+            images.emplace_back(images_data[i]->img);
         }
     }
     return images;
@@ -777,7 +789,7 @@ const vector<vector<double> > & MultiImages::getImagesGridSpaceMatchingPointsWei
         const vector<vector<bool > > & images_features_mask = getImagesFeaturesMaskByMatchingPoints();//各图像的网格顶点是否与其他图像有重叠
         const vector<vector<InterpolateVertex> > & mesh_interpolate_vertex_of_matching_pts = getInterpolateVerticesOfMatchingPoints();//图像每个匹配点所属网格的索引，以及匹配点到网格四个顶点的权重(距离)
         for(int i = 0; i < images_polygon_space_matching_pts_weight.size(); ++i) {
-            const int polygons_count = (int)images_data[i].mesh_2d->getPolygonsIndices().size();//获取网格数量
+            const int polygons_count = (int)images_data[i]->mesh_2d->getPolygonsIndices().size();//获取网格数量
             vector<bool> polygons_has_matching_pts(polygons_count, false);//网格内是否存在与其他图像匹配的点，即此网格是否与其他图像存在重叠情况
             for(int j = 0; j < images_features_mask[i].size(); ++j) {
                 if(images_features_mask[i][j]) {
@@ -796,8 +808,8 @@ const vector<vector<double> > & MultiImages::getImagesGridSpaceMatchingPointsWei
                     images_polygon_space_matching_pts_weight[i].emplace_back(MAXFLOAT);
                 }
             }
-            const vector<Indices> & polygons_neighbors = images_data[i].mesh_2d->getPolygonsNeighbors();//网格顶点相领的四个顶点的网格坐标
-            const vector<Point2> & polygons_center = images_data[i].mesh_2d->getPolygonsCenter();//每个网格中心点的坐标，像素坐标
+            const vector<Indices> & polygons_neighbors = images_data[i]->mesh_2d->getPolygonsNeighbors();//网格顶点相领的四个顶点的网格坐标
+            const vector<Point2> & polygons_center = images_data[i]->mesh_2d->getPolygonsCenter();//每个网格中心点的坐标，像素坐标
             while(que.empty() == false) {
                 const dijkstraNode now = que.top();
                 const int index = now.pos;
@@ -816,7 +828,7 @@ const vector<vector<double> > & MultiImages::getImagesGridSpaceMatchingPointsWei
                     }
                 }
             }
-            const double normalize_inv = 1. / norm(Point2i(images_data[i].img.cols, images_data[i].img.rows));
+            const double normalize_inv = 1. / norm(Point2i(images_data[i]->img.cols, images_data[i]->img.rows));
             for(int j = 0; j < images_polygon_space_matching_pts_weight[i].size(); ++j) {
                 images_polygon_space_matching_pts_weight[i][j] = images_polygon_space_matching_pts_weight[i][j] * normalize_inv;
             }
@@ -846,8 +858,8 @@ const vector<vector<vector<pair<int, int> > > > & MultiImages::getFeaturePairs()
             timer.start();
 
              
-            const vector<Point2> & m1_fpts = images_data[match_pair.first ].getFeaturePoints();
-            const vector<Point2> & m2_fpts = images_data[match_pair.second].getFeaturePoints();
+            const vector<Point2> & m1_fpts = images_data[match_pair.first ]->getFeaturePoints();
+            const vector<Point2> & m2_fpts = images_data[match_pair.second]->getFeaturePoints();
             vector<Point2> X, Y;
             X.reserve(initial_indices.size());
             Y.reserve(initial_indices.size());
@@ -884,8 +896,8 @@ const vector<vector<vector<Point2> > > & MultiImages::getFeatureMatches() const 
                 const int & m1 = match_pair.first, & m2 = match_pair.second;
                 feature_matches[m1][m2].reserve(feature_pairs[m1][m2].size());
                 feature_matches[m2][m1].reserve(feature_pairs[m1][m2].size());
-                const vector<Point2> & m1_fpts = images_data[m1].getFeaturePoints();
-                const vector<Point2> & m2_fpts = images_data[m2].getFeaturePoints();
+                const vector<Point2> & m1_fpts = images_data[m1]->getFeaturePoints();
+                const vector<Point2> & m2_fpts = images_data[m2]->getFeaturePoints();
                 for(int j = 0; j < feature_pairs[m1][m2].size(); ++j) {
                     feature_matches[m1][m2].emplace_back(m1_fpts[feature_pairs[m1][m2][j].first ]);
                     feature_matches[m2][m1].emplace_back(m2_fpts[feature_pairs[m1][m2][j].second]);
@@ -904,8 +916,8 @@ const vector<vector<vector<Point2> > > & MultiImages::getFeatureMatches() const 
                 const int & m1 = match_pair.first, & m2 = match_pair.second;
                 feature_matches[m1][m2].reserve(feature_pairs[m1][m2].size());
                 feature_matches[m2][m1].reserve(feature_pairs[m1][m2].size());
-                const vector<Point2> & m1_fpts = images_data[m1].getFeaturePoints();
-                const vector<Point2> & m2_fpts = images_data[m2].getFeaturePoints();
+                const vector<Point2> & m1_fpts = images_data[m1]->getFeaturePoints();
+                const vector<Point2> & m2_fpts = images_data[m2]->getFeaturePoints();
                 for(int j = 0; j < feature_pairs[m1][m2].size(); ++j) {
                     feature_matches[m1][m2].emplace_back(m1_fpts[feature_pairs[m1][m2][j].first ]);
                     feature_matches[m2][m1].emplace_back(m2_fpts[feature_pairs[m1][m2][j].second]);
@@ -994,8 +1006,8 @@ vector<pair<int, int> > MultiImages::getInitialFeaturePairs(const pair<int, int>
     
     assert(nearest_size > 0);
     
-    const int feature_size_1 = (int)images_data[_match_pair.first ].getFeaturePoints().size();
-    const int feature_size_2 = (int)images_data[_match_pair.second].getFeaturePoints().size();
+    const int feature_size_1 = (int)images_data[_match_pair.first ]->getFeaturePoints().size();
+    const int feature_size_2 = (int)images_data[_match_pair.second]->getFeaturePoints().size();
     const int PAIR_COUNT = 2;
     const int feature_size[PAIR_COUNT] = { feature_size_1, feature_size_2 };
     const int pair_match[PAIR_COUNT] = { _match_pair.first , _match_pair.second };
@@ -1008,8 +1020,8 @@ vector<pair<int, int> > MultiImages::getInitialFeaturePairs(const pair<int, int>
     for(int p = 0; p < pair_count; ++p) {
         const int another_feature_size = feature_size[1 - p];
         const int nearest_k = min(nearest_size, another_feature_size);
-        const vector<FeatureDescriptor> & feature_descriptors_1 = images_data[pair_match[ p]].getFeatureDescriptors();
-        const vector<FeatureDescriptor> & feature_descriptors_2 = images_data[pair_match[!p]].getFeatureDescriptors();
+        const vector<FeatureDescriptor> & feature_descriptors_1 = images_data[pair_match[ p]]->getFeatureDescriptors();
+        const vector<FeatureDescriptor> & feature_descriptors_2 = images_data[pair_match[!p]]->getFeatureDescriptors();
         for(int f1 = 0; f1 < feature_size[p]; ++f1) {
              //TimeCalculator timer;
       
@@ -1112,7 +1124,7 @@ Mat MultiImages::textureMapping(const vector<vector<Point2> > & _vertices,
     }
 #ifndef NDEBUG
     for(int i = 0; i < rects.size(); ++i) {
-        cout << images_data[i].file_name << " rect = " << rects[i] << endl;
+        cout << images_data[i]->file_name << " rect = " << rects[i] << endl;
     }
 #endif
     _warp_images.reserve(_vertices.size());
@@ -1124,17 +1136,17 @@ Mat MultiImages::textureMapping(const vector<vector<Point2> > & _vertices,
     
     for(int i = 0; i < images_data.size(); ++i) {
         //timer.start();
-        const vector<Point2> & src_vertices = images_data[i].mesh_2d->getVertices();
-        const vector<Indices> & polygons_indices = images_data[i].mesh_2d->getPolygonsIndices();
+        const vector<Point2> & src_vertices = images_data[i]->mesh_2d->getVertices();
+        const vector<Indices> & polygons_indices = images_data[i]->mesh_2d->getPolygonsIndices();
         const Point2 origin(rects[i].x, rects[i].y);
         const Point2 shift(0.5, 0.5);
         vector<Mat> affine_transforms;
-        affine_transforms.reserve(polygons_indices.size() * (images_data[i].mesh_2d->getTriangulationIndices().size()));
+        affine_transforms.reserve(polygons_indices.size() * (images_data[i]->mesh_2d->getTriangulationIndices().size()));
         Mat polygon_index_mask(rects[i].height + shift.y, rects[i].width + shift.x, CV_32SC1, Scalar::all(NO_GRID));
         int label = 0;
         for(int j = 0; j < polygons_indices.size(); ++j) {
-            for(int k = 0; k < images_data[i].mesh_2d->getTriangulationIndices().size(); ++k) {
-                const Indices & index = images_data[i].mesh_2d->getTriangulationIndices()[k];
+            for(int k = 0; k < images_data[i]->mesh_2d->getTriangulationIndices().size(); ++k) {
+                const Indices & index = images_data[i]->mesh_2d->getTriangulationIndices()[k];
                 const Point2i contour[] = {
                     (_vertices[i][polygons_indices[j].indices[index.indices[0]]] - origin) * SCALE,
                     (_vertices[i][polygons_indices[j].indices[index.indices[1]]] - origin) * SCALE,
@@ -1179,11 +1191,11 @@ Mat MultiImages::textureMapping(const vector<vector<Point2> > & _vertices,
                         //getSubpix操作很耗时，直接使用最近点的值来代替，牺牲精度换速度
                         //TODO: 改用双线性差值
                        if(xx>= 0 && yy >= 0 &&
-                       xx < images_data[i].img.cols &&
-                       yy < images_data[i].img.rows)
+                       xx < images_data[i]->img.cols &&
+                       yy < images_data[i]->img.rows)
                        {
-                            uchar alpha = images_data[i].alpha_mask.at<uchar>(yy,xx);
-                            Vec3b c = images_data[i].img.at<Vec3b>(yy,xx);
+                            uchar alpha = images_data[i]->alpha_mask.at<uchar>(yy,xx);
+                            Vec3b c = images_data[i]->img.at<Vec3b>(yy,xx);
 
                             image.at<Vec4b>(y, x) = Vec4b(c[0], c[1], c[2], alpha);
                             if(_blend_method != BLEND_AVERAGE) 
@@ -1197,10 +1209,10 @@ Mat MultiImages::textureMapping(const vector<vector<Point2> > & _vertices,
                     {
                         //p_f.x = -1;
                         if(p_f.x >= 0 && p_f.y >= 0 &&
-                       p_f.x <= images_data[i].img.cols &&
-                       p_f.y <= images_data[i].img.rows) {
-                        Vec<uchar, 1> alpha = getSubpix<uchar, 1>(images_data[i].alpha_mask, p_f);//
-                        Vec3b c = getSubpix<uchar, 3>(images_data[i].img, p_f);
+                       p_f.x <= images_data[i]->img.cols &&
+                       p_f.y <= images_data[i]->img.rows) {
+                        Vec<uchar, 1> alpha = getSubpix<uchar, 1>(images_data[i]->alpha_mask, p_f);//
+                        Vec3b c = getSubpix<uchar, 3>(images_data[i]->img, p_f);
                         image.at<Vec4b>(y, x) = Vec4b(c[0], c[1], c[2], alpha[0]);
                         if(_blend_method != BLEND_AVERAGE) {
                             w_mask.at<float>(y, x) = getSubpix<float>(weight_mask[i], p_f);
@@ -1239,10 +1251,10 @@ void MultiImages::writeResultWithMesh(const Mat & _result,
     _result.copyTo(result(rect));
     for(int i = 0; i < images_data.size(); ++i) {
         const Scalar & color = getBlueToRedScalar((2. * i / (images_data.size() - 1)) - 1) * 255;
-        const vector<Edge> & edges = images_data[i].mesh_2d->getEdges();
+        const vector<Edge> & edges = images_data[i]->mesh_2d->getEdges();
         vector<int> edge_indices;
         if(_only_border) {
-            edge_indices = images_data[i].mesh_2d->getBoundaryEdgeIndices();
+            edge_indices = images_data[i]->mesh_2d->getBoundaryEdgeIndices();
         } else {
             edge_indices.reserve(edges.size());
             for(int j = 0; j < edges.size(); ++j) {
@@ -1262,11 +1274,11 @@ void MultiImages::writeResultWithMesh(const Mat & _result,
 void MultiImages::writeImageOfFeaturePairs(const string & _name,
                                            const pair<int, int> & _match_pair,
                                            const vector<pair<int, int> > & _pairs) const {
-    cout << images_data[_match_pair.first ].file_name << "-" <<
-            images_data[_match_pair.second].file_name << " " << _name << " feature pairs = " << _pairs.size() << endl;
+    cout << images_data[_match_pair.first ]->file_name << "-" <<
+            images_data[_match_pair.second]->file_name << " " << _name << " feature pairs = " << _pairs.size() << endl;
 
-    const vector<Point2> & m1_fpts = images_data[_match_pair.first ].getFeaturePoints();
-    const vector<Point2> & m2_fpts = images_data[_match_pair.second].getFeaturePoints();
+    const vector<Point2> & m1_fpts = images_data[_match_pair.first ]->getFeaturePoints();
+    const vector<Point2> & m2_fpts = images_data[_match_pair.second]->getFeaturePoints();
     vector<Point2> f1, f2;
     f1.reserve(_pairs.size());
     f2.reserve(_pairs.size());
@@ -1274,15 +1286,15 @@ void MultiImages::writeImageOfFeaturePairs(const string & _name,
         f1.emplace_back(m1_fpts[_pairs[i].first ]);
         f2.emplace_back(m2_fpts[_pairs[i].second]);
     }
-    Mat image_of_feauture_pairs = getImageOfFeaturePairs(images_data[_match_pair.first ].img,
-                                                         images_data[_match_pair.second].img,
+    Mat image_of_feauture_pairs = getImageOfFeaturePairs(images_data[_match_pair.first ]->img,
+                                                         images_data[_match_pair.second]->img,
                                                          f1, f2);
     imwrite(parameter.debug_dir +
             "feature_pairs-" + _name + "-" +
-            images_data[_match_pair.first ].file_name  + "-" +
-            images_data[_match_pair.second].file_name  + "-" +
+            images_data[_match_pair.first ]->file_name  + "-" +
+            images_data[_match_pair.second]->file_name  + "-" +
             to_string(_pairs.size()) +
-            images_data[_match_pair.first ].file_extension, image_of_feauture_pairs);
+            images_data[_match_pair.first ]->file_extension, image_of_feauture_pairs);
 }
 
 
@@ -1296,8 +1308,8 @@ vector<pair<int, int> > MultiImages::getInitialFeaturePairsGPU(const pair<int, i
     const int PAIR_COUNT = 2;
     const int pair_match[PAIR_COUNT] = { _match_pair.first , _match_pair.second };
 
-    colmap::FeatureDescriptors & descriptors1 = images_data[ _match_pair.first].getFeatureDescriptorsSiftgpu();
-    colmap::FeatureDescriptors & descriptors2 = images_data[ _match_pair.second].getFeatureDescriptorsSiftgpu();
+    colmap::FeatureDescriptors & descriptors1 = images_data[ _match_pair.first]->getFeatureDescriptorsSiftgpu();
+    colmap::FeatureDescriptors & descriptors2 = images_data[ _match_pair.second]->getFeatureDescriptorsSiftgpu();
 
     colmap::FeatureMatches matches;
     vector<pair<int, int> > initial_indices;
@@ -1330,8 +1342,8 @@ vector<vector<vector<pair<int, int> > > > & MultiImages::getFeaturePairsGPU() co
             timer.end("init pair");
       
             timer.start();
-            const vector<Point2> & m1_fpts = images_data[match_pair.first ].getFeaturePoints();
-            const vector<Point2> & m2_fpts = images_data[match_pair.second].getFeaturePoints();
+            const vector<Point2> & m1_fpts = images_data[match_pair.first ]->getFeaturePoints();
+            const vector<Point2> & m2_fpts = images_data[match_pair.second]->getFeaturePoints();
             vector<Point2> X, Y;
             X.reserve(initial_indices.size());
             Y.reserve(initial_indices.size());
@@ -1351,3 +1363,39 @@ vector<vector<vector<pair<int, int> > > > & MultiImages::getFeaturePairsGPU() co
     }
     return feature_pairs;
 }
+
+
+/*
+int MultiImages::SetAPAPProjectObject(CAPAPProjectThread* pAPAPProjectObject)
+{
+    m_pAPAPProjectObject = pAPAPProjectObject;
+    return 0;
+}
+
+int MultiImages::InitMemberVariables()
+{
+    vector<ImageData> images_data;
+
+    
+    mutable vector<detail::ImageFeatures> images_features; //存储当前图像网格顶点坐标以及其他图像顶点投影到当前图像后的顶点坐标, (当前图像中与其他图像有匹配关系的匹配点坐标，即其他图像的网格顶点通过apap投影到当前图像的点的坐标)
+
+    //保存匹配图相对的匹配信息,其中，D_matches的第一个值为M1的点，第二个值为m2的点，保存了两种匹配情况，
+    //第一种为m1投影到m2，若在m2图像内，则保存m1源点与投影后在m2上的点，两个点为匹配点
+    //第二种为M2投影到m1，若在m1图像内，则保存投影后的M1点，以及M2上的源点，两个点为匹配点对
+    //此处保存的是匹配点在images_features中的索引
+    mutable vector<detail::MatchesInfo>   pairwise_matches; 
+    mutable vector<detail::CameraParams>  camera_params;
+    
+    mutable vector<vector<bool> > images_features_mask;  //images_features_mask[m1][k] = true; m1的第K个网格点，其他图像中有与它匹配的网格点,相当于各图像的网格顶点是否与其他图像有重叠
+    
+    mutable vector<vector<vector<pair<int, int> > > > feature_pairs; //图像之间特征点配对情况，存储的是特征点的索引
+    mutable vector<vector<vector<Point2> > > feature_matches;  //[m1][m2][j], img1 j_th matches  //m1与m2的第j个特征匹配点的坐标，m1上的坐标
+    
+    mutable vector<vector<vector<bool> > >   apap_overlap_mask; //apap_overlap_mask[m1][m2][k] = true; //m1的第K个网格顶点投影到m2图像，如果在M2图像内，则值为true
+    mutable vector<vector<vector<Mat> > >    apap_homographies; //apap_homographies[m1][m2] m1投影到m2的单应矩阵列表
+    mutable vector<vector<vector<Point2> > > apap_matching_points;//apap_matching_points[m1][m2] m1上所有网格顶点投影到m2后的坐标
+    mutable vector<vector<vector<Point2> > > images_lines_projects;
+
+
+    return 0;
+}*/

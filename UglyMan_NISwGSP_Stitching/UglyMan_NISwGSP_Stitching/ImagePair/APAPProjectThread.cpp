@@ -144,6 +144,33 @@ int  CAPAPProjectThread::GetFeatureMatches(ImageData* pImage1, ImageData* pImage
 
 }
 
+int CAPAPProjectThread::ImageLineProject(ImageData* pImage, vector<Point2>& vecFeatureMatches1, 
+                                         vector<Point2>& vecFeatureMatches2, vector<Point2>& vecProjectedLine)
+{
+    const vector<LineData> & lines = pImage->getLines();
+    //pImage2->getLines(); //preprocess, no need now
+    vector<Point2> points, project_points;
+    points.reserve(lines.size() * EDGE_VERTEX_SIZE);
+    for(int i = 0; i < lines.size(); ++i) 
+    {   
+        for(int j = 0; j < EDGE_VERTEX_SIZE; ++j) 
+        {
+            points.emplace_back(lines[i].data[j]);
+        }
+        
+    }
+    vector<Mat> not_be_used;
+    //TimeCalculator timer2;
+      
+    //timer2.start();
+    //vector<vector<Point2>> vecProjectedLine;
+    //vecProjectedLine.resize(2);
+    APAP_Stitching::apap_project(vecFeatureMatches1, vecFeatureMatches2, points, vecProjectedLine, not_be_used);
+
+
+    return 0;
+}
+
 
 int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pImage2)
 {
@@ -220,7 +247,7 @@ int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pIm
         }
     }
 
-
+/*
     for(int i = 0; i < vecImg.size(); i++)
     {
         const vector<Point2> & vertices = vecImg[i]->mesh_2d->getVertices();
@@ -229,7 +256,7 @@ int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pIm
         {
             vecImagesFeatures[i].keypoints.emplace_back(vertices[j], 0);
         }
-    }
+    }*/
 
     vector<DMatch> & D_matches = matchInfo.matches;
     
@@ -247,17 +274,19 @@ int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pIm
                     if(j) {
                         //apap_overlap_mask[m2][m1][k] = true;
                         vecOverlapMask[j][k] = true;
-                        D_matches.emplace_back(vecImagesFeatures[!j].keypoints.size(), k, 0);//m2的第K个点投影到m1的坐标，存储在m1的keypoint中，即，m2的第k个顶点与投影到m1的顶点坐标
+                        D_matches.emplace_back(m_mapImagesFeatures[nSrcIndex].keypoints.size(), k, 0);//m2的第K个点投影到m1的坐标，存储在m1的keypoint中，即，m2的第k个顶点与投影到m1的顶点坐标
                         //images_features_mask[m2][k] = true;
                         vecImagesFeatureMask[j][k] = true;
+                        m_mapImagesFeatures[nSrcIndex].keypoints.emplace_back((*out_dst[j])[k], 0);
                     } else {
                         vecOverlapMask[j][k] = true;
                         //apap_overlap_mask[m1][m2][k] = true; //m1的第K个网格顶点投影到m2图像，如果在M2图像内，则值为true
-                        D_matches.emplace_back(k, vecImagesFeatures[!j].keypoints.size(), 0);//保存顶点配对关系，m1的第k个顶点与m2图像keypoint列表的第n个点配对，即，m1的第k个顶点投影到m2后的顶点坐标
+                        D_matches.emplace_back(k, m_mapImagesFeatures[nDstIndex].keypoints.size(), 0);//保存顶点配对关系，m1的第k个顶点与m2图像keypoint列表的第n个点配对，即，m1的第k个顶点投影到m2后的顶点坐标
                         //images_features_mask[m1][k] = true;//m1的第K个网格点，有与它匹配的网格点
                         vecImagesFeatureMask[j][k] = true;
+                        m_mapImagesFeatures[nDstIndex].keypoints.emplace_back((*out_dst[j])[k], 0);
                     }
-                    vecImagesFeatures[!j].keypoints.emplace_back((*out_dst[j])[k], 0);//存储当前图像网格顶点坐标以及其他图像顶点投影到当前图像后的顶点坐标
+                    //存储当前图像网格顶点坐标以及其他图像顶点投影到当前图像后的顶点坐标
                 }
         }
     }
@@ -269,27 +298,11 @@ int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pIm
     matchInfo.num_inliers = (int)D_matches.size();
     matchInfo.H = vecAPAPHomographies[0].front(); /*** for OpenCV findMaxSpanningTree funtion ***/
 
-
     ///////project line
-    //const vector<vector<vector<Point2> > > & feature_matches = getFeatureMatches(); vecFeatureMatches
-    const vector<LineData> & lines = pImage1->getLines();
-    pImage2->getLines(); //preprocess, no need now
-    vector<Point2> points, project_points;
-    points.reserve(lines.size() * EDGE_VERTEX_SIZE);
-    for(int i = 0; i < lines.size(); ++i) 
-    {   
-        for(int j = 0; j < EDGE_VERTEX_SIZE; ++j) 
-        {
-            points.emplace_back(lines[i].data[j]);
-        }
-        
-    }
-    vector<Mat> not_be_used;
-    //TimeCalculator timer2;
-      
-    //timer2.start();
-    vector<Point2> vecProjectedLine;
-    APAP_Stitching::apap_project(vecFeatureMatches[0], vecFeatureMatches[1], points, vecProjectedLine, not_be_used);
+    vector<vector<Point2>> vecProjectedLine;
+    vecProjectedLine.resize(2);
+    ImageLineProject(pImage1, vecFeatureMatches[0], vecFeatureMatches[1], vecProjectedLine[0]);
+    ImageLineProject(pImage2, vecFeatureMatches[1], vecFeatureMatches[0], vecProjectedLine[1]);
 
     //////////save result to member variable
     int nForwardPairIndex = 0;
@@ -311,25 +324,16 @@ int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pIm
 
     m_mapPairwiseMatches[nForwardPairIndex] = matchInfo; //保存匹配图相对的匹配信息,其中，D_matches的第一个值为src的点，第二个值为dst的点
 
+    //???不能用赋值，需要循环添加
     //m_mapImagesFeatures[nSrcIndex] = vecImagesFeatures[0]; ////存储当前图像网格顶点坐标以及其他图像顶点投影到当前图像后的顶点坐标,
     //m_mapImagesFeatures[nDstIndex] = vecImagesFeatures[1];
 
+    // m_mapImagesFeaturesMask[nSrcIndex] = vecImagesFeatureMask[0]; //src的第K个网格点，其他图像中有与它匹配的网格点,相当于各图像的网格顶点是否与其他图像有重叠
+    //m_mapImagesFeaturesMask[nDstIndex] = vecImagesFeatureMask[1];
 
-    ????不能用赋值，需要循环添加 m_mapImagesFeaturesMask[nSrcIndex] = vecImagesFeatureMask[0]; //src的第K个网格点，其他图像中有与它匹配的网格点,相当于各图像的网格顶点是否与其他图像有重叠
-    m_mapImagesFeaturesMask[nDstIndex] = vecImagesFeatureMask[1];
+    m_mapImagesLinesProjects[nForwardPairIndex] = vecProjectedLine[0];
+    m_mapImagesLinesProjects[nBackwradPairIndex] = vecProjectedLine[1];
 
-
-
-     //mutable vector<vector<bool> > images_features_mask;  //images_features_mask[m1][k] = true; m1的第K个网格点，其他图像中有与它匹配的网格点,相当于各图像的网格顶点是否与其他图像有重叠
-    //std::map<int, std::map<int, std::vector<bool>>> m_imagesFeaturesMask;
-    std::map<int, std::vector<bool>> m_mapImagesFeaturesMask;
-
-
- vector<vector<bool>> vecImagesFeatureMask;
-    vecImagesFeatureMask.resize(2);
-
- 
- 
     return 0;
 }
 
@@ -351,7 +355,7 @@ void CAPAPProjectThread::Run()
         std::map<int, ImageData*> mapKeyFrame = m_pFeatureMatchThread->GetKeyFrame();
         std::vector<pair<int, int>> vecPairs = m_pFeatureMatchThread->GetImagePairs();
 
-        //
+        //process pairs
         for(auto& onePair : vecPairs)
         {
             int nPairId;// = onePair.first * 100000 +  onePair.second;

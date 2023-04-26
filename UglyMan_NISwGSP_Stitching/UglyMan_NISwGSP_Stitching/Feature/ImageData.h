@@ -49,6 +49,8 @@ public:
               LINES_FILTER_FUNC * _width_filter  = &LINES_FILTER_WIDTH,
              LINES_FILTER_FUNC * _length_filter = &LINES_FILTER_LENGTH,
               const string * _debug_dir = NULL);
+
+    //ImageData& operator=(const ImageData &data);
             
     //~ImageData();
     void clear();
@@ -63,6 +65,8 @@ public:
     colmap::FeatureDescriptors& getFeatureDescriptorsSiftgpu() const;
     int detectFeature();
     int getFeaturePointSize();
+    int SetConnection(int nId);
+    int GetConnectionSize();
     
 public: 
     Mat img, rgba_img, alpha_mask;
@@ -83,6 +87,7 @@ private:
     mutable bool m_bIsFeatureDetected;
     mutable colmap::FeatureKeypoints m_vecFeaturePoints;
     mutable colmap::FeatureDescriptors m_vecFeatureDescriptors;
+    set<int> m_setContectedKfId;
 };
 
 #endif /* defined(__UglyMan_Stitiching__ImageData__) */

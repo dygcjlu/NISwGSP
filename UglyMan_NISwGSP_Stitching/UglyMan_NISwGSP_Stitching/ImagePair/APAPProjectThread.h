@@ -32,9 +32,12 @@ private:
                                             const vector<pair<int, int> > & _initial_indices);
 
     int  GetFeatureMatches(ImageData* pImage1, ImageData* pImage2, vector<vector<Point2>>& vecFeatureMatches);
+
     int PreComputeAPAPProject(ImageData* pImage1, ImageData* pImage2);
 
-   
+    int CAPAPProjectThread::ImageLineProject(ImageData* pImage, vector<Point2>& vecFeatureMatches1, 
+                                         vector<Point2>& vecFeatureMatches2, vector<Point2>& vecProjectedLine);
+
 
 private:
     int m_nIndexEncodeBase; //encode index1 and index1 to one index

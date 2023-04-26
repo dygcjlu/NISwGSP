@@ -103,20 +103,20 @@ void MeshOptimization::prepareAlignmentTerm(vector<Triplet<double> > & _triplets
             const pair<int, int> & match_pair = images_match_graph_pair_list[i];
             const int & m1 = match_pair.first, & m2 = match_pair.second;
             const int pm_index = m1 * (int)multi_images->images_data.size() + m2;
-            const vector<Indices> & polygons_indices_1 = multi_images->images_data[m1].mesh_2d->getPolygonsIndices();
-            const vector<Indices> & polygons_indices_2 = multi_images->images_data[m2].mesh_2d->getPolygonsIndices();
+            const vector<Indices> & polygons_indices_1 = multi_images->images_data[m1]->mesh_2d->getPolygonsIndices();
+            const vector<Indices> & polygons_indices_2 = multi_images->images_data[m2]->mesh_2d->getPolygonsIndices();
             
             for(int j = 0; j < pairwise_matches[pm_index].matches.size(); ++j) {
                 const DMatch & D_Match = pairwise_matches[pm_index].matches[j];
                 
                 for(int dim = 0; dim < DIMENSION_2D; ++dim) {
-                    for(int k = 0; k < multi_images->images_data[m1].mesh_2d->getPolygonVerticesCount(); ++k) {
+                    for(int k = 0; k < multi_images->images_data[m1]->mesh_2d->getPolygonVerticesCount(); ++k) {
                         _triplets.emplace_back(equation + eq_count + dim,
                                                images_vertices_start_index[m1] + dim +
                                                DIMENSION_2D * (polygons_indices_1[mesh_interpolate_vertex_of_matching_pts[m1][D_Match.queryIdx].polygon].indices[k]),
                                                 alignment_weight * mesh_interpolate_vertex_of_matching_pts[m1][D_Match.queryIdx].weights[k]);
                     }
-                    for(int k = 0; k < multi_images->images_data[m2].mesh_2d->getPolygonVerticesCount(); ++k) {
+                    for(int k = 0; k < multi_images->images_data[m2]->mesh_2d->getPolygonVerticesCount(); ++k) {
                         _triplets.emplace_back(equation + eq_count + dim,
                                                images_vertices_start_index[m2] + dim +
                                                DIMENSION_2D * (polygons_indices_2[mesh_interpolate_vertex_of_matching_pts[m2][D_Match.trainIdx].polygon].indices[k]),
@@ -148,10 +148,10 @@ void MeshOptimization::prepareSimilarityTerm(vector<Triplet<double> > & _triplet
         //timer.end("getImagesSimilarityElements");
         int eq_count = 0, eq_count_rotation = 0;
         for(int i = 0; i < multi_images->images_data.size(); ++i) {
-            const vector<Edge> & edges = multi_images->images_data[i].mesh_2d->getEdges();
-            const vector<Point2> & vertices = multi_images->images_data[i].mesh_2d->getVertices();
-            const vector<Indices> & v_neighbors = multi_images->images_data[i].mesh_2d->getVertexStructures();
-            const vector<Indices> & e_neighbors = multi_images->images_data[i].mesh_2d->getEdgeStructures();
+            const vector<Edge> & edges = multi_images->images_data[i]->mesh_2d->getEdges();
+            const vector<Point2> & vertices = multi_images->images_data[i]->mesh_2d->getVertices();
+            const vector<Indices> & v_neighbors = multi_images->images_data[i]->mesh_2d->getVertexStructures();
+            const vector<Indices> & e_neighbors = multi_images->images_data[i]->mesh_2d->getEdgeStructures();
             
             const double similarity[DIMENSION_2D] = {
                 images_similarity_elements[i].scale * cos(images_similarity_elements[i].theta),
@@ -161,8 +161,8 @@ void MeshOptimization::prepareSimilarityTerm(vector<Triplet<double> > & _triplet
             for(int j = 0; j < edges.size(); ++j) {
                 const int & ind_e1 = edges[j].indices[0];
                 const int & ind_e2 = edges[j].indices[1];
-                const Point2 & src = multi_images->images_data[i].mesh_2d->getVertices()[ind_e1];
-                const Point2 & dst = multi_images->images_data[i].mesh_2d->getVertices()[ind_e2];
+                const Point2 & src = multi_images->images_data[i]->mesh_2d->getVertices()[ind_e1];
+                const Point2 & dst = multi_images->images_data[i]->mesh_2d->getVertices()[ind_e2];
                 set<int> point_ind_set;
                 for(int e = 0; e < EDGE_VERTEX_SIZE; ++e) {
                     for(int v = 0; v < v_neighbors[edges[j].indices[e]].indices.size(); ++v) {
@@ -261,7 +261,7 @@ int MeshOptimization::getAlignmentTermEquationsCount() const {
 int MeshOptimization::getVerticesCount() const {
     int result = 0;
     for(int i = 0; i < multi_images->images_data.size(); ++i) {
-        result += multi_images->images_data[i].mesh_2d->getVertices().size();
+        result += multi_images->images_data[i]->mesh_2d->getVertices().size();
     }
     return result * DIMENSION_2D;
 }
@@ -269,7 +269,7 @@ int MeshOptimization::getVerticesCount() const {
 int MeshOptimization::getEdgesCount() const {
     int result = 0;
     for(int i = 0; i < multi_images->images_data.size(); ++i) {
-        result += multi_images->images_data[i].mesh_2d->getEdges().size();
+        result += multi_images->images_data[i]->mesh_2d->getEdges().size();
     }
     return result;
 }
@@ -277,8 +277,8 @@ int MeshOptimization::getEdgesCount() const {
 int MeshOptimization::getEdgeNeighborVerticesCount() const {
     int result = 0;
     for(int i = 0; i < multi_images->images_data.size(); ++i) {
-        const vector<Edge> & edges = multi_images->images_data[i].mesh_2d->getEdges();
-        const vector<Indices> & v_neighbors = multi_images->images_data[i].mesh_2d->getVertexStructures();
+        const vector<Edge> & edges = multi_images->images_data[i]->mesh_2d->getEdges();
+        const vector<Indices> & v_neighbors = multi_images->images_data[i]->mesh_2d->getVertexStructures();
         for(int j = 0; j < edges.size(); ++j) {
             for(int e = 0; e < EDGE_VERTEX_SIZE; ++e) {
                 result += v_neighbors[edges[j].indices[e]].indices.size();
@@ -324,7 +324,7 @@ vector<vector<Point2> > MeshOptimization::getImageVerticesBySolving(vector<Tripl
     vector<vector<Point2> > vertices;
     vertices.resize(multi_images->images_data.size());
     for(int i = 0, x_index = 0; i < vertices.size(); ++i) {
-        int count = (int)multi_images->images_data[i].mesh_2d->getVertices().size() * DIMENSION_2D;
+        int count = (int)multi_images->images_data[i]->mesh_2d->getVertices().size() * DIMENSION_2D;
         vertices[i].reserve(count);
         for(int j = 0; j < count; j += DIMENSION_2D) {
             vertices[i].emplace_back(x[x_index + j    ],
