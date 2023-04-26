@@ -18,12 +18,24 @@ MultiImages::MultiImages(const string & rootPath, const string & _file_name,
     
     for(int i = 0; i < parameter.image_file_full_names.size(); ++i) {
 #ifndef NDEBUG
+
         images_data.emplace_back(parameter.file_dir,
                                  parameter.image_file_full_names[i],
                                  _width_filter,
                                  _length_filter,
                                  m_bUseSiftGPU,
                                  &parameter.debug_dir);
+                                 /*
+        ImageData a = ImageData(parameter.file_dir,
+                                 parameter.image_file_full_names[i],
+                                 _width_filter,
+                                 _length_filter,
+                                 m_bUseSiftGPU,
+                                 &parameter.debug_dir);
+
+
+        images_data.emplace_back(a);*/
+        
 #else
         images_data.emplace_back(parameter.file_dir,
                                  parameter.image_file_full_names[i],
@@ -916,7 +928,8 @@ vector<pair<int, int> > MultiImages::getFeaturePairsBySequentialRANSAC(const pai
     
    
     vector<char> final_mask(_initial_indices.size(), 0);
-    findHomography(_X, _Y, CV_RANSAC, parameter.global_homography_max_inliers_dist, final_mask, GLOBAL_MAX_ITERATION);
+    cv::Mat H = findHomography(_X, _Y, CV_RANSAC, parameter.global_homography_max_inliers_dist, final_mask, GLOBAL_MAX_ITERATION);
+    std::cout<<"H:"<<H<<std::endl;
      
     
     vector<Point2> tmp_X = _X, tmp_Y = _Y;
@@ -931,7 +944,8 @@ vector<pair<int, int> > MultiImages::getFeaturePairsBySequentialRANSAC(const pai
         const int LOCAL_MAX_ITERATION = log(1 - OPENCV_DEFAULT_CONFIDENCE) / log(1 - pow(LOCAL_TRUE_PROBABILITY, HOMOGRAPHY_MODEL_MIN_POINTS));
         vector<Point2> next_X, next_Y;
         vector<char> mask(tmp_X.size(), 0);
-        findHomography(tmp_X, tmp_Y, CV_RANSAC, parameter.local_homogrpahy_max_inliers_dist, mask, LOCAL_MAX_ITERATION);
+        H = findHomography(tmp_X, tmp_Y, CV_RANSAC, parameter.local_homogrpahy_max_inliers_dist, mask, LOCAL_MAX_ITERATION);
+        std::cout<<"h:"<<H<<std::endl;
 
         int inliers_count = 0;
         for(int i = 0; i < mask.size(); ++i) {
@@ -1159,7 +1173,7 @@ Mat MultiImages::textureMapping(const vector<vector<Point2> > & _vertices,
                     
                     int xx = int(round(p_f.x));
                     int yy = int(round(p_f.y));
-                    bool beFast = true;
+                    bool beFast = false;
                     if(beFast)
                     {
                         //getSubpix操作很耗时，直接使用最近点的值来代替，牺牲精度换速度

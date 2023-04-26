@@ -111,6 +111,7 @@ Size_<T> normalizeVertices(vector<vector<Point_<T> > > & vertices) {
             vertices[i][j].y = (vertices[i][j].y - min_y);
         }
     }
+    std::cout<<"min x:"<<min_x<<"min y:"<<min_y<<std::endl;
     return Size_<T>(max_x - min_x, max_y - min_y);
 }
 

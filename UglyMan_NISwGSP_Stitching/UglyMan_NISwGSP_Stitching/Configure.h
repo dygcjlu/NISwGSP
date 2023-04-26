@@ -47,7 +47,7 @@ using namespace Eigen;
 
 /*** data setting ***/
 //const int GRID_SIZE = 40;
-const int GRID_SIZE = 80;
+const int GRID_SIZE = 200;
 const int DOWN_SAMPLE_IMAGE_SIZE = 800 * 600;
 //const int DOWN_SAMPLE_IMAGE_SIZE = 1920 * 1080;
 
@@ -126,6 +126,7 @@ const int HOMOGRAPHY_VARIABLES_COUNT = 9;
 /* AutoStitch */
 enum  AUTO_STITCH_WAVE_CORRECTS { WAVE_X = 0, WAVE_H, WAVE_V };
 const AUTO_STITCH_WAVE_CORRECTS   WAVE_CORRECT = WAVE_H;
+//const AUTO_STITCH_WAVE_CORRECTS   WAVE_CORRECT = WAVE_X;
 const string AUTO_STITCH_WAVE_CORRECTS_NAME[] = {"", "[WAVE_H]", "[WAVE_V]"};
 
 #endif /* defined(__UglyMan_Stitiching__Configure__) */

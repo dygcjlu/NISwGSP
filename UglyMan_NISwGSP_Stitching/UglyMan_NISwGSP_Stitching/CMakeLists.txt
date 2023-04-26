@@ -109,6 +109,7 @@ set(COLMAP_INCLUDE_DIRS
 
 include_directories( ${COLMAP_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/siftgpu)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rd)
 #include_directories(${OpenCV_INCLUDE_DIRS})
 #include_directories(${EIGEN_INCLUDE_DIRS})
 

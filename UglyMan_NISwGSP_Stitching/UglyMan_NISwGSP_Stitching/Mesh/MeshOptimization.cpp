@@ -136,16 +136,16 @@ void MeshOptimization::prepareSimilarityTerm(vector<Triplet<double> > & _triplet
     const bool local_similarity_term = local_similarity_equation.second;
     const bool global_similarity_term = global_similarity_equation.second;
     if(local_similarity_term || global_similarity_term) {
-        TimeCalculator timer;
+        //TimeCalculator timer;
       
-        timer.start();
+        //timer.start();
         const vector<int> & images_vertices_start_index = multi_images->getImagesVerticesStartIndex();//各个图像的网格起始索引
         //返回第i个图像的第j个网格的距离权重，到此重叠区域的距离？
         const vector<vector<double> > & images_grid_space_matching_pts_weight = multi_images->getImagesGridSpaceMatchingPointsWeight(global_similarity_weight_gamma);
-        timer.end("images_grid_space_matching_pts_weight");
-        timer.start();
+        //timer.end("images_grid_space_matching_pts_weight");
+        //timer.start();
         const vector<SimilarityElements> & images_similarity_elements = multi_images->getImagesSimilarityElements(global_rotation_method);//得到图像之间缩放关系和旋转角度
-        timer.end("getImagesSimilarityElements");
+        //timer.end("getImagesSimilarityElements");
         int eq_count = 0, eq_count_rotation = 0;
         for(int i = 0; i < multi_images->images_data.size(); ++i) {
             const vector<Edge> & edges = multi_images->images_data[i].mesh_2d->getEdges();
@@ -310,8 +310,9 @@ vector<vector<Point2> > MeshOptimization::getImageVerticesBySolving(vector<Tripl
     timer.end("Initial A matrix");
     timer.start();
 #endif
-    lscg.setTolerance(1e-10);
-    lscg.setMaxIterations(500);
+    //lscg.setTolerance(1e-10);
+    //lscg.setMaxIterations(500);
+    
     lscg.compute(A);
     x = lscg.solve(b);
 #ifndef NDEBUG
@@ -328,8 +329,16 @@ vector<vector<Point2> > MeshOptimization::getImageVerticesBySolving(vector<Tripl
         for(int j = 0; j < count; j += DIMENSION_2D) {
             vertices[i].emplace_back(x[x_index + j    ],
                                      x[x_index + j + 1]);
+
+            std::cout<<"("<<x[x_index + j    ]<<", "<<x[x_index + j + 1]<<") ";
         }
+
+        std::cout<<std::endl;
         x_index += count;
     }
+    
+   
+
+   
     return vertices;
 }

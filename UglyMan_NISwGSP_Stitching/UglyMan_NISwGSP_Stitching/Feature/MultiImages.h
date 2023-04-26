@@ -9,7 +9,8 @@
 #ifndef __UglyMan_Stitiching__MultiImages__
 #define __UglyMan_Stitiching__MultiImages__
 
-#include <queue>
+//#include <queue>
+#include <vector>
 
 #include "../Configure.h"
 #include "../Stitching/Parameter.h"

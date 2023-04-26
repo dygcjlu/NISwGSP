@@ -45,6 +45,14 @@ public:
               bool bUseSiftgpu,
               const string * _debug_dir = NULL);
     
+    ImageData(cv::Mat& img, int nId, bool bUseSiftgpu = true,
+              LINES_FILTER_FUNC * _width_filter  = &LINES_FILTER_WIDTH,
+             LINES_FILTER_FUNC * _length_filter = &LINES_FILTER_LENGTH,
+              const string * _debug_dir = NULL);
+            
+    //~ImageData();
+    void clear();
+    
     const Mat & getGreyImage() const;
     const vector<LineData> & getLines() const;
     const vector<Point2> & getFeaturePoints() const;
@@ -53,11 +61,13 @@ public:
     //siftgpu version
     //vector<Point2> & getFeaturePointsSiftgpu();
     colmap::FeatureDescriptors& getFeatureDescriptorsSiftgpu() const;
+    int detectFeature();
+    int getFeaturePointSize();
     
-    void clear();
-    
+public: 
     Mat img, rgba_img, alpha_mask;
     unique_ptr<Mesh2D> mesh_2d;
+    int m_nID;
     
 private:
     LINES_FILTER_FUNC * width_filter, * length_filter;
@@ -68,6 +78,7 @@ private:
     mutable vector<FeatureDescriptor> feature_descriptors;//特征描述子
 
 private:
+    
     bool m_bUseSiftGPU;
     mutable bool m_bIsFeatureDetected;
     mutable colmap::FeatureKeypoints m_vecFeaturePoints;

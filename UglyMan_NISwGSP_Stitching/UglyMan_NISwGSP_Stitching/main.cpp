@@ -9,10 +9,22 @@
 #include <iostream>
 #include "./Stitching/NISwGSP_Stitching.h"
 #include "./Debugger/TimeCalculator.h"
+//#include "./ImagePair/GetImageThread.h"
 
 using namespace std;
+/*
+int main_(int argc, const char * argv[])
+{
+    //
+    colmap::JobQueue<cv::Mat> queImages;
+    CGetImageThread getImageThread;
 
-int main(int argc, const char * argv[]) {
+
+    return 0;
+}*/
+
+int main(int argc, const char * argv[]) 
+{
     Eigen::initParallel(); /* remember to turn off "Hardware Multi-Threading */
     Eigen::setNbThreads(4);
     cout << "nThreads = " << Eigen::nbThreads() << endl;

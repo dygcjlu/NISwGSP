@@ -79,6 +79,10 @@
         "*.tc": "cpp",
         "*.def": "cpp",
         "iterativelinearsolvers": "cpp",
-        "mprealsupport": "cpp"
+        "mprealsupport": "cpp",
+        "charconv": "cpp",
+        "*.expression": "cpp",
+        "alignedvector3": "cpp",
+        "fft": "cpp"
     }
 }

@@ -44,8 +44,9 @@ ImageData::ImageData(const string & _file_dir,
                      LINES_FILTER_FUNC * _width_filter,
                      LINES_FILTER_FUNC * _length_filter,
                      bool bUseSiftgpu,
-                     const string * _debug_dir) {
-
+                     const string * _debug_dir) 
+{
+    m_nID = 0;
     m_bUseSiftGPU = bUseSiftgpu;
     
     file_dir = &_file_dir;
@@ -82,6 +83,56 @@ ImageData::ImageData(const string & _file_dir,
     mesh_2d = make_unique_custom<MeshGrid>(img.cols, img.rows);
 
     m_bIsFeatureDetected = false;
+}
+
+ImageData::ImageData(cv::Mat& img, int nId, bool bUseSiftgpu,
+              LINES_FILTER_FUNC * _width_filter,
+             LINES_FILTER_FUNC * _length_filter,
+              const string * _debug_dir)
+{
+    m_nID = nId;
+    width_filter  = _width_filter;
+    length_filter = _length_filter;
+    m_bUseSiftGPU = bUseSiftgpu;
+    debug_dir = _debug_dir;
+
+    grey_img = Mat();
+    float original_img_size = img.rows * img.cols;
+
+    if(original_img_size > DOWN_SAMPLE_IMAGE_SIZE) {
+        float scale = sqrt(DOWN_SAMPLE_IMAGE_SIZE / original_img_size);
+        resize(img, img, Size(), scale, scale);
+        //resize(rgba_img, rgba_img, Size(), scale, scale);
+    }
+
+    cvtColor(img, rgba_img, CV_BGR2BGRA);
+    
+    vector<Mat> channels;
+    split(rgba_img, channels);
+    alpha_mask = channels[3];
+    //mesh_2d = make_unique<MeshGrid>(img.cols, img.rows);
+    mesh_2d = make_unique_custom<MeshGrid>(img.cols, img.rows);
+
+    m_bIsFeatureDetected = false;
+
+
+}
+
+/*
+ImageData::~ImageData()
+{
+    //clear();
+}*/
+
+void ImageData::clear() 
+{
+    img.release();
+    rgba_img.release();
+    alpha_mask.release();
+    grey_img.release();
+    img_lines.clear();
+    feature_points.clear();
+    feature_descriptors.clear();
 }
 
 const Mat & ImageData::getGreyImage() const {
@@ -126,15 +177,20 @@ const vector<LineData> & ImageData::getLines() const {
             }
         }
 #ifndef NDEBUG
-        vector<Vec4f> draw_lines;
-        draw_lines.reserve(img_lines.size());
-        for(int i = 0; i < img_lines.size(); ++i) {
-            draw_lines.emplace_back(img_lines[i].data[0].x, img_lines[i].data[0].y,
+        if(debug_dir != nullptr)
+        {
+            vector<Vec4f> draw_lines;
+            draw_lines.reserve(img_lines.size());
+            for(int i = 0; i < img_lines.size(); ++i) {
+                draw_lines.emplace_back(img_lines[i].data[0].x, img_lines[i].data[0].y,
                                     img_lines[i].data[1].x, img_lines[i].data[1].y);
+            }
+            Mat canvas = Mat::zeros(grey_image.rows, grey_image.cols, grey_image.type());
+            ls->drawSegments(canvas, draw_lines);
+            imwrite(*debug_dir + "line-result-" + file_name + file_extension, canvas);
+
         }
-        Mat canvas = Mat::zeros(grey_image.rows, grey_image.cols, grey_image.type());
-        ls->drawSegments(canvas, draw_lines);
-        imwrite(*debug_dir + "line-result-" + file_name + file_extension, canvas);
+        
 #endif
     }
     return img_lines;
@@ -213,10 +269,28 @@ colmap::FeatureDescriptors & ImageData::getFeatureDescriptorsSiftgpu() const
     return m_vecFeatureDescriptors;
 }
 
-void ImageData::clear() {
-    img.release();
-    grey_img.release();
-    img_lines.clear();
-    feature_points.clear();
-    feature_descriptors.clear();
+int ImageData::detectFeature()
+{
+    if(!m_bIsFeatureDetected) {
+        //FeatureController::detect(getGreyImage(), m_vecFeaturePoints, m_vecFeatureDescriptors);
+         CSiftgpuManage::getInstance().FeatureDetect(getGreyImage(), m_vecFeaturePoints, m_vecFeatureDescriptors);
+
+         //
+        for(int i = 0; i < m_vecFeaturePoints.size(); i++)
+        {
+            Point2 tmp(m_vecFeaturePoints[i].x, m_vecFeaturePoints[i].y);
+            feature_points.push_back(tmp);
+        }
+        m_bIsFeatureDetected = true;
+    }
+
+    return 0;
 }
+
+
+int ImageData::getFeaturePointSize()
+{
+    return feature_points.size();
+}
+
+
