@@ -10,7 +10,7 @@ class CFeatureMatchThread : public colmap::Thread
 {
 public:
     CFeatureMatchThread();
-    int Init();
+    int Init(std::string strSavePath);
     int StopThread();
     int SetJobQueue(colmap::JobQueue<cv::Mat> *pJobQue);
 
@@ -20,7 +20,7 @@ public:
 
 private:
     void Run() override;
-    int LoopFeatureMatch(ImageData* pImage,  bool bIsKeyFrame);
+    int LoopFeatureMatch(ImageData* pImage,   bool& bIsKeyFrame);
     double ComputeOverlapArea(ImageData* pImage1, colmap::FeatureDescriptors& descriptors1, const vector<Point2> & m1_fpts, 
                                                 ImageData* pImage2);
     void SaveImage2Disk(int nId, cv::Mat& img);

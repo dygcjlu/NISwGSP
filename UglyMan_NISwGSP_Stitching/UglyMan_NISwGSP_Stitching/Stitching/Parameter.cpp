@@ -55,6 +55,10 @@ bool isFileExist (const string & name) {
 Parameter::Parameter(const string & rootPath) 
 {
     
+    result_dir = rootPath + "0_results/" ;
+
+    mkdir(result_dir.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    
 #ifndef NDEBUG
     //debug_dir = "./input-42-data/1_debugs/" + _file_name + "-result/";
     debug_dir = rootPath + "1_debugs/";
@@ -194,28 +198,19 @@ const vector<pair<int, int> > & Parameter::getImagesMatchGraphPairList() const {
 }
 
 /////////////////////////////////
-/*
-int Parameter::SetImagePair()
+
+int Parameter::SetImagePair(int nCenterIndex, int nImageCount, vector<vector<bool> >& matchedGraph)
 {
 
-    images_count                 = input_parser.get<   int>("images_count");
-    center_image_index           = input_parser.get<   int>("center_image_index");
-    center_image_rotation_angle  = input_parser.get<double>("center_image_rotation_angle");
+    images_count           = nImageCount;
+    center_image_index     = nCenterIndex;    
+    center_image_rotation_angle  = 0;
         
     
-        
-        assert(image_file_full_names.size() == images_count);
-        assert(center_image_index >= 0 && center_image_index < images_count);
        
         
-        images_match_graph_manually.resize(images_count);
-        for(int i = 0; i < images_count; ++i) {
-            images_match_graph_manually[i].resize(images_count, false);
-            vector<int> labels = input_parser.getVec<int>("matching_graph_image_edges-"+to_string(i), false);
-            for(int j = 0; j < labels.size(); ++j) {
-                images_match_graph_manually[i][labels[j]] = true;
-            }
-        }
+        images_match_graph_manually = matchedGraph;
+        
         
         // check 
         queue<int> que;
@@ -248,4 +243,4 @@ int Parameter::SetImagePair()
 #endif
 
     return 0;
-}*/
+}

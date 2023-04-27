@@ -9,12 +9,15 @@ CGetImageThread::CGetImageThread()
 {
     m_pJobQue = nullptr;
     m_nImageId = 0;
-    m_nSkipFrameNum = 1;
+    m_nNextFileIndex = 0;
+    m_nSkipFrameNum = 0;
     m_bScanning = false;
     m_nQueueMaxSize = 20;  // 1920*1080*3=6MB per image.
     m_nQueueMinSize = 10;
     m_strSavePath = "./";
+    m_nSrcImgType = -1;
 
+    m_bIsIdle = true; 
     m_pLogger = GetLoggerHandle();
 
 
@@ -22,21 +25,52 @@ CGetImageThread::CGetImageThread()
     SPDLOG_LOGGER_INFO(m_pLogger, "CGetImageThread::CGetImageThread...");
 }
 
-int CGetImageThread::Init(int nMaxQueueSize)
+
+int CGetImageThread::Init(int nMaxQueueSize, int nSrcImgType, std::string strSrcFile, std::string strSavePath)
 {
-    
     m_nQueueMaxSize = nMaxQueueSize;//50;
     m_nQueueMinSize = m_nQueueMaxSize - 10; // 
     m_nQueueMinSize = m_nQueueMinSize > 0 ? m_nQueueMinSize : 0;
-    
+    m_strSavePath = strSavePath;
 
-    std::string strFileName = "";
-    m_videoCapture.open(strFileName);
-
-    if (!m_videoCapture.isOpened()) 
+    if(m_strSavePath[m_strSavePath.size() - 1] != '/')
     {
-        //cerr << "ERROR! Unable to open camera\n";
-        return -1;
+        m_strSavePath = m_strSavePath + '/';
+    }
+
+    //std::string strFileName = strSrcFile;//"";
+    m_nSrcImgType = nSrcImgType;
+
+    if(SRC_TYPE_IMAGE_LIST == m_nSrcImgType)
+    {
+        //strSrcFile = /data/*.jpg
+        cv::glob(strSrcFile, m_vecFileList, false);
+        SPDLOG_LOGGER_INFO(m_pLogger, "Total Image Num:{}", m_vecFileList.size());
+    
+    }else if(SRC_TYPE_VIDEO_FILE == m_nSrcImgType)
+    {
+        m_videoCapture.open(strSrcFile);
+
+        if (!m_videoCapture.isOpened()) 
+        {
+            //cerr << "ERROR! Unable to open camera\n";
+            SPDLOG_LOGGER_ERROR(m_pLogger, "Failed to open video file:{}", strSrcFile);
+            return -1;
+        }
+
+    }else if(SRC_TYPE_CAMERA == m_nSrcImgType)
+    {
+        m_videoCapture.open(strSrcFile);
+
+        if (!m_videoCapture.isOpened()) 
+        {
+            //cerr << "ERROR! Unable to open camera\n";
+            SPDLOG_LOGGER_ERROR(m_pLogger, "Failed to open camera:{}", strSrcFile);
+            return -1;
+        }
+
+    }else{
+        SPDLOG_LOGGER_ERROR(m_pLogger, "Unknown src image type:{}", nSrcImgType);
     }
 
     return 0;
@@ -47,7 +81,7 @@ int CGetImageThread::StopThread()
     m_pJobQue->Stop();
     Stop();
 
-    return;
+    return 0;
 }
 
 int CGetImageThread::SetJobQueue(colmap::JobQueue<cv::Mat> *pJobQue)
@@ -74,6 +108,7 @@ int CGetImageThread::PushData(cv::Mat& img)
         if(m_queSavedImages.empty())
         {
             m_pJobQue->Push(img);
+            SPDLOG_LOGGER_DEBUG(m_pLogger, "Insert one image to queue");
         }else if(m_pJobQue->Size() <= m_nQueueMinSize)
         {
             //m_queSavedImages not empty and  nQueueSize <= m_nQueueMinSize
@@ -120,12 +155,70 @@ int CGetImageThread::PushData(cv::Mat& img)
     return 0;
 }
 
+void CGetImageThread::StartScanning()
+{
+    m_bScanning = true;
+}
+
+void CGetImageThread::StopScanning()
+{
+    m_bScanning = false;
+}
+
+bool CGetImageThread::IsIdle()
+{
+    return m_bIsIdle;
+}
+
+bool CGetImageThread::GetNextFrame(cv::Mat& frame)
+{
+
+    switch(m_nSrcImgType)
+    {
+        case SRC_TYPE_IMAGE_LIST:
+        {
+            if(m_nNextFileIndex < m_vecFileList.size())
+            {
+                cv::String file = m_vecFileList[m_nNextFileIndex++];
+                frame = cv::imread(file);
+
+            }else{
+                return false;
+            }
+            
+            break;
+        } 
+        case SRC_TYPE_VIDEO_FILE:
+        {
+            m_videoCapture.read(frame);
+            break;
+        }
+        case SRC_TYPE_CAMERA:
+        {
+            m_videoCapture.read(frame);
+            break;
+        }
+        default:
+        {
+            SPDLOG_LOGGER_ERROR(m_pLogger, "Unkonwn src image type:{}", m_nSrcImgType);
+            return false;
+        }
+    }
+
+    if (frame.empty()) 
+    {     
+        return false;
+    }
+    return true;
+}
+
 
 void CGetImageThread::Run()
 {
-    SPDLOG_LOGGER_INFO(m_pLogger, "CGetImageThread start...");
+    SPDLOG_LOGGER_INFO(m_pLogger, "CGetImageThread run...");
     while(true)
     {
+        m_bIsIdle = true;
         usleep(5*1000);//sleep 5ms
         
         if(IsStopped())
@@ -140,13 +233,21 @@ void CGetImageThread::Run()
         
         while (m_bScanning)
         {
-            //read image one by one
-            m_videoCapture.read(frame);
-            // check if we succeeded
-            if (frame.empty()) {
-                //cerr << "ERROR! blank frame grabbed\n";
+            if(m_bIsIdle)
+            {
+                m_bIsIdle = false;
+            }
+
+            if(!GetNextFrame(frame))
+            {
+                //SPDLOG_LOGGER_ERROR(m_pLogger, "Failed to get image");
                 break;
             }
+            
+            //read image one by one
+            //m_videoCapture.read(frame);
+            // check if we succeeded
+            
             m_nImageId++;
 
             //Skip n frame
@@ -162,5 +263,5 @@ void CGetImageThread::Run()
         }
     }
 
-    SPDLOG_LOGGER_INFO(m_pLogger, "CGetImageThread quit...");
+    SPDLOG_LOGGER_WARN(m_pLogger, "CGetImageThread quit...");
 }

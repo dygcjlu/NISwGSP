@@ -26,7 +26,9 @@
 #include <opencv2/stitching/detail/camera.hpp> /* CameraParams */
 #include <opencv2/stitching/detail/motion_estimators.hpp> /* BundleAdjusterBase */
 
-//#include "../ImagePair/APAPProjectThread.h"
+#include "../ImagePair/APAPProjectThread.h"
+#include "../ImagePair/FeatureMatchThread.h"
+
 
 const int PAIR_COUNT = 2;
 
@@ -75,6 +77,8 @@ public:
     MultiImages(const string & rootPath, const string & _file_name,
                 LINES_FILTER_FUNC * _width_filter  = &LINES_FILTER_NONE,
                 LINES_FILTER_FUNC * _length_filter = &LINES_FILTER_NONE);
+    ~MultiImages();
+    int Clear();
     
     const vector<detail::ImageFeatures> & getImagesFeaturesByMatchingPoints() const;
     const vector<detail::MatchesInfo>   & getPairwiseMatchesByMatchingPoints() const;
@@ -119,14 +123,18 @@ public:
     
     //vector<ImageData> images_data;
     vector<ImageData*> images_data;
+    map<int, int> m_mapId2vecIndex;
     Parameter parameter;
 
+public:
+    int SetAPAPProjectObject(CAPAPProjectThread* pAPAPProjectObject);
+    int SetFeatureMatchObject(CFeatureMatchThread* pFeatureMatchThread);
+    int InitMemberVariables();
 private:
 
     vector<pair<int, int> > getInitialFeaturePairsGPU(const pair<int, int> & _match_pair) const;
     vector<vector<vector<pair<int, int> > > > & getFeaturePairsGPU() const;
-    //int SetAPAPProjectObject(CAPAPProjectThread* pAPAPProjectObject);
-    //int InitMemberVariables();
+   
     
 
 private:    
@@ -184,7 +192,8 @@ private:
 
 private:
     bool m_bUseSiftGPU;
-    //CAPAPProjectThread* m_pAPAPProjectObject;
+    CAPAPProjectThread* m_pAPAPProjectObject;
+    CFeatureMatchThread* m_pFeatureMatchThread; //
 
 };
 

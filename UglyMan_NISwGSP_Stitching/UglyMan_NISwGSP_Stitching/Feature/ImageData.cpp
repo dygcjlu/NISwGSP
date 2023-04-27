@@ -85,7 +85,7 @@ ImageData::ImageData(const string & _file_dir,
     m_bIsFeatureDetected = false;
 }
 
-ImageData::ImageData(cv::Mat& img, int nId, bool bUseSiftgpu,
+ImageData::ImageData(cv::Mat& inImg, int nId, bool bUseSiftgpu,
               LINES_FILTER_FUNC * _width_filter,
              LINES_FILTER_FUNC * _length_filter,
               const string * _debug_dir)
@@ -95,6 +95,7 @@ ImageData::ImageData(cv::Mat& img, int nId, bool bUseSiftgpu,
     length_filter = _length_filter;
     m_bUseSiftGPU = bUseSiftgpu;
     debug_dir = _debug_dir;
+    img = inImg.clone();
 
     grey_img = Mat();
     float original_img_size = img.rows * img.cols;

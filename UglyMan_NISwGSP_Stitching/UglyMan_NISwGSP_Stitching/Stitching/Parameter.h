@@ -43,7 +43,7 @@ public:
     const vector<vector<bool> >   & getImagesMatchGraph() const;
     const vector<pair<int, int> > & getImagesMatchGraphPairList() const;
 public:
-    //int SetImagePair();
+    int SetImagePair(int nCenterIndex, int nImageCount, vector<vector<bool> >& matchedGraph);
 private:
     mutable vector<vector<bool> >   images_match_graph_manually;
     mutable vector<vector<bool> >   images_match_graph_automatically; /* TODO */

@@ -139,9 +139,10 @@ aux_source_directory(./Mesh MESH_SRC)
 aux_source_directory(./Stitching STITCHING_SRC)
 aux_source_directory(./Util UTIL_SRC)
 aux_source_directory(./siftgpu/util SIFTGPU_UTIL_SRC)
+aux_source_directory(./ImagePair IMAGE_PAIR_SRC)
 
 add_executable(NISwGSP Configure.h main.cpp ./siftgpu/siftgpu_manage.cpp ./siftgpu/siftgpu.cc ./siftgpu/types_.cc ./siftgpu/utils_.cc 
-${DEBUGGER_SRC} ${FEATURE_SRC} ${MESH_SRC} ${STITCHING_SRC} ${UTIL_SRC} ${SIFTGPU_UTIL_SRC})
+${DEBUGGER_SRC} ${FEATURE_SRC} ${MESH_SRC} ${STITCHING_SRC} ${UTIL_SRC} ${SIFTGPU_UTIL_SRC} ${IMAGE_PAIR_SRC})
 #target_link_libraries(NISwGSP ${OpenCV_LIBS} ${VLFEAT_LIBRARY})
 target_link_libraries(NISwGSP ${OpenCV_LIBS} ${VLFEAT_LIBRARY}  ${SIFTGPU_LIBRARY} ${FLANN_LIBRARY} 
 ${COLMAP_EXTERNAL_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_gl_LIBRARY}  ${OPENGL_glu_LIBRARY} ${CUDA_LIBRARIES})

@@ -47,7 +47,7 @@ using namespace Eigen;
 
 /*** data setting ***/
 //const int GRID_SIZE = 40;
-const int GRID_SIZE = 200;
+const int GRID_SIZE = 80;
 const int DOWN_SAMPLE_IMAGE_SIZE = 800 * 600;
 //const int DOWN_SAMPLE_IMAGE_SIZE = 1920 * 1080;
 

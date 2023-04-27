@@ -210,8 +210,8 @@ int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pIm
 
     detail::MatchesInfo matchInfo;
 
-    vector<vector<bool>> vecImagesFeatureMask;
-    vecImagesFeatureMask.resize(2);
+    //vector<vector<bool>> vecImagesFeatureMask;
+    //vecImagesFeatureMask.resize(2);
 
     //vector<detail::ImageFeatures> vecImagesFeatures;
     //vecImagesFeatures.resize(2);
@@ -276,14 +276,16 @@ int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pIm
                         vecOverlapMask[j][k] = true;
                         D_matches.emplace_back(m_mapImagesFeatures[nSrcIndex].keypoints.size(), k, 0);//m2的第K个点投影到m1的坐标，存储在m1的keypoint中，即，m2的第k个顶点与投影到m1的顶点坐标
                         //images_features_mask[m2][k] = true;
-                        vecImagesFeatureMask[j][k] = true;
+                        //vecImagesFeatureMask[j][k] = true;
+                        m_mapImagesFeaturesMask[nDstIndex][k] = true;
                         m_mapImagesFeatures[nSrcIndex].keypoints.emplace_back((*out_dst[j])[k], 0);
                     } else {
                         vecOverlapMask[j][k] = true;
                         //apap_overlap_mask[m1][m2][k] = true; //m1的第K个网格顶点投影到m2图像，如果在M2图像内，则值为true
                         D_matches.emplace_back(k, m_mapImagesFeatures[nDstIndex].keypoints.size(), 0);//保存顶点配对关系，m1的第k个顶点与m2图像keypoint列表的第n个点配对，即，m1的第k个顶点投影到m2后的顶点坐标
                         //images_features_mask[m1][k] = true;//m1的第K个网格点，有与它匹配的网格点
-                        vecImagesFeatureMask[j][k] = true;
+                        //vecImagesFeatureMask[j][k] = true;
+                        m_mapImagesFeaturesMask[nSrcIndex][k] = true;
                         m_mapImagesFeatures[nDstIndex].keypoints.emplace_back((*out_dst[j])[k], 0);
                     }
                     //存储当前图像网格顶点坐标以及其他图像顶点投影到当前图像后的顶点坐标
@@ -308,7 +310,7 @@ int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pIm
     int nForwardPairIndex = 0;
     int nBackwradPairIndex = 0;
     GetEncodeIndex(nSrcIndex, nDstIndex, &nForwardPairIndex);
-    GetEncodeIndex(nSrcIndex, nDstIndex, &nBackwradPairIndex);
+    GetEncodeIndex(nDstIndex, nSrcIndex, &nBackwradPairIndex);
 
     m_mapAPAPHomographies[nForwardPairIndex] = vecAPAPHomographies[0]; // src 到 dst的单应矩阵列表
     m_mapAPAPHomographies[nBackwradPairIndex] = vecAPAPHomographies[1];// dst 到 src的单应矩阵列表
@@ -340,6 +342,8 @@ int CAPAPProjectThread::PreComputeAPAPProject(ImageData* pImage1, ImageData* pIm
 
 void CAPAPProjectThread::Run()
 {
+    m_bIsIdle = false;
+    SPDLOG_LOGGER_INFO(m_pLogger, "CAPAPProjectThread run....");
     while(true)
     {
         usleep(10*1000);//sleep 10ms
@@ -356,6 +360,7 @@ void CAPAPProjectThread::Run()
         std::vector<pair<int, int>> vecPairs = m_pFeatureMatchThread->GetImagePairs();
 
         //process pairs
+        bool bHaveNewPair = false;
         for(auto& onePair : vecPairs)
         {
             int nPairId;// = onePair.first * 100000 +  onePair.second;
@@ -365,12 +370,23 @@ void CAPAPProjectThread::Run()
                 //Already processed before
                 continue;
             }
+            bHaveNewPair = true;
 
             PreComputeAPAPProject(mapKeyFrame[onePair.first], mapKeyFrame[onePair.second]);
 
             m_setDonePairList.insert(nPairId);
+            SPDLOG_LOGGER_INFO(m_pLogger, "process pair<{},{}> finished.", onePair.first, onePair.second);
+        }
+
+        if(bHaveNewPair)
+        {
+            m_bIsIdle = false;
+        }else{
+            m_bIsIdle = true;
         }
     }
+
+    SPDLOG_LOGGER_WARN(m_pLogger, "CAPAPProjectThread quit....");
 
 
 }

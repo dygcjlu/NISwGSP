@@ -12,6 +12,7 @@
 
 MultiImages::MultiImages(const string & rootPath):parameter(rootPath)
 {
+    m_bUseSiftGPU = true;
 
 }
 
@@ -56,6 +57,22 @@ MultiImages::MultiImages(const string & rootPath, const string & _file_name,
         images_data.emplace_back(pTmp);
 #endif
     }
+}
+
+MultiImages::~MultiImages()
+{
+    Clear();
+}
+
+int MultiImages::Clear()
+{
+    for(int i = 0; i < images_data.size(); i++)
+    {
+        delete images_data[i];
+        images_data[i] = nullptr;
+    }
+
+    return 0;
 }
 
 void MultiImages::doFeatureMatching() const {
@@ -203,8 +220,10 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
         for(int i = 0; i < camera_params.size(); ++i) {
             if(image_focal_candidates[i].empty()) {
                 camera_params[i].focal = images_data[i]->img.cols + images_data[i]->img.rows;
+                std::cout<<"empty camera_params[i].focal:"<<camera_params[i].focal<<std::endl;
             } else {
                 Statistics::getMedianWithoutCopyData(image_focal_candidates[i], camera_params[i].focal);
+                std::cout<<"camera_params[i].focal:"<<camera_params[i].focal<<std::endl;
             }
         }
         timer.end("get focal length");
@@ -258,6 +277,7 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
             }
             SVD svd(R, SVD::FULL_UV);
             relative_3D_rotations[m1][m2] = svd.u * svd.vt;
+            //std::cout<<"R"<<m1<<"_"<<m2<<" :"<<relative_3D_rotations[m1][m2]<<std::endl;
         }
         queue<int> que;
         vector<bool> labels(images_data.size(), false);
@@ -398,12 +418,12 @@ const vector<SimilarityElements> & MultiImages::getImagesSimilarityElements(cons
     vector<SimilarityElements> & result = *images_similarity_elements[_global_rotation_method];
     if(result.empty()) {
         result.reserve(images_data.size());
-         //TimeCalculator timer;
+         TimeCalculator timer;
       
-        //timer.start();
+        timer.start();
         const vector<detail::CameraParams> & camera_params = getCameraParams();//计算焦距和旋转矩阵
         
-        //timer.end("getCameraParams");
+        timer.end("getCameraParams");
         for(int i = 0; i < images_data.size(); ++i) {
             result.emplace_back(fabs(camera_params[parameter.center_image_index].focal / camera_params[i].focal),
                                 -getEulerZXYRadians<float>(camera_params[i].R)[2]);
@@ -941,7 +961,7 @@ vector<pair<int, int> > MultiImages::getFeaturePairsBySequentialRANSAC(const pai
    
     vector<char> final_mask(_initial_indices.size(), 0);
     cv::Mat H = findHomography(_X, _Y, CV_RANSAC, parameter.global_homography_max_inliers_dist, final_mask, GLOBAL_MAX_ITERATION);
-    std::cout<<"H:"<<H<<std::endl;
+    //std::cout<<"H:"<<H<<std::endl;
      
     
     vector<Point2> tmp_X = _X, tmp_Y = _Y;
@@ -957,7 +977,7 @@ vector<pair<int, int> > MultiImages::getFeaturePairsBySequentialRANSAC(const pai
         vector<Point2> next_X, next_Y;
         vector<char> mask(tmp_X.size(), 0);
         H = findHomography(tmp_X, tmp_Y, CV_RANSAC, parameter.local_homogrpahy_max_inliers_dist, mask, LOCAL_MAX_ITERATION);
-        std::cout<<"h:"<<H<<std::endl;
+        //std::cout<<"h:"<<H<<std::endl;
 
         int inliers_count = 0;
         for(int i = 0; i < mask.size(); ++i) {
@@ -1365,37 +1385,188 @@ vector<vector<vector<pair<int, int> > > > & MultiImages::getFeaturePairsGPU() co
 }
 
 
-/*
+
 int MultiImages::SetAPAPProjectObject(CAPAPProjectThread* pAPAPProjectObject)
 {
     m_pAPAPProjectObject = pAPAPProjectObject;
     return 0;
 }
 
-int MultiImages::InitMemberVariables()
+int MultiImages::SetFeatureMatchObject(CFeatureMatchThread* pFeatureMatchThread)
 {
-    vector<ImageData> images_data;
-
-    
-    mutable vector<detail::ImageFeatures> images_features; //存储当前图像网格顶点坐标以及其他图像顶点投影到当前图像后的顶点坐标, (当前图像中与其他图像有匹配关系的匹配点坐标，即其他图像的网格顶点通过apap投影到当前图像的点的坐标)
-
-    //保存匹配图相对的匹配信息,其中，D_matches的第一个值为M1的点，第二个值为m2的点，保存了两种匹配情况，
-    //第一种为m1投影到m2，若在m2图像内，则保存m1源点与投影后在m2上的点，两个点为匹配点
-    //第二种为M2投影到m1，若在m1图像内，则保存投影后的M1点，以及M2上的源点，两个点为匹配点对
-    //此处保存的是匹配点在images_features中的索引
-    mutable vector<detail::MatchesInfo>   pairwise_matches; 
-    mutable vector<detail::CameraParams>  camera_params;
-    
-    mutable vector<vector<bool> > images_features_mask;  //images_features_mask[m1][k] = true; m1的第K个网格点，其他图像中有与它匹配的网格点,相当于各图像的网格顶点是否与其他图像有重叠
-    
-    mutable vector<vector<vector<pair<int, int> > > > feature_pairs; //图像之间特征点配对情况，存储的是特征点的索引
-    mutable vector<vector<vector<Point2> > > feature_matches;  //[m1][m2][j], img1 j_th matches  //m1与m2的第j个特征匹配点的坐标，m1上的坐标
-    
-    mutable vector<vector<vector<bool> > >   apap_overlap_mask; //apap_overlap_mask[m1][m2][k] = true; //m1的第K个网格顶点投影到m2图像，如果在M2图像内，则值为true
-    mutable vector<vector<vector<Mat> > >    apap_homographies; //apap_homographies[m1][m2] m1投影到m2的单应矩阵列表
-    mutable vector<vector<vector<Point2> > > apap_matching_points;//apap_matching_points[m1][m2] m1上所有网格顶点投影到m2后的坐标
-    mutable vector<vector<vector<Point2> > > images_lines_projects;
-
+    m_pFeatureMatchThread = pFeatureMatchThread;
 
     return 0;
-}*/
+}
+
+int MultiImages::InitMemberVariables()
+{
+
+    std::map<int, ImageData*> mapKeyFrame = m_pFeatureMatchThread->GetKeyFrame();
+    int nImageNum = mapKeyFrame.size();
+    int nvecIndex = 0;
+    for(auto& itor : mapKeyFrame)
+    {
+        images_data.push_back(itor.second);
+        m_mapId2vecIndex[itor.first] = nvecIndex;
+        nvecIndex++;
+    }
+
+    vector<vector<bool> >   images_match_graph_manually;
+    images_match_graph_manually.resize(nImageNum);
+    for(int i = 0; i < nImageNum; ++i) 
+    {
+        images_match_graph_manually[i].resize(nImageNum, false);
+    }
+
+    std::vector<pair<int, int>> vecPairs = m_pFeatureMatchThread->GetImagePairs();
+    for(int i = 0; i < vecPairs.size(); i++)
+    {
+        int nIndex1 = m_mapId2vecIndex[vecPairs[i].first];
+        int nIndex2 = m_mapId2vecIndex[vecPairs[i].second];
+        
+        images_match_graph_manually[nIndex1][nIndex2] = true;
+    }
+
+    int nCenterIdex = 0;
+    int nMaxSize = 0;
+    for(int i = 0; i < images_data.size(); i++)
+    {
+        int nSize = images_data[i]->GetConnectionSize();
+        if(nMaxSize < nSize)
+        {
+            nMaxSize = nSize;
+            nCenterIdex = i;
+        }
+
+    }
+    //parameter.SetImagePair(nCenterIdex, nImageNum, images_match_graph_manually);
+    parameter.SetImagePair(0, nImageNum, images_match_graph_manually);
+
+    /////////
+    apap_homographies.resize(images_data.size());
+    apap_overlap_mask.resize(images_data.size());
+    apap_matching_points.resize(images_data.size());
+    for(int i = 0; i < images_data.size(); ++i) {
+        apap_homographies[i].resize(images_data.size());
+        apap_overlap_mask[i].resize(images_data.size());
+        apap_matching_points[i].resize(images_data.size());
+    }
+
+    
+    //mutable vector<vector<vector<Mat> > >    apap_homographies; //apap_homographies[m1][m2] m1投影到m2的单应矩阵列表
+
+    std::map<int, std::vector<cv::Mat>>& mapAPAPHomographies =  m_pAPAPProjectObject->GetAPAPHomographies();
+    for(auto& itor : mapAPAPHomographies)
+    {
+        int nId1 = 0;
+        int nId2 = 0;
+        m_pAPAPProjectObject->GetDecodeIndex(itor.first, &nId1, &nId2);
+        int nVecIndex1 = m_mapId2vecIndex[nId1];
+        int nVecINdex2 = m_mapId2vecIndex[nId2];
+        apap_homographies[nVecIndex1][nVecINdex2] = itor.second;
+
+    }
+
+    //mutable vector<vector<vector<Point2> > > apap_matching_points;//apap_matching_points[m1][m2] m1上所有网格顶点投影到m2后的坐标
+    std::map<int, std::vector<Point2>>& mapMatchPoints =  m_pAPAPProjectObject->GetMatchPoints();
+    for(auto& itor : mapMatchPoints)
+    {
+        int nId1 = 0;
+        int nId2 = 0;
+        m_pAPAPProjectObject->GetDecodeIndex(itor.first, &nId1, &nId2);
+        int nVecIndex1 = m_mapId2vecIndex[nId1];
+        int nVecINdex2 = m_mapId2vecIndex[nId2];
+        apap_matching_points[nVecIndex1][nVecINdex2] = itor.second;
+    }
+    
+    //mutable vector<vector<vector<bool> > >   apap_overlap_mask; //apap_overlap_mask[m1][m2][k] = true; //m1的第K个网格顶点投影到m2图像，如果在M2图像内，则值为true   
+    std::map<int, std::vector<bool>>& mapOverlapMask = m_pAPAPProjectObject->GetOverlapMask();
+    for(auto& itor : mapOverlapMask)
+    {
+        int nId1 = 0;
+        int nId2 = 0;
+        m_pAPAPProjectObject->GetDecodeIndex(itor.first, &nId1, &nId2);
+        int nVecIndex1 = m_mapId2vecIndex[nId1];
+        int nVecINdex2 = m_mapId2vecIndex[nId2];
+        apap_overlap_mask[nVecIndex1][nVecINdex2] = itor.second;
+    }
+
+    //mutable vector<vector<bool> > images_features_mask;  //images_features_mask[m1][k] = true; m1的第K个网格点，其他图像中有与它匹配的网格点,相当于各图像的网格顶点是否与其他图像有重叠
+    images_features_mask.resize(images_data.size());
+    std::map<int, std::vector<bool>>& mapImagesFeaturesMask = m_pAPAPProjectObject->GetImagesFeaturesMask();
+    for(auto& itor : mapImagesFeaturesMask)
+    {
+        int nVecIndex = m_mapId2vecIndex[itor.first];
+        images_features_mask[nVecIndex] = itor.second;
+    }
+
+    //mutable vector<detail::ImageFeatures> images_features; //存储当前图像网格顶点坐标以及其他图像顶点投影到当前图像后的顶点坐标, (当前图像中与其他图像有匹配关系的匹配点坐标，即其他图像的网格顶点通过apap投影到当前图像的点的坐标)
+    images_features.resize(images_data.size());
+    std::map<int, detail::ImageFeatures>& mapImagesFeatures = m_pAPAPProjectObject->GetImagesFeatures();
+    for(auto& itor : mapImagesFeatures)
+    {
+        int nVecIndex = m_mapId2vecIndex[itor.first];
+        images_features[nVecIndex]  = itor.second;
+    }
+   
+    //mutable vector<detail::MatchesInfo>   pairwise_matches;
+    pairwise_matches.resize(images_data.size() * images_data.size());
+    std::map<int, detail::MatchesInfo>&  mapPairwiseMatches = m_pAPAPProjectObject->GetPairwiseMatches();
+    for(auto& itor : mapPairwiseMatches)
+    {
+        int nId1 = 0;
+        int nId2 = 0;
+        m_pAPAPProjectObject->GetDecodeIndex(itor.first, &nId1, &nId2);
+        int nVecIndex1 = m_mapId2vecIndex[nId1];
+        int nVecINdex2 = m_mapId2vecIndex[nId2];
+        int nNewIndex = nVecIndex1 * (int)images_data.size() + nVecINdex2;
+        if(itor.second.src_img_idx != nId1 ||itor.second.dst_img_idx != nId2 )
+        {
+            std::cout<<"error! itor.second.src_img_idx != nId1"<<std::endl;
+        }
+
+        itor.second.src_img_idx = nVecIndex1;
+        itor.second.dst_img_idx = nVecINdex2;
+        pairwise_matches[nNewIndex] = itor.second;
+    }
+
+    //mutable vector<vector<vector<pair<int, int> > > > feature_pairs; //图像之间特征点配对情况，存储的是特征点的索引 no need
+    //mutable vector<vector<vector<Point2> > > feature_matches;  //[m1][m2][j], img1 j_th matches  //m1与m2的第j个特征匹配点的坐标，m1上的坐标
+    feature_matches.resize(images_data.size());
+    for(int i = 0; i < images_data.size(); ++i) {
+        feature_matches[i].resize(images_data.size());
+    }
+
+    std::map<int, std::vector<Point2>>& mapFeatureMatches = m_pAPAPProjectObject->GetFeatureMatches();
+    for(auto& itor : mapFeatureMatches)
+    {
+        int nId1 = 0;
+        int nId2 = 0;
+        m_pAPAPProjectObject->GetDecodeIndex(itor.first, &nId1, &nId2);
+        int nVecIndex1 = m_mapId2vecIndex[nId1];
+        int nVecINdex2 = m_mapId2vecIndex[nId2];
+        feature_matches[nVecIndex1][nVecINdex2] = itor.second;
+    }
+
+    //mutable vector<vector<vector<Point2> > > images_lines_projects;
+    
+    images_lines_projects.resize(images_data.size());
+    for(int i = 0; i < images_lines_projects.size(); ++i) 
+    {
+        images_lines_projects[i].resize(images_data.size());
+    }
+    
+    std::map<int, std::vector<Point2>>& mapImagesLinesProjects = m_pAPAPProjectObject->GetImagesLinesProjects();
+    for(auto& itor : mapImagesLinesProjects)
+    {
+        int nId1 = 0;
+        int nId2 = 0;
+        m_pAPAPProjectObject->GetDecodeIndex(itor.first, &nId1, &nId2);
+        int nVecIndex1 = m_mapId2vecIndex[nId1];
+        int nVecINdex2 = m_mapId2vecIndex[nId2];
+        images_lines_projects[nVecIndex1][nVecINdex2] = itor.second;
+    }
+
+    return 0;
+}

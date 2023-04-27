@@ -1,0 +1,150 @@
+[2023-04-27 13:44:33.587][66345][debug][CommonDef.cpp:GetLoggerHandle:25] DEBUG log is enabled!
+[2023-04-27 13:44:33.587][66345][info][CommonDef.cpp:GetLoggerHandle:26] INFO log is enabled!
+[2023-04-27 13:44:33.587][66345][info][GetImageThread.cpp:CGetImageThread:25] CGetImageThread::CGetImageThread...
+[2023-04-27 13:44:33.590][66345][info][GetImageThread.cpp:Init:48] Total Image Num:29
+[2023-04-27 13:44:33.590][66345][info][FeatureMatchThread.cpp:CFeatureMatchThread:24] CFeatureMatchThread::CFeatureMatchThread...
+[2023-04-27 13:44:33.590][66345][info][FeatureMatchThread.cpp:Init:37] save path:/media/xxd/Data2/datasets/image_stitching/za/
+[2023-04-27 13:44:33.590][66345][info][APAPProjectThread.cpp:CAPAPProjectThread:11] CAPAPProjectThread::CAPAPProjectThread...
+[2023-04-27 13:44:33.590][66352][info][GetImageThread.cpp:Run:218] CGetImageThread run...
+[2023-04-27 13:44:33.590][66353][info][FeatureMatchThread.cpp:Run:294] CFeatureMatchThread run....
+[2023-04-27 13:44:33.590][66354][info][APAPProjectThread.cpp:Run:346] CAPAPProjectThread run....
+[2023-04-27 13:44:33.604][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.604][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:33.614][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.623][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.632][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.641][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.650][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.660][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.670][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.679][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.689][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.699][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.708][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.717][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.726][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.736][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.745][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.754][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.763][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.772][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.780][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.788][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.797][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.805][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.815][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.823][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.832][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.841][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.851][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.859][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
+[2023-04-27 13:44:33.875][66353][info][FeatureMatchThread.cpp:Run:334] Add new key frame, id:0
+[2023-04-27 13:44:33.875][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:34.030][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:202] Add first pair<1,0>
+[2023-04-27 13:44:34.030][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:1, matched size:1
+[2023-04-27 13:44:34.033][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:34.225][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<2,1>
+[2023-04-27 13:44:34.226][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:2, matched size:1
+[2023-04-27 13:44:34.228][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:34.335][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<3,2>
+[2023-04-27 13:44:34.335][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:3, matched size:1
+[2023-04-27 13:44:34.338][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:34.527][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<4,3>
+[2023-04-27 13:44:34.527][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:4, matched size:1
+[2023-04-27 13:44:34.530][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:34.666][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<5,4>
+[2023-04-27 13:44:34.667][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:5, matched size:1
+[2023-04-27 13:44:34.669][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:34.806][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<6,5>
+[2023-04-27 13:44:34.806][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:6, matched size:1
+[2023-04-27 13:44:34.810][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:34.968][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<7,6>
+[2023-04-27 13:44:34.968][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:7, matched size:1
+[2023-04-27 13:44:34.971][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:34.996][66354][info][APAPProjectThread.cpp:Run:378] process pair<1,0> finished.
+[2023-04-27 13:44:35.214][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<8,7>
+[2023-04-27 13:44:35.221][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:8, matched size:1
+[2023-04-27 13:44:35.225][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:35.424][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<9,8>
+[2023-04-27 13:44:35.429][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:9, matched size:1
+[2023-04-27 13:44:35.432][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:35.632][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<10,9>
+[2023-04-27 13:44:35.637][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:10, matched size:1
+[2023-04-27 13:44:35.640][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:35.649][66354][info][APAPProjectThread.cpp:Run:378] process pair<2,1> finished.
+[2023-04-27 13:44:35.768][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<11,10>
+[2023-04-27 13:44:35.776][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:11, matched size:1
+[2023-04-27 13:44:35.780][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:35.827][66354][info][APAPProjectThread.cpp:Run:378] process pair<3,2> finished.
+[2023-04-27 13:44:35.920][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<12,11>
+[2023-04-27 13:44:35.931][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:12, matched size:1
+[2023-04-27 13:44:35.934][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:36.083][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<13,12>
+[2023-04-27 13:44:36.093][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:13, matched size:1
+[2023-04-27 13:44:36.096][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:36.166][66354][info][APAPProjectThread.cpp:Run:378] process pair<4,3> finished.
+[2023-04-27 13:44:36.324][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<14,13>
+[2023-04-27 13:44:36.345][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:14, matched size:1
+[2023-04-27 13:44:36.349][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:36.594][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<15,14>
+[2023-04-27 13:44:36.610][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:15, matched size:1
+[2023-04-27 13:44:36.613][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:36.757][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<16,15>
+[2023-04-27 13:44:36.778][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<16,9>
+[2023-04-27 13:44:36.778][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:16, matched size:2
+[2023-04-27 13:44:36.781][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:36.808][66354][info][APAPProjectThread.cpp:Run:378] process pair<5,4> finished.
+[2023-04-27 13:44:36.952][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<17,16>
+[2023-04-27 13:44:36.978][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<17,10>
+[2023-04-27 13:44:36.978][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:17, matched size:2
+[2023-04-27 13:44:36.982][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:37.238][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:210] dOverlapRatio0.7446491008991009 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-27 13:44:37.238][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:37.295][66354][info][APAPProjectThread.cpp:Run:378] process pair<6,5> finished.
+[2023-04-27 13:44:37.424][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<19,17>
+[2023-04-27 13:44:37.452][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<19,11>
+[2023-04-27 13:44:37.452][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:19, matched size:2
+[2023-04-27 13:44:37.455][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:37.555][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<20,19>
+[2023-04-27 13:44:37.576][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<20,10>
+[2023-04-27 13:44:37.576][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:20, matched size:2
+[2023-04-27 13:44:37.579][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:37.624][66354][info][APAPProjectThread.cpp:Run:378] process pair<7,6> finished.
+[2023-04-27 13:44:37.679][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<21,20>
+[2023-04-27 13:44:37.700][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<21,9>
+[2023-04-27 13:44:37.700][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:21, matched size:2
+[2023-04-27 13:44:37.703][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:37.805][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<22,21>
+[2023-04-27 13:44:37.832][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<22,6>
+[2023-04-27 13:44:37.832][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:22, matched size:2
+[2023-04-27 13:44:37.835][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:37.952][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<23,22>
+[2023-04-27 13:44:37.987][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<23,6>
+[2023-04-27 13:44:37.987][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:23, matched size:2
+[2023-04-27 13:44:37.991][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:38.098][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<24,23>
+[2023-04-27 13:44:38.126][66354][info][APAPProjectThread.cpp:Run:378] process pair<8,7> finished.
+[2023-04-27 13:44:38.128][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<24,4>
+[2023-04-27 13:44:38.128][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:24, matched size:2
+[2023-04-27 13:44:38.131][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:38.264][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<25,24>
+[2023-04-27 13:44:38.306][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<25,3>
+[2023-04-27 13:44:38.306][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:25, matched size:2
+[2023-04-27 13:44:38.309][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:38.559][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<26,25>
+[2023-04-27 13:44:38.615][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<26,2>
+[2023-04-27 13:44:38.615][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:26, matched size:2
+[2023-04-27 13:44:38.618][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:38.619][66354][info][APAPProjectThread.cpp:Run:378] process pair<9,8> finished.
+[2023-04-27 13:44:38.845][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:210] dOverlapRatio0.7481164668664668 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-27 13:44:38.845][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
+[2023-04-27 13:44:38.963][66354][info][APAPProjectThread.cpp:Run:378] process pair<10,9> finished.
+[2023-04-27 13:44:38.980][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<28,26>
+[2023-04-27 13:44:39.017][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<28,0>
+[2023-04-27 13:44:39.017][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:28, matched size:2
+[2023-04-27 13:44:39.185][66354][info][APAPProjectThread.cpp:Run:378] process pair<11,10> finished.
+[2023-04-27 13:44:39.555][66354][info][APAPProjectThread.cpp:Run:378] process pair<12,11> finished.
+[2023-04-27 13:44:40.013][66354][info][APAPProjectThread.cpp:Run:378] process pair<13,12> finished.
+[2023-04-27 13:44:40.650][66354][info][APAPProjectThread.cpp:Run:378] process pair<14,13> finished.
+[2023-04-27 13:44:41.197][66354][info][APAPProjectThread.cpp:Run:378] process pair<15,14> finished.
+[2023-04-27 13:44:41.514][66354][info][APAPProjectThread.cpp:Run:378] process pair<16,15> finished.

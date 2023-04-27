@@ -28,7 +28,7 @@
     ]
 }*/
 
-/*
+
 {
     //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
     //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
@@ -42,7 +42,7 @@
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build/NISwGSP",
+            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build_d/NISwGSP",
             "args": [ "/media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/images/image_stitching/", "simple3"],
             "cwd": "${workspaceFolder}",
             "setupCommands": [
@@ -55,7 +55,7 @@
         }
         
     ]
-}*/
+}
 
 /*{
     //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
@@ -83,7 +83,7 @@
         
     ]
 }*/
-
+/*
 {
     //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
     //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
@@ -96,7 +96,7 @@
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build/NISwGSP",
+            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build_d/NISwGSP",
             "args": [ "/media/xxd/Data2/datasets/image_stitching/input-42-data/", "APAP-garden"],
             "cwd": "${workspaceFolder}",
             "setupCommands": [
@@ -109,7 +109,7 @@
         }
         
     ]
-}
+}*/
 
 //CAVE-church, 32 images, about 180s
 //CAVE-columbus_circle, 15 images, about 60s
@@ -148,3 +148,32 @@
         
     ]
 }*/
+//////////////////////////////////////////////////////////////////////////
+/*
+{
+    //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
+    //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
+    ///media/xxd/Data2/datasets/image_stitching/APAP/scene1/*
+    ///home/xxd/dyg/opencv/opencv4_5/opencv_extra/testdata/stitching/s*
+    ///media/xxd/Data2/datasets/3d/mine/0111/mono/stitching/2/ NISwGSP-parrington APAP-garden AANAP-building
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build_d/NISwGSP",
+            "args": [ "/media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/images/image_stitching/simple3/*jpg", "/media/xxd/Data2/datasets/image_stitching/za/"],
+            "cwd": "${workspaceFolder}",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+        
+    ]
+}
+*/

@@ -12,11 +12,12 @@ CFeatureMatchThread::CFeatureMatchThread()
     m_nMatchSizeThreshold = 20;
     m_nLoopDetectInterval = 2;
 
-    m_dMinOverlapRatio = 0.2;
-    m_dMaxOverlapRatio = 0.7;
+    m_dMinOverlapRatio = 0.1;
+    m_dMaxOverlapRatio = 0.9;
     m_nLoopDetectStartIndex = 5;
 
     m_pLogger = GetLoggerHandle();
+    m_strSavePath = './';
 
 
 
@@ -25,8 +26,15 @@ CFeatureMatchThread::CFeatureMatchThread()
 }
 
 
-int CFeatureMatchThread::Init()
+int CFeatureMatchThread::Init(std::string strSavePath)
 {
+    m_strSavePath = strSavePath;
+    if(m_strSavePath[m_strSavePath.size() - 1] != '/')
+    {
+        m_strSavePath = m_strSavePath + '/';
+    }
+
+    SPDLOG_LOGGER_INFO(m_pLogger, "save path:{}", m_strSavePath);
 
     return 0;
 }
@@ -93,13 +101,40 @@ double  CFeatureMatchThread::ComputeOverlapArea(ImageData* pImage1, colmap::Feat
 
         pts.push_back(cv::Point(cvRound(p.x), cvRound(p.y)));
     }
+    for(int i = 0; i < pts.size(); ++i)
+    {
+        if(pts[i].x < 0)
+        {
+            pts[i].x = 0;
+        }
+        if(pts[i].y < 0)
+        {
+            pts[i].y = 0;
+        }
+        if(pts[i].x > (pImage2->img.cols - 1))
+        {
+            pts[i].x = pImage2->img.cols - 1;
+        }
+        if(pts[i].y > (pImage2->img.rows - 1))
+        {
+            pts[i].y = pImage2->img.rows - 1;
+        }
+    }
     
+
     Mat roi = Mat::zeros(pImage2->img.size(), CV_8UC1);
     vector<vector<Point>> contour;
     contour.push_back(pts);
 
     drawContours(roi, contour, 0, Scalar::all(255), -1);
-    double area = cv::contourArea(contour);
+
+#ifndef NDEBUG
+    static int nOverlapNo = 1000;
+
+    SaveImage2Disk(nOverlapNo++, roi);
+#endif
+    
+    double area = cv::contourArea(contour[0]);
     double dRatio = area / (pImage2->img.rows * pImage2->img.cols);
     return dRatio;
     /*
@@ -111,13 +146,14 @@ double  CFeatureMatchThread::ComputeOverlapArea(ImageData* pImage1, colmap::Feat
 
 }
 
-int CFeatureMatchThread::LoopFeatureMatch(ImageData* pImage,  bool bIsKeyFrame)
+int CFeatureMatchThread::LoopFeatureMatch(ImageData* pImage,  bool& bIsKeyFrame)
 {
     colmap::FeatureDescriptors & descriptors1 = pImage->getFeatureDescriptorsSiftgpu();
     const vector<Point2> & m1_fpts = pImage->getFeaturePoints();
     int nIteratorNo = 0;
     int nSkipKf = 0;
     double dOverlapRatioWithLastKF = 0;
+    int nLastKFId = -1;
     double dMaxOverlapRatio = 0.;
     int nMaxOverlapIndex = -1;
     int nMaxOverlapId = -1;
@@ -125,6 +161,7 @@ int CFeatureMatchThread::LoopFeatureMatch(ImageData* pImage,  bool bIsKeyFrame)
     std::map<int, ImageData*>::reverse_iterator rit;
     vector<pair<int, int>> vecPairs;
     //bool bIsKeyFrame = false;
+    bool bLoopDetect = false;
    
     for (rit=m_mapKeyFrame.rbegin(); rit!=m_mapKeyFrame.rend(); ++rit)
     {
@@ -143,7 +180,7 @@ int CFeatureMatchThread::LoopFeatureMatch(ImageData* pImage,  bool bIsKeyFrame)
         nSkipKf = 0;
 
         double dOverlapRatio = ComputeOverlapArea(pImage, descriptors1, m1_fpts, rit->second);
-        if(dOverlapRatio < m_dMinOverlapRatio || dOverlapRatio > m_dMinOverlapRatio)
+        if(dOverlapRatio < m_dMinOverlapRatio || dOverlapRatio > m_dMaxOverlapRatio)
         {
             continue;
         }
@@ -156,21 +193,32 @@ int CFeatureMatchThread::LoopFeatureMatch(ImageData* pImage,  bool bIsKeyFrame)
         if(1 == nIteratorNo)
         {     
             dOverlapRatioWithLastKF = dOverlapRatio;
+            nLastKFId = rit->second->m_nID;
+            if(m_mapKeyFrame.size() == 1) //only one key frame in map
+            {
+                bIsKeyFrame = true;
+                //vecPairs.push_back( std::pair<pImage->m_nID, rit->second->m_nID>);
+                vecPairs.emplace_back(std::make_pair(pImage->m_nID, rit->second->m_nID));
+                SPDLOG_LOGGER_INFO(m_pLogger, "Add first pair<{},{}>", pImage->m_nID, rit->second->m_nID);
+            }
             
         }else if(2 == nIteratorNo)
         {
             //若与前一张的重叠度大于与前前一张的重叠度(否则认为走回头路了)，则此图片做为候选关键帧
             if(dOverlapRatio > dOverlapRatioWithLastKF )
             {
+                SPDLOG_LOGGER_INFO(m_pLogger, "dOverlapRatio{} > dOverlapRatioWithLastKF{},ignore this frame", dOverlapRatio , dOverlapRatioWithLastKF);
                 break;
             }else
             {
                 bIsKeyFrame = true;
                 //vecPairs.push_back( std::pair<pImage->m_nID, rit->second->m_nID>);
-                vecPairs.emplace_back(std::make_pair(pImage->m_nID, rit->second->m_nID));
+                vecPairs.emplace_back(std::make_pair(pImage->m_nID, nLastKFId));
+                SPDLOG_LOGGER_INFO(m_pLogger, "Add  pair<{},{}>", pImage->m_nID, nLastKFId);
             }
         }else
         {
+            bLoopDetect = true;
             //只对候选关键帧做loop detect, 对m_nLoopDetectStartIndex帧之前的关键帧做loop detect
             if(dOverlapRatio > dMaxOverlapRatio)
             {
@@ -188,7 +236,7 @@ int CFeatureMatchThread::LoopFeatureMatch(ImageData* pImage,  bool bIsKeyFrame)
     //对前一轮得到的最大从叠关键帧的前后帧进行计算，取最终的最大重叠帧做为配对帧
     if(bIsKeyFrame)
     {
-        if(dMaxOverlapRatio > m_dMinOverlapRatio)
+        if(bLoopDetect && (dMaxOverlapRatio > m_dMinOverlapRatio))
         {
             nIteratorNo = 0;
             for (rit=m_mapKeyFrame.rbegin(); rit!=m_mapKeyFrame.rend(); ++rit)
@@ -207,12 +255,15 @@ int CFeatureMatchThread::LoopFeatureMatch(ImageData* pImage,  bool bIsKeyFrame)
             }
             //add this match pair 
             vecPairs.emplace_back(std::make_pair( pImage->m_nID, nMaxOverlapId));
+            SPDLOG_LOGGER_INFO(m_pLogger, "Add loop pair<{},{}>", pImage->m_nID, nMaxOverlapId);
         }
 
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-            m_mapKeyFrame[nMaxOverlapId] = pImage;   
+            m_mapKeyFrame[pImage->m_nID] = pImage;   
+            pImage->file_name = std::to_string(pImage->m_nID);
             m_vecPairs.insert(m_vecPairs.end(),vecPairs.begin(),vecPairs.end());
+            SPDLOG_LOGGER_INFO(m_pLogger, "Add new key frame, id:{}, matched size:{}", pImage->m_nID, vecPairs.size());
         }
         
         
@@ -234,12 +285,13 @@ int CFeatureMatchThread::LoopFeatureMatch(ImageData* pImage,  bool bIsKeyFrame)
 
 void CFeatureMatchThread::SaveImage2Disk(int nId, cv::Mat& img)
 {
-    std::string strFileName = m_strSavePath + std::to_string(nId) + ".jpg";
+    std::string strFileName = m_strSavePath + std::to_string(nId) + "_kf.jpg";
     cv::imwrite(strFileName, img);
 }
 
 void CFeatureMatchThread::Run()
 {
+    SPDLOG_LOGGER_INFO(m_pLogger, "CFeatureMatchThread run....");
     while(true)
     {
         //usleep(5*1000);//sleep 5ms
@@ -257,6 +309,8 @@ void CFeatureMatchThread::Run()
             continue;
         }
 
+        SPDLOG_LOGGER_DEBUG(m_pLogger, "Got one image from queue");
+
         cv::Mat& img = j.Data();
         ImageData* pImage = new ImageData(img, m_nKeyFrameId++);
 
@@ -267,12 +321,25 @@ void CFeatureMatchThread::Run()
         {
             delete pImage;
             pImage = nullptr;
+            SPDLOG_LOGGER_DEBUG(m_pLogger, "nSize[{}] < m_nFeaturePointSizeThreshold[{}]", nSize, m_nFeaturePointSizeThreshold);
             continue;
         }
 
+        //insert first key frame
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            if(m_mapKeyFrame.empty())
+            {
+                m_mapKeyFrame[pImage->m_nID] = pImage;  
+                SPDLOG_LOGGER_INFO(m_pLogger, "Add new key frame, id:{}", pImage->m_nID);
+                continue;
+            }
+        }
+        
+
         //global project and loop detect
         bool bIsKeyFrame = false;
-        LoopFeatureMatch(pImage, &bIsKeyFrame);
+        LoopFeatureMatch(pImage, bIsKeyFrame);
 
         if(!bIsKeyFrame)
         {
@@ -281,6 +348,7 @@ void CFeatureMatchThread::Run()
             continue;
         }
     }
+    SPDLOG_LOGGER_WARN(m_pLogger, "CFeatureMatchThread quit....");
 }
 
  

@@ -330,15 +330,11 @@ vector<vector<Point2> > MeshOptimization::getImageVerticesBySolving(vector<Tripl
             vertices[i].emplace_back(x[x_index + j    ],
                                      x[x_index + j + 1]);
 
-            std::cout<<"("<<x[x_index + j    ]<<", "<<x[x_index + j + 1]<<") ";
+            //std::cout<<"("<<x[x_index + j    ]<<", "<<x[x_index + j + 1]<<") ";
         }
 
-        std::cout<<std::endl;
+        //std::cout<<std::endl;
         x_index += count;
     }
-    
-   
-
-   
     return vertices;
 }

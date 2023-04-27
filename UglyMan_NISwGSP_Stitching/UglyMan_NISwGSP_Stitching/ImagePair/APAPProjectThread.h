@@ -10,6 +10,7 @@
 class CAPAPProjectThread : public colmap::Thread
 {
 public:
+    CAPAPProjectThread();
     int Init();
     int StopThread();
     int SetFeatureMatchObject(CFeatureMatchThread* pFeatureMatchThread);
@@ -21,8 +22,53 @@ public:
     void GetDecodeIndex(int nEncodedIndex, int* pnIndex1, int* pnIndex2)
     {
         *pnIndex1 = nEncodedIndex / m_nIndexEncodeBase;
+
         *pnIndex2 = nEncodedIndex % m_nIndexEncodeBase;
     }
+
+    bool IsIdle(){return m_bIsIdle;}
+
+public:
+    std::map<int, std::vector<cv::Mat>>& GetAPAPHomographies()
+    {
+        return m_mapAPAPHomographies;
+    }
+
+    std::map<int, std::vector<Point2>>& GetMatchPoints()
+    {
+        return m_mapMatchPoints;
+    }
+
+    std::map<int, std::vector<bool>>& GetOverlapMask()
+    {
+        return m_mapOverlapMask;
+    }
+
+    std::map<int, std::vector<Point2>>& GetFeatureMatches()
+    {
+        return m_mapFeatureMatches;
+    }
+
+    std::map<int, detail::MatchesInfo>& GetPairwiseMatches()
+    {
+        return m_mapPairwiseMatches;
+    }
+
+    std::map<int, detail::ImageFeatures>& GetImagesFeatures()
+    {
+        return m_mapImagesFeatures;
+    }
+
+    std::map<int, std::vector<bool>>& GetImagesFeaturesMask()
+    {
+        return m_mapImagesFeaturesMask;
+    }
+
+    std::map<int, std::vector<Point2>>& GetImagesLinesProjects()
+    {
+        return m_mapImagesLinesProjects;
+    }
+
 
 private:
     void Run() override;
@@ -35,11 +81,14 @@ private:
 
     int PreComputeAPAPProject(ImageData* pImage1, ImageData* pImage2);
 
-    int CAPAPProjectThread::ImageLineProject(ImageData* pImage, vector<Point2>& vecFeatureMatches1, 
+    int ImageLineProject(ImageData* pImage, vector<Point2>& vecFeatureMatches1, 
                                          vector<Point2>& vecFeatureMatches2, vector<Point2>& vecProjectedLine);
+
+    
 
 
 private:
+    std::atomic_bool m_bIsIdle;
     int m_nIndexEncodeBase; //encode index1 and index1 to one index
     std::shared_ptr<spdlog::logger> m_pLogger; //log handle
     CFeatureMatchThread* m_pFeatureMatchThread; //
