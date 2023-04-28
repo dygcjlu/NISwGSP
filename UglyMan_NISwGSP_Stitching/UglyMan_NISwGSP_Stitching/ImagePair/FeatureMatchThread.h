@@ -5,6 +5,21 @@
 #include "../siftgpu/util/util_threading.h"
 #include "../Util/CommonDef.h"
 #include "../Feature/ImageData.h"
+/*
+condition 1:
+start  * * * 
+   *   *   *
+   *   *   *
+   * * *   end
+
+//condition 1:
+
+   * * *   start 
+   *   *   *
+   *   *   *
+ end   * * *
+
+*/
 
 class CFeatureMatchThread : public colmap::Thread
 {

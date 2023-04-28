@@ -1,150 +1,382 @@
-[2023-04-27 13:44:33.587][66345][debug][CommonDef.cpp:GetLoggerHandle:25] DEBUG log is enabled!
-[2023-04-27 13:44:33.587][66345][info][CommonDef.cpp:GetLoggerHandle:26] INFO log is enabled!
-[2023-04-27 13:44:33.587][66345][info][GetImageThread.cpp:CGetImageThread:25] CGetImageThread::CGetImageThread...
-[2023-04-27 13:44:33.590][66345][info][GetImageThread.cpp:Init:48] Total Image Num:29
-[2023-04-27 13:44:33.590][66345][info][FeatureMatchThread.cpp:CFeatureMatchThread:24] CFeatureMatchThread::CFeatureMatchThread...
-[2023-04-27 13:44:33.590][66345][info][FeatureMatchThread.cpp:Init:37] save path:/media/xxd/Data2/datasets/image_stitching/za/
-[2023-04-27 13:44:33.590][66345][info][APAPProjectThread.cpp:CAPAPProjectThread:11] CAPAPProjectThread::CAPAPProjectThread...
-[2023-04-27 13:44:33.590][66352][info][GetImageThread.cpp:Run:218] CGetImageThread run...
-[2023-04-27 13:44:33.590][66353][info][FeatureMatchThread.cpp:Run:294] CFeatureMatchThread run....
-[2023-04-27 13:44:33.590][66354][info][APAPProjectThread.cpp:Run:346] CAPAPProjectThread run....
-[2023-04-27 13:44:33.604][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.604][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:33.614][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.623][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.632][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.641][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.650][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.660][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.670][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.679][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.689][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.699][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.708][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.717][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.726][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.736][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.745][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.754][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.763][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.772][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.780][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.788][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.797][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.805][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.815][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.823][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.832][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.841][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.851][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.859][66352][debug][GetImageThread.cpp:PushData:111] Insert one image to queue
-[2023-04-27 13:44:33.875][66353][info][FeatureMatchThread.cpp:Run:334] Add new key frame, id:0
-[2023-04-27 13:44:33.875][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:34.030][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:202] Add first pair<1,0>
-[2023-04-27 13:44:34.030][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:1, matched size:1
-[2023-04-27 13:44:34.033][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:34.225][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<2,1>
-[2023-04-27 13:44:34.226][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:2, matched size:1
-[2023-04-27 13:44:34.228][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:34.335][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<3,2>
-[2023-04-27 13:44:34.335][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:3, matched size:1
-[2023-04-27 13:44:34.338][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:34.527][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<4,3>
-[2023-04-27 13:44:34.527][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:4, matched size:1
-[2023-04-27 13:44:34.530][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:34.666][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<5,4>
-[2023-04-27 13:44:34.667][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:5, matched size:1
-[2023-04-27 13:44:34.669][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:34.806][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<6,5>
-[2023-04-27 13:44:34.806][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:6, matched size:1
-[2023-04-27 13:44:34.810][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:34.968][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<7,6>
-[2023-04-27 13:44:34.968][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:7, matched size:1
-[2023-04-27 13:44:34.971][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:34.996][66354][info][APAPProjectThread.cpp:Run:378] process pair<1,0> finished.
-[2023-04-27 13:44:35.214][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<8,7>
-[2023-04-27 13:44:35.221][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:8, matched size:1
-[2023-04-27 13:44:35.225][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:35.424][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<9,8>
-[2023-04-27 13:44:35.429][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:9, matched size:1
-[2023-04-27 13:44:35.432][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:35.632][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<10,9>
-[2023-04-27 13:44:35.637][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:10, matched size:1
-[2023-04-27 13:44:35.640][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:35.649][66354][info][APAPProjectThread.cpp:Run:378] process pair<2,1> finished.
-[2023-04-27 13:44:35.768][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<11,10>
-[2023-04-27 13:44:35.776][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:11, matched size:1
-[2023-04-27 13:44:35.780][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:35.827][66354][info][APAPProjectThread.cpp:Run:378] process pair<3,2> finished.
-[2023-04-27 13:44:35.920][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<12,11>
-[2023-04-27 13:44:35.931][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:12, matched size:1
-[2023-04-27 13:44:35.934][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:36.083][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<13,12>
-[2023-04-27 13:44:36.093][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:13, matched size:1
-[2023-04-27 13:44:36.096][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:36.166][66354][info][APAPProjectThread.cpp:Run:378] process pair<4,3> finished.
-[2023-04-27 13:44:36.324][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<14,13>
-[2023-04-27 13:44:36.345][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:14, matched size:1
-[2023-04-27 13:44:36.349][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:36.594][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<15,14>
-[2023-04-27 13:44:36.610][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:15, matched size:1
-[2023-04-27 13:44:36.613][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:36.757][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<16,15>
-[2023-04-27 13:44:36.778][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<16,9>
-[2023-04-27 13:44:36.778][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:16, matched size:2
-[2023-04-27 13:44:36.781][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:36.808][66354][info][APAPProjectThread.cpp:Run:378] process pair<5,4> finished.
-[2023-04-27 13:44:36.952][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<17,16>
-[2023-04-27 13:44:36.978][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<17,10>
-[2023-04-27 13:44:36.978][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:17, matched size:2
-[2023-04-27 13:44:36.982][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:37.238][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:210] dOverlapRatio0.7446491008991009 > dOverlapRatioWithLastKF0,ignore this frame
-[2023-04-27 13:44:37.238][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:37.295][66354][info][APAPProjectThread.cpp:Run:378] process pair<6,5> finished.
-[2023-04-27 13:44:37.424][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<19,17>
-[2023-04-27 13:44:37.452][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<19,11>
-[2023-04-27 13:44:37.452][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:19, matched size:2
-[2023-04-27 13:44:37.455][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:37.555][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<20,19>
-[2023-04-27 13:44:37.576][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<20,10>
-[2023-04-27 13:44:37.576][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:20, matched size:2
-[2023-04-27 13:44:37.579][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:37.624][66354][info][APAPProjectThread.cpp:Run:378] process pair<7,6> finished.
-[2023-04-27 13:44:37.679][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<21,20>
-[2023-04-27 13:44:37.700][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<21,9>
-[2023-04-27 13:44:37.700][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:21, matched size:2
-[2023-04-27 13:44:37.703][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:37.805][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<22,21>
-[2023-04-27 13:44:37.832][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<22,6>
-[2023-04-27 13:44:37.832][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:22, matched size:2
-[2023-04-27 13:44:37.835][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:37.952][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<23,22>
-[2023-04-27 13:44:37.987][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<23,6>
-[2023-04-27 13:44:37.987][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:23, matched size:2
-[2023-04-27 13:44:37.991][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:38.098][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<24,23>
-[2023-04-27 13:44:38.126][66354][info][APAPProjectThread.cpp:Run:378] process pair<8,7> finished.
-[2023-04-27 13:44:38.128][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<24,4>
-[2023-04-27 13:44:38.128][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:24, matched size:2
-[2023-04-27 13:44:38.131][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:38.264][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<25,24>
-[2023-04-27 13:44:38.306][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<25,3>
-[2023-04-27 13:44:38.306][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:25, matched size:2
-[2023-04-27 13:44:38.309][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:38.559][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<26,25>
-[2023-04-27 13:44:38.615][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<26,2>
-[2023-04-27 13:44:38.615][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:26, matched size:2
-[2023-04-27 13:44:38.618][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:38.619][66354][info][APAPProjectThread.cpp:Run:378] process pair<9,8> finished.
-[2023-04-27 13:44:38.845][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:210] dOverlapRatio0.7481164668664668 > dOverlapRatioWithLastKF0,ignore this frame
-[2023-04-27 13:44:38.845][66353][debug][FeatureMatchThread.cpp:Run:312] Got one image from queue
-[2023-04-27 13:44:38.963][66354][info][APAPProjectThread.cpp:Run:378] process pair<10,9> finished.
-[2023-04-27 13:44:38.980][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:217] Add  pair<28,26>
-[2023-04-27 13:44:39.017][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:258] Add loop pair<28,0>
-[2023-04-27 13:44:39.017][66353][info][FeatureMatchThread.cpp:LoopFeatureMatch:266] Add new key frame, id:28, matched size:2
-[2023-04-27 13:44:39.185][66354][info][APAPProjectThread.cpp:Run:378] process pair<11,10> finished.
-[2023-04-27 13:44:39.555][66354][info][APAPProjectThread.cpp:Run:378] process pair<12,11> finished.
-[2023-04-27 13:44:40.013][66354][info][APAPProjectThread.cpp:Run:378] process pair<13,12> finished.
-[2023-04-27 13:44:40.650][66354][info][APAPProjectThread.cpp:Run:378] process pair<14,13> finished.
-[2023-04-27 13:44:41.197][66354][info][APAPProjectThread.cpp:Run:378] process pair<15,14> finished.
-[2023-04-27 13:44:41.514][66354][info][APAPProjectThread.cpp:Run:378] process pair<16,15> finished.
+[2023-04-28 11:27:20.095][218787][debug][CommonDef.cpp:GetLoggerHandle:25] DEBUG log is enabled!
+[2023-04-28 11:27:20.095][218787][info][CommonDef.cpp:GetLoggerHandle:26] INFO log is enabled!
+[2023-04-28 11:27:20.095][218787][info][GetImageThread.cpp:CGetImageThread:27] CGetImageThread::CGetImageThread...
+[2023-04-28 11:27:20.108][218787][info][FeatureMatchThread.cpp:CFeatureMatchThread:25] CFeatureMatchThread::CFeatureMatchThread...
+[2023-04-28 11:27:20.108][218787][info][FeatureMatchThread.cpp:Init:38] save path:/media/xxd/Data2/datasets/image_stitching/za/
+[2023-04-28 11:27:20.108][218787][info][APAPProjectThread.cpp:CAPAPProjectThread:12] CAPAPProjectThread::CAPAPProjectThread...
+[2023-04-28 11:27:20.108][218812][info][GetImageThread.cpp:Run:298] CGetImageThread run...
+[2023-04-28 11:27:20.109][218813][info][FeatureMatchThread.cpp:Run:295] CFeatureMatchThread run....
+[2023-04-28 11:27:20.109][218814][info][APAPProjectThread.cpp:Run:350] CAPAPProjectThread run....
+[2023-04-28 11:27:20.169][218812][info][GetImageThread.cpp:GetNextFrame:213] Set start frame:90
+[2023-04-28 11:27:20.479][218813][info][FeatureMatchThread.cpp:Run:338] Add new key frame, id:0
+[2023-04-28 11:27:22.070][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:203] Add first pair<12,0>
+[2023-04-28 11:27:22.070][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:12, matched size:1
+[2023-04-28 11:27:22.292][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6751935564435565 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:22.447][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6502518315018315 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:22.493][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6166396103896103 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:22.575][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5926271645021645 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:22.629][218814][info][APAPProjectThread.cpp:Run:382] process pair<12,0> finished.
+[2023-04-28 11:27:22.673][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5753382034632034 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:22.792][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5531406093906094 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:22.895][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.531155303030303 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:23.004][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.47779095904095903 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:23.107][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.4504734848484849 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:23.218][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<22,12>
+[2023-04-28 11:27:23.219][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:22, matched size:1
+[2023-04-28 11:27:23.348][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6228365384615384 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:23.397][218814][info][APAPProjectThread.cpp:Run:382] process pair<22,12> finished.
+[2023-04-28 11:27:23.473][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5629183316683317 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:23.617][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5305715118215119 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:23.749][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.502579711954712 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:23.918][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.46552197802197803 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:24.086][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.430515318015318 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:24.216][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.36065288877788876 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:24.380][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<30,22>
+[2023-04-28 11:27:24.380][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:30, matched size:1
+[2023-04-28 11:27:24.638][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6676344488844489 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:24.724][218814][info][APAPProjectThread.cpp:Run:382] process pair<30,22> finished.
+[2023-04-28 11:27:24.811][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5976138444888445 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:24.950][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5486159673659674 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:25.085][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5138007825507825 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:25.211][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.476989676989677 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:25.336][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.44786879786879785 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:25.470][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<37,30>
+[2023-04-28 11:27:25.470][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:37, matched size:1
+[2023-04-28 11:27:25.692][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6540813353313353 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:25.815][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5306818181818181 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:25.960][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.48641878954378953 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:25.980][218814][info][APAPProjectThread.cpp:Run:382] process pair<37,30> finished.
+[2023-04-28 11:27:26.069][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.44150849150849153 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:26.201][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.43228334165834165 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:26.331][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<43,37>
+[2023-04-28 11:27:26.331][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:43, matched size:1
+[2023-04-28 11:27:26.484][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.672874000999001 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:26.602][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6414106726606726 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:26.691][218814][info][APAPProjectThread.cpp:Run:382] process pair<43,37> finished.
+[2023-04-28 11:27:26.759][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6267180735930736 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:26.905][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5968781218781218 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:27.044][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5774007242757243 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:27.190][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5454888861138861 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:27.304][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.4864323176823177 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:27.436][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.48757492507492506 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:27.562][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.44584478021978025 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:27.677][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.4102095820845821 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:27.788][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<54,43>
+[2023-04-28 11:27:27.788][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:54, matched size:1
+[2023-04-28 11:27:27.956][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6250999000999001 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:28.058][218814][info][APAPProjectThread.cpp:Run:382] process pair<54,43> finished.
+[2023-04-28 11:27:28.102][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5627716033966034 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:28.234][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5739572927072927 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:28.372][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.533289627039627 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:28.482][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5024662837162838 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:28.594][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.46570616883116883 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:28.743][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<61,54>
+[2023-04-28 11:27:28.743][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:61, matched size:1
+[2023-04-28 11:27:28.957][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.681171953046953 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:29.085][218814][info][APAPProjectThread.cpp:Run:382] process pair<61,54> finished.
+[2023-04-28 11:27:29.128][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6229822261072261 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:29.256][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5940850815850816 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:29.371][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5218375374625375 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:29.513][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.4654210372960373 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:29.663][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<67,61>
+[2023-04-28 11:27:29.668][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:67, matched size:1
+[2023-04-28 11:27:29.900][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6560085747585748 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:30.059][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6048118548118548 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:30.165][218814][info][APAPProjectThread.cpp:Run:382] process pair<67,61> finished.
+[2023-04-28 11:27:30.189][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5350961538461538 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:30.326][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5091928904428904 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:30.478][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.4800470362970363 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:30.633][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<73,67>
+[2023-04-28 11:27:30.638][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:73, matched size:1
+[2023-04-28 11:27:30.964][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6409527972027972 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:31.191][218814][info][APAPProjectThread.cpp:Run:382] process pair<73,67> finished.
+[2023-04-28 11:27:31.260][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6427218614718615 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:31.397][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5644241175491176 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:31.526][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.541587579087579 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:31.657][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5176458957708958 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:31.670][218812][debug][GetImageThread.cpp:PushData:147] Load 10 images, time elapsed:0.08792s
+[2023-04-28 11:27:31.804][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<79,73>
+[2023-04-28 11:27:31.808][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:79, matched size:1
+[2023-04-28 11:27:31.979][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6445231851481852 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:32.136][218814][info][APAPProjectThread.cpp:Run:382] process pair<79,73> finished.
+[2023-04-28 11:27:32.180][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6416333666333667 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:32.310][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6307827589077589 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:32.455][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6162556193806193 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:32.631][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6153866966366967 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:32.760][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5911484348984349 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:32.916][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5885312604062604 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:33.093][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<87,79>
+[2023-04-28 11:27:33.105][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:87, matched size:1
+[2023-04-28 11:27:33.432][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6540053696303696 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:33.433][218814][info][APAPProjectThread.cpp:Run:382] process pair<87,79> finished.
+[2023-04-28 11:27:33.544][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.581539294039294 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:33.593][218812][debug][GetImageThread.cpp:PushData:147] Load 10 images, time elapsed:0.090793s
+[2023-04-28 11:27:33.659][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5839941308691309 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:33.793][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.55560168997669 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:33.939][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5300074925074925 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:34.083][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.516648976023976 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:34.191][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.4841710372960373 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:34.284][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.442742673992674 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:34.384][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.4441808191808192 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:34.491][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<97,87>
+[2023-04-28 11:27:34.497][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:97, matched size:1
+[2023-04-28 11:27:34.663][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6471008158508158 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:34.718][218814][info][APAPProjectThread.cpp:Run:382] process pair<97,87> finished.
+[2023-04-28 11:27:34.778][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6124323593073593 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:34.860][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5902722277722278 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:34.940][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5730602730602731 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:34.952][218812][debug][GetImageThread.cpp:PushData:147] Load 11 images, time elapsed:0.098268s
+[2023-04-28 11:27:35.022][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5730602730602731 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.086][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5394251581751581 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.146][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5347340159840159 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.210][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5310054528804529 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.281][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.4961715367965368 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.356][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.45721466033966035 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.416][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.45522186147186144 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.490][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.437859015984016 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.571][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.4260468697968698 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.654][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:218] Add  pair<111,97>
+[2023-04-28 11:27:35.667][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<111,54>
+[2023-04-28 11:27:35.667][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:111, matched size:2
+[2023-04-28 11:27:35.795][218814][info][APAPProjectThread.cpp:Run:382] process pair<111,97> finished.
+[2023-04-28 11:27:35.798][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6599171661671661 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.834][218812][debug][GetImageThread.cpp:PushData:147] Load 10 images, time elapsed:0.108534s
+[2023-04-28 11:27:35.860][218814][info][APAPProjectThread.cpp:Run:382] process pair<111,54> finished.
+[2023-04-28 11:27:35.882][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6575382950382951 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.935][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6461913086913087 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:35.995][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6363438644688645 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:36.065][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.6185543623043623 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:36.146][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5977335164835165 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:36.235][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5687406343656344 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:36.303][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.5356726606726607 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:36.429][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.3375353812853813 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:36.545][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.31806006493506495 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:36.664][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.304788961038961 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:36.763][218812][debug][GetImageThread.cpp:PushData:147] Load 9 images, time elapsed:0.072929s
+[2023-04-28 11:27:36.800][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.3360243922743923 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:36.916][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.3276723276723277 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:37.054][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.30703463203463205 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:37.202][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.2797681485181485 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:37.351][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.2587089993339993 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:37.512][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.26988428238428236 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:37.684][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:211] dOverlapRatio0.27400724275724275 > dOverlapRatioWithLastKF0,ignore this frame
+[2023-04-28 11:27:37.826][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<130,37>
+[2023-04-28 11:27:37.826][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:130, matched size:1
+[2023-04-28 11:27:37.935][218814][info][APAPProjectThread.cpp:Run:382] process pair<130,37> finished.
+[2023-04-28 11:27:38.066][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<131,67>
+[2023-04-28 11:27:38.066][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:131, matched size:1
+[2023-04-28 11:27:38.328][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<132,73>
+[2023-04-28 11:27:38.328][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:132, matched size:1
+[2023-04-28 11:27:38.418][218812][debug][GetImageThread.cpp:PushData:147] Load 9 images, time elapsed:0.068486s
+[2023-04-28 11:27:38.619][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<133,61>
+[2023-04-28 11:27:38.620][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:133, matched size:1
+[2023-04-28 11:27:38.652][218814][info][APAPProjectThread.cpp:Run:382] process pair<131,67> finished.
+[2023-04-28 11:27:38.894][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<134,67>
+[2023-04-28 11:27:38.894][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:134, matched size:1
+[2023-04-28 11:27:39.109][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<135,73>
+[2023-04-28 11:27:39.109][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:135, matched size:1
+[2023-04-28 11:27:39.338][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<136,73>
+[2023-04-28 11:27:39.338][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:136, matched size:1
+[2023-04-28 11:27:39.564][218814][info][APAPProjectThread.cpp:Run:382] process pair<132,73> finished.
+[2023-04-28 11:27:39.611][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<137,67>
+[2023-04-28 11:27:39.611][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:137, matched size:1
+[2023-04-28 11:27:39.832][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<138,73>
+[2023-04-28 11:27:39.832][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:138, matched size:1
+[2023-04-28 11:27:39.834][218814][info][APAPProjectThread.cpp:Run:382] process pair<133,61> finished.
+[2023-04-28 11:27:40.045][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<139,79>
+[2023-04-28 11:27:40.045][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:139, matched size:1
+[2023-04-28 11:27:40.230][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<140,67>
+[2023-04-28 11:27:40.230][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:140, matched size:1
+[2023-04-28 11:27:40.341][218814][info][APAPProjectThread.cpp:Run:382] process pair<134,67> finished.
+[2023-04-28 11:27:40.517][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<141,12>
+[2023-04-28 11:27:40.517][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:141, matched size:1
+[2023-04-28 11:27:40.715][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<142,79>
+[2023-04-28 11:27:40.715][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:142, matched size:1
+[2023-04-28 11:27:40.823][218812][debug][GetImageThread.cpp:PushData:147] Load 9 images, time elapsed:0.085894s
+[2023-04-28 11:27:41.001][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<143,67>
+[2023-04-28 11:27:41.001][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:143, matched size:1
+[2023-04-28 11:27:41.130][218814][info][APAPProjectThread.cpp:Run:382] process pair<135,73> finished.
+[2023-04-28 11:27:41.234][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<144,79>
+[2023-04-28 11:27:41.234][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:144, matched size:1
+[2023-04-28 11:27:41.479][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<145,132>
+[2023-04-28 11:27:41.479][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:145, matched size:1
+[2023-04-28 11:27:41.809][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<146,133>
+[2023-04-28 11:27:41.809][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:146, matched size:1
+[2023-04-28 11:27:41.863][218814][info][APAPProjectThread.cpp:Run:382] process pair<136,73> finished.
+[2023-04-28 11:27:42.049][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<147,134>
+[2023-04-28 11:27:42.049][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:147, matched size:1
+[2023-04-28 11:27:42.209][218814][info][APAPProjectThread.cpp:Run:382] process pair<137,67> finished.
+[2023-04-28 11:27:42.274][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<148,135>
+[2023-04-28 11:27:42.274][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:148, matched size:1
+[2023-04-28 11:27:42.543][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<149,135>
+[2023-04-28 11:27:42.543][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:149, matched size:1
+[2023-04-28 11:27:42.697][218814][info][APAPProjectThread.cpp:Run:382] process pair<138,73> finished.
+[2023-04-28 11:27:42.776][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<150,137>
+[2023-04-28 11:27:42.776][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:150, matched size:1
+[2023-04-28 11:27:43.145][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<151,138>
+[2023-04-28 11:27:43.145][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:151, matched size:1
+[2023-04-28 11:27:43.420][218814][info][APAPProjectThread.cpp:Run:382] process pair<139,79> finished.
+[2023-04-28 11:27:43.423][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<152,139>
+[2023-04-28 11:27:43.423][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:152, matched size:1
+[2023-04-28 11:27:43.559][218812][debug][GetImageThread.cpp:PushData:147] Load 9 images, time elapsed:0.091377s
+[2023-04-28 11:27:43.666][218814][info][APAPProjectThread.cpp:Run:382] process pair<140,67> finished.
+[2023-04-28 11:27:43.694][218812][info][GetImageThread.cpp:Run:352] Total insert frame num:285........
+[2023-04-28 11:27:43.725][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<153,0>
+[2023-04-28 11:27:43.725][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:153, matched size:1
+[2023-04-28 11:27:43.939][218814][info][APAPProjectThread.cpp:Run:382] process pair<141,12> finished.
+[2023-04-28 11:27:43.999][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<154,138>
+[2023-04-28 11:27:43.999][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:154, matched size:1
+[2023-04-28 11:27:44.195][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<155,139>
+[2023-04-28 11:27:44.195][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:155, matched size:1
+[2023-04-28 11:27:44.420][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<156,143>
+[2023-04-28 11:27:44.420][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:156, matched size:1
+[2023-04-28 11:27:44.728][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<157,140>
+[2023-04-28 11:27:44.728][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:157, matched size:1
+[2023-04-28 11:27:45.010][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<158,87>
+[2023-04-28 11:27:45.010][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:158, matched size:1
+[2023-04-28 11:27:45.100][218814][info][APAPProjectThread.cpp:Run:382] process pair<142,79> finished.
+[2023-04-28 11:27:45.282][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<159,143>
+[2023-04-28 11:27:45.282][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:159, matched size:1
+[2023-04-28 11:27:45.382][218814][info][APAPProjectThread.cpp:Run:382] process pair<143,67> finished.
+[2023-04-28 11:27:45.588][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<160,144>
+[2023-04-28 11:27:45.588][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:160, matched size:1
+[2023-04-28 11:27:45.976][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<161,87>
+[2023-04-28 11:27:45.976][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:161, matched size:1
+[2023-04-28 11:27:46.211][218814][info][APAPProjectThread.cpp:Run:382] process pair<144,79> finished.
+[2023-04-28 11:27:46.347][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<162,143>
+[2023-04-28 11:27:46.347][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:162, matched size:1
+[2023-04-28 11:27:46.580][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<163,87>
+[2023-04-28 11:27:46.580][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:163, matched size:1
+[2023-04-28 11:27:46.855][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<164,141>
+[2023-04-28 11:27:46.855][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:164, matched size:1
+[2023-04-28 11:27:46.933][218814][info][APAPProjectThread.cpp:Run:382] process pair<145,132> finished.
+[2023-04-28 11:27:47.054][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<165,146>
+[2023-04-28 11:27:47.054][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:165, matched size:1
+[2023-04-28 11:27:47.249][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<166,147>
+[2023-04-28 11:27:47.249][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:166, matched size:1
+[2023-04-28 11:27:47.533][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<167,148>
+[2023-04-28 11:27:47.533][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:167, matched size:1
+[2023-04-28 11:27:47.570][218814][info][APAPProjectThread.cpp:Run:382] process pair<146,133> finished.
+[2023-04-28 11:27:47.871][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<168,149>
+[2023-04-28 11:27:47.871][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:168, matched size:1
+[2023-04-28 11:27:48.125][218814][info][APAPProjectThread.cpp:Run:382] process pair<147,134> finished.
+[2023-04-28 11:27:48.213][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<169,150>
+[2023-04-28 11:27:48.213][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:169, matched size:1
+[2023-04-28 11:27:48.507][218814][info][APAPProjectThread.cpp:Run:382] process pair<148,135> finished.
+[2023-04-28 11:27:48.581][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<170,151>
+[2023-04-28 11:27:48.581][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:170, matched size:1
+[2023-04-28 11:27:48.817][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<171,152>
+[2023-04-28 11:27:48.817][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:171, matched size:1
+[2023-04-28 11:27:48.891][218814][info][APAPProjectThread.cpp:Run:382] process pair<149,135> finished.
+[2023-04-28 11:27:49.018][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<172,152>
+[2023-04-28 11:27:49.018][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:172, matched size:1
+[2023-04-28 11:27:49.146][218814][info][APAPProjectThread.cpp:Run:382] process pair<150,137> finished.
+[2023-04-28 11:27:49.305][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<173,157>
+[2023-04-28 11:27:49.305][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:173, matched size:1
+[2023-04-28 11:27:49.400][218814][info][APAPProjectThread.cpp:Run:382] process pair<151,138> finished.
+[2023-04-28 11:27:49.650][218814][info][APAPProjectThread.cpp:Run:382] process pair<152,139> finished.
+[2023-04-28 11:27:49.733][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<174,0>
+[2023-04-28 11:27:49.734][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:174, matched size:1
+[2023-04-28 11:27:49.962][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<175,159>
+[2023-04-28 11:27:49.962][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:175, matched size:1
+[2023-04-28 11:27:49.999][218814][info][APAPProjectThread.cpp:Run:382] process pair<153,0> finished.
+[2023-04-28 11:27:50.166][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<176,97>
+[2023-04-28 11:27:50.166][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:176, matched size:1
+[2023-04-28 11:27:50.285][218814][info][APAPProjectThread.cpp:Run:382] process pair<154,138> finished.
+[2023-04-28 11:27:50.378][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<177,161>
+[2023-04-28 11:27:50.378][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:177, matched size:1
+[2023-04-28 11:27:50.537][218814][info][APAPProjectThread.cpp:Run:382] process pair<155,139> finished.
+[2023-04-28 11:27:50.606][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<178,162>
+[2023-04-28 11:27:50.606][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:178, matched size:1
+[2023-04-28 11:27:50.773][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<179,163>
+[2023-04-28 11:27:50.773][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:179, matched size:1
+[2023-04-28 11:27:50.953][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<180,163>
+[2023-04-28 11:27:50.953][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:180, matched size:1
+[2023-04-28 11:27:50.994][218814][info][APAPProjectThread.cpp:Run:382] process pair<156,143> finished.
+[2023-04-28 11:27:51.136][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<181,162>
+[2023-04-28 11:27:51.136][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:181, matched size:1
+[2023-04-28 11:27:51.222][218814][info][APAPProjectThread.cpp:Run:382] process pair<157,140> finished.
+[2023-04-28 11:27:51.361][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<182,166>
+[2023-04-28 11:27:51.361][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:182, matched size:1
+[2023-04-28 11:27:51.509][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<183,167>
+[2023-04-28 11:27:51.509][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:183, matched size:1
+[2023-04-28 11:27:51.930][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<185,168>
+[2023-04-28 11:27:51.930][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:185, matched size:1
+[2023-04-28 11:27:52.071][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<186,169>
+[2023-04-28 11:27:52.071][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:186, matched size:1
+[2023-04-28 11:27:52.205][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<187,173>
+[2023-04-28 11:27:52.205][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:187, matched size:1
+[2023-04-28 11:27:52.322][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<188,173>
+[2023-04-28 11:27:52.322][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:188, matched size:1
+[2023-04-28 11:27:52.467][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<189,172>
+[2023-04-28 11:27:52.467][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:189, matched size:1
+[2023-04-28 11:27:52.635][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<190,176>
+[2023-04-28 11:27:52.635][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:190, matched size:1
+[2023-04-28 11:27:52.810][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<191,111>
+[2023-04-28 11:27:52.810][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:191, matched size:1
+[2023-04-28 11:27:52.960][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<192,178>
+[2023-04-28 11:27:52.960][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:192, matched size:1
+[2023-04-28 11:27:52.994][218814][info][APAPProjectThread.cpp:Run:382] process pair<158,87> finished.
+[2023-04-28 11:27:53.071][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<193,179>
+[2023-04-28 11:27:53.071][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:193, matched size:1
+[2023-04-28 11:27:53.434][218814][info][APAPProjectThread.cpp:Run:382] process pair<159,143> finished.
+[2023-04-28 11:27:53.564][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<195,180>
+[2023-04-28 11:27:53.564][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:195, matched size:1
+[2023-04-28 11:27:53.723][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<196,181>
+[2023-04-28 11:27:53.723][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:196, matched size:1
+[2023-04-28 11:27:53.855][218814][info][APAPProjectThread.cpp:Run:382] process pair<160,144> finished.
+[2023-04-28 11:27:53.912][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<197,182>
+[2023-04-28 11:27:53.912][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:197, matched size:1
+[2023-04-28 11:27:54.055][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<198,183>
+[2023-04-28 11:27:54.055][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:198, matched size:1
+[2023-04-28 11:27:54.223][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<199,185>
+[2023-04-28 11:27:54.223][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:199, matched size:1
+[2023-04-28 11:27:54.413][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<200,186>
+[2023-04-28 11:27:54.413][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:200, matched size:1
+[2023-04-28 11:27:54.611][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<201,187>
+[2023-04-28 11:27:54.611][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:201, matched size:1
+[2023-04-28 11:27:54.896][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<202,188>
+[2023-04-28 11:27:54.896][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:202, matched size:1
+[2023-04-28 11:27:54.951][218814][info][APAPProjectThread.cpp:Run:382] process pair<161,87> finished.
+[2023-04-28 11:27:55.028][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:259] Add loop pair<203,189>
+[2023-04-28 11:27:55.028][218813][info][FeatureMatchThread.cpp:LoopFeatureMatch:267] Add new key frame, id:203, matched size:1
+[2023-04-28 11:27:55.314][218814][info][APAPProjectThread.cpp:Run:382] process pair<162,143> finished.
+[2023-04-28 11:27:55.757][218814][info][APAPProjectThread.cpp:Run:382] process pair<163,87> finished.
+[2023-04-28 11:27:56.083][218814][info][APAPProjectThread.cpp:Run:382] process pair<164,141> finished.
+[2023-04-28 11:27:56.337][218814][info][APAPProjectThread.cpp:Run:382] process pair<165,146> finished.
+[2023-04-28 11:27:56.598][218814][info][APAPProjectThread.cpp:Run:382] process pair<166,147> finished.
+[2023-04-28 11:27:56.831][218814][info][APAPProjectThread.cpp:Run:382] process pair<167,148> finished.
+[2023-04-28 11:27:57.081][218814][info][APAPProjectThread.cpp:Run:382] process pair<168,149> finished.
+[2023-04-28 11:27:57.323][218814][info][APAPProjectThread.cpp:Run:382] process pair<169,150> finished.
+[2023-04-28 11:27:57.586][218814][info][APAPProjectThread.cpp:Run:382] process pair<170,151> finished.
+[2023-04-28 11:27:57.823][218814][info][APAPProjectThread.cpp:Run:382] process pair<171,152> finished.
+[2023-04-28 11:27:57.990][218814][info][APAPProjectThread.cpp:Run:382] process pair<172,152> finished.
+[2023-04-28 11:27:58.189][218814][info][APAPProjectThread.cpp:Run:382] process pair<173,157> finished.
+[2023-04-28 11:27:58.439][218814][info][APAPProjectThread.cpp:Run:382] process pair<174,0> finished.
+[2023-04-28 11:27:58.596][218814][info][APAPProjectThread.cpp:Run:382] process pair<175,159> finished.
+[2023-04-28 11:27:58.927][218814][info][APAPProjectThread.cpp:Run:382] process pair<176,97> finished.
+[2023-04-28 11:27:59.090][218814][info][APAPProjectThread.cpp:Run:382] process pair<177,161> finished.
+[2023-04-28 11:27:59.227][218814][info][APAPProjectThread.cpp:Run:382] process pair<178,162> finished.
+[2023-04-28 11:27:59.317][218814][info][APAPProjectThread.cpp:Run:382] process pair<179,163> finished.
+[2023-04-28 11:27:59.419][218814][info][APAPProjectThread.cpp:Run:382] process pair<180,163> finished.
+[2023-04-28 11:27:59.505][218814][info][APAPProjectThread.cpp:Run:382] process pair<181,162> finished.
+[2023-04-28 11:27:59.579][218814][info][APAPProjectThread.cpp:Run:382] process pair<182,166> finished.
+[2023-04-28 11:27:59.646][218814][info][APAPProjectThread.cpp:Run:382] process pair<183,167> finished.
+[2023-04-28 11:27:59.711][218814][info][APAPProjectThread.cpp:Run:382] process pair<185,168> finished.
+[2023-04-28 11:27:59.784][218814][info][APAPProjectThread.cpp:Run:382] process pair<186,169> finished.
+[2023-04-28 11:27:59.857][218814][info][APAPProjectThread.cpp:Run:382] process pair<187,173> finished.
+[2023-04-28 11:27:59.918][218814][info][APAPProjectThread.cpp:Run:382] process pair<188,173> finished.
+[2023-04-28 11:27:59.985][218814][info][APAPProjectThread.cpp:Run:382] process pair<189,172> finished.
+[2023-04-28 11:28:00.070][218814][info][APAPProjectThread.cpp:Run:382] process pair<190,176> finished.
+[2023-04-28 11:28:00.447][218814][info][APAPProjectThread.cpp:Run:382] process pair<191,111> finished.
+[2023-04-28 11:28:00.513][218814][info][APAPProjectThread.cpp:Run:382] process pair<192,178> finished.
+[2023-04-28 11:28:00.557][218814][info][APAPProjectThread.cpp:Run:382] process pair<193,179> finished.
+[2023-04-28 11:28:00.613][218814][info][APAPProjectThread.cpp:Run:382] process pair<195,180> finished.
+[2023-04-28 11:28:00.676][218814][info][APAPProjectThread.cpp:Run:382] process pair<196,181> finished.
+[2023-04-28 11:28:00.748][218814][info][APAPProjectThread.cpp:Run:382] process pair<197,182> finished.
+[2023-04-28 11:28:00.792][218814][info][APAPProjectThread.cpp:Run:382] process pair<198,183> finished.
+[2023-04-28 11:28:00.847][218814][info][APAPProjectThread.cpp:Run:382] process pair<199,185> finished.
+[2023-04-28 11:28:00.911][218814][info][APAPProjectThread.cpp:Run:382] process pair<200,186> finished.
+[2023-04-28 11:28:00.983][218814][info][APAPProjectThread.cpp:Run:382] process pair<201,187> finished.
+[2023-04-28 11:28:01.044][218814][info][APAPProjectThread.cpp:Run:382] process pair<202,188> finished.
+[2023-04-28 11:28:01.084][218814][info][APAPProjectThread.cpp:Run:382] process pair<203,189> finished.

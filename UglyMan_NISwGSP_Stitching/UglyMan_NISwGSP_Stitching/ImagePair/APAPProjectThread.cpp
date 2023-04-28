@@ -6,6 +6,7 @@
 CAPAPProjectThread::CAPAPProjectThread()
 {
     m_nIndexEncodeBase=100000;
+    m_nMatchSizeThreshold = 40;
     m_pLogger = GetLoggerHandle();
 
     SPDLOG_LOGGER_INFO(m_pLogger, "CAPAPProjectThread::CAPAPProjectThread...");
@@ -109,9 +110,10 @@ int  CAPAPProjectThread::GetFeatureMatches(ImageData* pImage1, ImageData* pImage
     vector<pair<int, int> > initial_indices;
 
     CSiftgpuManage::getInstance().FeatureMatch(matches, descriptors1, descriptors2);
-    if(matches.size() < 40)
+    if(matches.size() < m_nMatchSizeThreshold)
     {
-        return 0;
+        SPDLOG_LOGGER_ERROR(m_pLogger, "matches.size({}) < m_nMatchSizeThreshold{}", matches.size(), m_nMatchSizeThreshold );
+        return -1;
     }
 
     for(int i = 0; i < matches.size(); i++)
@@ -141,6 +143,8 @@ int  CAPAPProjectThread::GetFeatureMatches(ImageData* pImage1, ImageData* pImage
         vecFeatureMatches[0].emplace_back(m1_fpts[result[j].first ]);
         vecFeatureMatches[1].emplace_back(m2_fpts[result[j].second]);
     }
+
+    return 0;
 
 }
 

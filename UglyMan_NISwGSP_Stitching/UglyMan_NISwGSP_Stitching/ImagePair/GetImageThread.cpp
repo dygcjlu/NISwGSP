@@ -10,14 +10,16 @@ CGetImageThread::CGetImageThread()
     m_pJobQue = nullptr;
     m_nImageId = 0;
     m_nNextFileIndex = 0;
-    m_nSkipFrameNum = 0;
+    m_nSkipFrameNum = 1;
     m_bScanning = false;
     m_nQueueMaxSize = 20;  // 1920*1080*3=6MB per image.
     m_nQueueMinSize = 10;
     m_strSavePath = "./";
     m_nSrcImgType = -1;
+    m_dLastFrameTime = 0;
 
     m_bIsIdle = true; 
+    m_timer.Start();
     m_pLogger = GetLoggerHandle();
 
 
@@ -102,15 +104,18 @@ int CGetImageThread::SaveImage2Disk(cv::Mat& img)
 
 int CGetImageThread::PushData(cv::Mat& img)
 {
+    static  int nInsertedImgCount = 0;
     
     if(m_pJobQue->Size() < m_nQueueMaxSize)
     {
         if(m_queSavedImages.empty())
         {
             m_pJobQue->Push(img);
-            SPDLOG_LOGGER_DEBUG(m_pLogger, "Insert one image to queue");
+            SPDLOG_LOGGER_TRACE(m_pLogger, "Insert one image to queue, No.:{}", nInsertedImgCount++);
         }else if(m_pJobQue->Size() <= m_nQueueMinSize)
         {
+            m_pJobQue->Push(img);
+            SPDLOG_LOGGER_TRACE(m_pLogger, "Insert one image to queue, 1No.:{}", nInsertedImgCount++);
             //m_queSavedImages not empty and  nQueueSize <= m_nQueueMinSize
             //reload image from disk
 
@@ -134,6 +139,7 @@ int CGetImageThread::PushData(cv::Mat& img)
                     break;
                 }
                 m_pJobQue->Push(image);
+                SPDLOG_LOGGER_TRACE(m_pLogger, "Insert one image to queue, 2No.:{}", nInsertedImgCount++);
                 nCount++;
             }
             //total tim elapse should less than 100ms
@@ -141,8 +147,9 @@ int CGetImageThread::PushData(cv::Mat& img)
             SPDLOG_LOGGER_DEBUG(m_pLogger, "Load {} images, time elapsed:{}s", nCount, t);
         
         }else{
-            SPDLOG_LOGGER_ERROR(m_pLogger, "PushData failed, job queue size:{}, max:{}, min:{}",
-             m_pJobQue->Size(),m_nQueueMaxSize, m_nQueueMinSize);
+            SaveImage2Disk(img);
+            //SPDLOG_LOGGER_ERROR(m_pLogger, "PushData failed, job queue size:{}, max:{}, min:{}",
+            // m_pJobQue->Size(),m_nQueueMaxSize, m_nQueueMinSize);
 
         }
 
@@ -170,6 +177,13 @@ bool CGetImageThread::IsIdle()
     return m_bIsIdle;
 }
 
+void CGetImageThread::SetStartEndSecond(int nStart, int nEnd)
+{
+    m_nStartSecond = nStart;
+    m_nEndSecond = nEnd;
+}
+ 
+
 bool CGetImageThread::GetNextFrame(cv::Mat& frame)
 {
 
@@ -190,6 +204,29 @@ bool CGetImageThread::GetNextFrame(cv::Mat& frame)
         } 
         case SRC_TYPE_VIDEO_FILE:
         {
+            double fps = m_videoCapture.get(cv::CAP_PROP_FPS);
+            int nCurPos = m_videoCapture.get(cv::CAP_PROP_POS_FRAMES);
+            m_nCurrentSecond = int(nCurPos / fps);
+            if(m_nCurrentSecond < m_nStartSecond)
+            {
+                m_videoCapture.set(1,int(m_nStartSecond * fps));
+                SPDLOG_LOGGER_INFO(m_pLogger, "Set start frame:{}", int(m_nStartSecond * fps));
+            }
+
+            
+            while(true)
+            {
+                double dCurTime = m_timer.ElapsedMicroSeconds();
+                double dTimeDiff = (dCurTime - m_dLastFrameTime) / 1000; //ms
+                if(dTimeDiff < 40) //25 fps
+                {
+                    usleep(1000);//1ms
+                }else{
+                    m_dLastFrameTime = dCurTime;
+                    break;
+                }
+            }
+            
             m_videoCapture.read(frame);
             break;
         }
@@ -212,10 +249,54 @@ bool CGetImageThread::GetNextFrame(cv::Mat& frame)
     return true;
 }
 
+bool CGetImageThread::HaveMoreImg()
+{
+    bool bImgAvailable = false;
+    switch(m_nSrcImgType)
+    {
+        case SRC_TYPE_IMAGE_LIST:
+        {
+            if(m_nNextFileIndex < m_vecFileList.size())
+            {
+                bImgAvailable = true;
+            }
+            
+            break;
+        } 
+        case SRC_TYPE_VIDEO_FILE:
+        {
+            //m_videoCapture.read(frame);
+            double fps = m_videoCapture.get(cv::CAP_PROP_FPS);
+            int nCurPos = m_videoCapture.get(cv::CAP_PROP_POS_FRAMES);
+            m_nCurrentSecond = int(nCurPos / fps);
+            if(m_nCurrentSecond < m_nEndSecond)
+            {
+                bImgAvailable = true;
+            }
+
+            
+            break;
+        }
+        case SRC_TYPE_CAMERA:
+        {
+            bImgAvailable = m_bScanning;
+            break;
+        }
+        default:
+        {
+            SPDLOG_LOGGER_ERROR(m_pLogger, "Unkonwn src image type:{}", m_nSrcImgType);
+            return false;
+        }
+    }
+
+    return bImgAvailable;
+}
+
 
 void CGetImageThread::Run()
 {
     SPDLOG_LOGGER_INFO(m_pLogger, "CGetImageThread run...");
+   
     while(true)
     {
         m_bIsIdle = true;
@@ -226,13 +307,24 @@ void CGetImageThread::Run()
             //quit this thread
             break;
         }
+
+        if(!HaveMoreImg())
+        {
+            continue;
+        }
+
         cv::Mat frame;
         int nSkipFrameCount = 0;
-        //m_nImageId = 0;
+        m_nImageId = 0;
 
         
         while (m_bScanning)
         {
+            if(!HaveMoreImg())
+            {
+                break;
+            }
+
             if(m_bIsIdle)
             {
                 m_bIsIdle = false;
@@ -240,16 +332,10 @@ void CGetImageThread::Run()
 
             if(!GetNextFrame(frame))
             {
-                //SPDLOG_LOGGER_ERROR(m_pLogger, "Failed to get image");
+                SPDLOG_LOGGER_ERROR(m_pLogger, "Failed to get image");
                 break;
             }
-            
-            //read image one by one
-            //m_videoCapture.read(frame);
-            // check if we succeeded
-            
-            m_nImageId++;
-
+        
             //Skip n frame
             if(nSkipFrameCount < m_nSkipFrameNum)
             {
@@ -259,8 +345,11 @@ void CGetImageThread::Run()
             nSkipFrameCount = 0;
 
             //push image to queue or save to disk temporary
+            m_nImageId++;
             PushData(frame);
         }
+
+        SPDLOG_LOGGER_INFO(m_pLogger, "Total insert frame num:{}........", m_nImageId);
     }
 
     SPDLOG_LOGGER_WARN(m_pLogger, "CGetImageThread quit...");

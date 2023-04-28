@@ -9,11 +9,12 @@ CFeatureMatchThread::CFeatureMatchThread()
 {
     m_pOriginImgQue = nullptr;
     m_nFeaturePointSizeThreshold = 100;
-    m_nMatchSizeThreshold = 20;
+    m_nMatchSizeThreshold = 40;
     m_nLoopDetectInterval = 2;
 
-    m_dMinOverlapRatio = 0.1;
-    m_dMaxOverlapRatio = 0.9;
+    m_dMinOverlapRatio = 0.2;
+    //m_dMaxOverlapRatio = 0.8;
+    m_dMaxOverlapRatio = 0.7;
     m_nLoopDetectStartIndex = 5;
 
     m_pLogger = GetLoggerHandle();
@@ -292,6 +293,7 @@ void CFeatureMatchThread::SaveImage2Disk(int nId, cv::Mat& img)
 void CFeatureMatchThread::Run()
 {
     SPDLOG_LOGGER_INFO(m_pLogger, "CFeatureMatchThread run....");
+    int nReceivedImgCount = 0;
     while(true)
     {
         //usleep(5*1000);//sleep 5ms
@@ -306,10 +308,12 @@ void CFeatureMatchThread::Run()
         colmap::JobQueue<cv::Mat>::Job j = m_pOriginImgQue->Pop();
         if(!j.IsValid())
         {
+            SPDLOG_LOGGER_WARN(m_pLogger, "Got an invalid data");
             continue;
         }
+        nReceivedImgCount++;
 
-        SPDLOG_LOGGER_DEBUG(m_pLogger, "Got one image from queue");
+        SPDLOG_LOGGER_TRACE(m_pLogger, "Got one image from queue, No.:{}",nReceivedImgCount);
 
         cv::Mat& img = j.Data();
         ImageData* pImage = new ImageData(img, m_nKeyFrameId++);
@@ -348,6 +352,7 @@ void CFeatureMatchThread::Run()
             continue;
         }
     }
+    SPDLOG_LOGGER_INFO(m_pLogger, "Got total image num:{}",nReceivedImgCount);
     SPDLOG_LOGGER_WARN(m_pLogger, "CFeatureMatchThread quit....");
 }
 

@@ -89,6 +89,7 @@ private:
 
 private:
     std::atomic_bool m_bIsIdle;
+    int m_nMatchSizeThreshold;
     int m_nIndexEncodeBase; //encode index1 and index1 to one index
     std::shared_ptr<spdlog::logger> m_pLogger; //log handle
     CFeatureMatchThread* m_pFeatureMatchThread; //

@@ -17,20 +17,28 @@ using namespace std;
 
 int main(int argc, const char * argv[])
 {
-    //
-    colmap::JobQueue<cv::Mat> queImages;
-    CGetImageThread getImageThread;
-    getImageThread.SetJobQueue(&queImages);
- 
-    //int Init(int nMaxQueueSize, std::string strSrcFile, std::string strSavePath);APAP-building APAP-garden/*JPG
+    
     int nMaxQueueSize = 50;
-    std::string strSrcFile = "/media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/images/image_stitching/simple3/*jpg";//"/media/xxd/Data2/datasets/image_stitching/input-42-data/APAP-garden/*JPG";
-    //std::string strSrcFile = "/media/xxd/Data2/datasets/image_stitching/input-42-data/APAP-garden/*JPG";
     std::string strSavePath = "/media/xxd/Data2/datasets/image_stitching/za/";
+    //std::string strSrcFile = "/media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/images/image_stitching/simple3/*jpg";//"/media/xxd/Data2/datasets/image_stitching/input-42-data/APAP-garden/*JPG";
+    //std::string strSrcFile = "/media/xxd/Data2/datasets/image_stitching/input-42-data/APAP-garden/*JPG";
+    //int nSrcImgType = 0; //0 - image list in folder,  1 - video file, 2 - camera
+
+    std::string strSrcFile = "/media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/2023-03-15_083101_VID003.mp4";
+    int nSrcImgType = 1; //0 - image list in folder,  1 - video file, 2 - camera
+    
     //std::string strSrcFile = argv[1];
     //std::string strSavePath = argv[2];
-    int nSrcImgType = 0; //0 - image list in folder,  1 - video file, 2 - camera
+    colmap::JobQueue<cv::Mat> queImages(nMaxQueueSize);
+    CGetImageThread getImageThread;
+    getImageThread.SetJobQueue(&queImages);
     getImageThread.Init(nMaxQueueSize, nSrcImgType, strSrcFile, strSavePath);
+    if(1 == nSrcImgType)
+    {
+        int nStartSecond = 4;
+        int nEndSecond = 29;
+        getImageThread.SetStartEndSecond(nStartSecond, nEndSecond);
+    }
 
     CFeatureMatchThread featureMatchThread;
     featureMatchThread.SetJobQueue(&queImages);
@@ -106,7 +114,7 @@ int main(int argc, const char * argv[])
     return 0;
 }
 
-int main_(int argc, const char * argv[]) 
+int main__(int argc, const char * argv[]) 
 {
     Eigen::initParallel(); /* remember to turn off "Hardware Multi-Threading */
     Eigen::setNbThreads(4);

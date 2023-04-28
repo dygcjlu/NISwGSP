@@ -22,8 +22,10 @@ class CGetImageThread : public colmap::Thread
 public:
     CGetImageThread();
     int Init(int nMaxQueueSize, int nSrcImgType, std::string strSrcFile, std::string strSavePath);
-    int SetJobQueue(colmap::JobQueue<cv::Mat> *pJobQue);
     int StopThread();
+    int SetJobQueue(colmap::JobQueue<cv::Mat> *pJobQue);
+    void SetStartEndSecond(int nStart, int nEnd);
+    
 
     void StartScanning();
     void StopScanning();
@@ -37,12 +39,22 @@ private:
     int PushData(cv::Mat& img);
     int SaveImage2Disk(cv::Mat& img);
     bool GetNextFrame(cv::Mat& frame);
+    bool HaveMoreImg();
 
 private:
     std::shared_ptr<spdlog::logger> m_pLogger;
     cv::VideoCapture m_videoCapture;
+
+    //for file list
     std::vector<cv::String> m_vecFileList;
     int m_nNextFileIndex;
+
+    //for video file
+    int m_nStartSecond;
+    int m_nEndSecond;
+    int m_nCurrentSecond;
+    colmap::Timer m_timer;
+    double m_dLastFrameTime;
 
 
 

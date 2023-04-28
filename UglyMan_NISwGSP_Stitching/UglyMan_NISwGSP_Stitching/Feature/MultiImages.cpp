@@ -220,10 +220,10 @@ const vector<detail::CameraParams> & MultiImages::getCameraParams() const {
         for(int i = 0; i < camera_params.size(); ++i) {
             if(image_focal_candidates[i].empty()) {
                 camera_params[i].focal = images_data[i]->img.cols + images_data[i]->img.rows;
-                std::cout<<"empty camera_params[i].focal:"<<camera_params[i].focal<<std::endl;
+                //std::cout<<"empty camera_params[i].focal:"<<camera_params[i].focal<<std::endl;
             } else {
                 Statistics::getMedianWithoutCopyData(image_focal_candidates[i], camera_params[i].focal);
-                std::cout<<"camera_params[i].focal:"<<camera_params[i].focal<<std::endl;
+                //std::cout<<"camera_params[i].focal:"<<camera_params[i].focal<<std::endl;
             }
         }
         timer.end("get focal length");
