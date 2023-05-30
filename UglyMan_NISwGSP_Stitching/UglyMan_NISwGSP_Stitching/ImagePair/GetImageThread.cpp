@@ -10,7 +10,7 @@ CGetImageThread::CGetImageThread()
     m_pJobQue = nullptr;
     m_nImageId = 0;
     m_nNextFileIndex = 0;
-    m_nSkipFrameNum = 1;
+    m_nSkipFrameNum = 0;
     m_bScanning = false;
     m_nQueueMaxSize = 20;  // 1920*1080*3=6MB per image.
     m_nQueueMinSize = 10;

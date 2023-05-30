@@ -15,17 +15,21 @@
 
 using namespace std;
 
-int main(int argc, const char * argv[])
+int main_(int argc, const char * argv[])
 {
     
     int nMaxQueueSize = 50;
-    std::string strSavePath = "/media/xxd/Data2/datasets/image_stitching/za/";
+    //std::string strSavePath = "/media/xxd/Data2/datasets/image_stitching/za/";
+    std::string strSavePath = "/media/xxd/Data2/datasets/3d/mine/0510_zheyi/1/image_stitch1/";
+    
     //std::string strSrcFile = "/media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/images/image_stitching/simple3/*jpg";//"/media/xxd/Data2/datasets/image_stitching/input-42-data/APAP-garden/*JPG";
     //std::string strSrcFile = "/media/xxd/Data2/datasets/image_stitching/input-42-data/APAP-garden/*JPG";
     //int nSrcImgType = 0; //0 - image list in folder,  1 - video file, 2 - camera
+     std::string strSrcFile = "/media/xxd/Data2/datasets/3d/mine/0510_zheyi/1/image1/origin/*jpg";
+     int nSrcImgType = 0;
 
-    std::string strSrcFile = "/media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/2023-03-15_083101_VID003.mp4";
-    int nSrcImgType = 1; //0 - image list in folder,  1 - video file, 2 - camera
+    //std::string strSrcFile = "/media/xxd/Data2/datasets/3d/mine/0510_zheyi/1/2023-05-10_084613_VID002.mp4";
+    //int nSrcImgType = 1; //0 - image list in folder,  1 - video file, 2 - camera
     
     //std::string strSrcFile = argv[1];
     //std::string strSavePath = argv[2];
@@ -35,7 +39,7 @@ int main(int argc, const char * argv[])
     getImageThread.Init(nMaxQueueSize, nSrcImgType, strSrcFile, strSavePath);
     if(1 == nSrcImgType)
     {
-        int nStartSecond = 4;
+        int nStartSecond = 3;
         int nEndSecond = 29;
         getImageThread.SetStartEndSecond(nStartSecond, nEndSecond);
     }
@@ -114,7 +118,7 @@ int main(int argc, const char * argv[])
     return 0;
 }
 
-int main__(int argc, const char * argv[]) 
+int main(int argc, const char * argv[]) 
 {
     Eigen::initParallel(); /* remember to turn off "Hardware Multi-Threading */
     Eigen::setNbThreads(4);
@@ -142,7 +146,7 @@ int main__(int argc, const char * argv[])
         niswgsp.writeImage(niswgsp.solve(BLEND_LINEAR),  BLENDING_METHODS_NAME[BLEND_LINEAR]);
         timer.end("2d BLEND_LINEAR: ");
          /* 3D */
-         /*
+         
         timer.start();
        
         niswgsp.setWeightToAlignmentTerm(1);
@@ -150,7 +154,7 @@ int main__(int argc, const char * argv[])
         niswgsp.setWeightToGlobalSimilarityTerm(6, 20, GLOBAL_ROTATION_3D_METHOD);
         niswgsp.writeImage(niswgsp.solve(BLEND_AVERAGE), BLENDING_METHODS_NAME[BLEND_AVERAGE]);
         niswgsp.writeImage(niswgsp.solve(BLEND_LINEAR),  BLENDING_METHODS_NAME[BLEND_LINEAR]);
-        timer.end("[NISwGSP] " + multi_images.parameter.file_name);*/
+        timer.end("[NISwGSP] " + multi_images.parameter.file_name);
     }
     return 0;
 }

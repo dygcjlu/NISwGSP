@@ -28,7 +28,7 @@
     ]
 }*/
 
-
+//export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/3rd/VideoCapture/lib
 {
     //opencv_single_calib "-w=9" "-h=6" "-pt=chessboard" "./data/calibration.yml"
     //stitching  "--mode", "panorama",   "/media/xxd/Data2/datasets/image_stitching/0913/*.jpg"
@@ -36,14 +36,18 @@
     ///home/xxd/dyg/opencv/opencv4_5/opencv_extra/testdata/stitching/s*
     ///media/xxd/Data2/datasets/image_stitching/0308_calib/rotation/images/1/
     ///media/xxd/Data2/datasets/image_stitching/0308_calib/plane/images/
+    // /media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/images/image_stitching/
+    ///media/xxd/Data2/datasets/3d/mine/0510_zheyi/2/image1/origin
+    ///media/xxd/Data2/datasets/3d/mine/0510_zheyi/1/image1/
+    // /media/xxd/Data2/datasets/3d/mine/0510_zheyi/3/image1/origin
     "version": "0.2.0",
     "configurations": [
         {
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build_d/NISwGSP",
-            "args": [ "/media/xxd/Data2/datasets/3d/mine/0315_zheyi/2023-03-15_082835/images/image_stitching/", "simple3"],
+            "program": "/home/xxd/dyg/image_stitch/mine/NISwGSP/UglyMan_NISwGSP_Stitching/UglyMan_NISwGSP_Stitching/build/NISwGSP",
+            "args": [ "/media/xxd/Data2/datasets/3d/mine/0512_zheyi/2023-05-11_211222/", "simple"],
             "cwd": "${workspaceFolder}",
             "setupCommands": [
                 {

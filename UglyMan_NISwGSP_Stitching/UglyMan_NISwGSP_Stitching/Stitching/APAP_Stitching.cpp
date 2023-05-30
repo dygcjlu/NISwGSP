@@ -56,6 +56,7 @@ void APAP_Stitching::apap_project(const vector<Point2> &_p_src,
     _homographies.resize(_src.size(), Mat(3, 3, CV_64FC1));
 
 omp_set_num_threads(8);
+//omp_set_num_threads(4);
 
 #pragma omp parallel for
     for (int i = 0; i < _src.size(); ++i)
